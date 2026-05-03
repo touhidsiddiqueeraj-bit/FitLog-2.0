@@ -4,6 +4,8 @@
 
 A single-page web application for tracking workouts, nutrition, body metrics, and generating personalized workout plans using Google Gemini AI.
 
+Live at: https://touhidsiddiqueeraj-bit.github.io/FitLog-2.0/
+
 ## ✨ Features
 
 - **📊 Dashboard** — Daily calories, protein, workouts, streak tracking, steps, hydration, and weight
