@@ -1,4 +1,4 @@
-# 💪 FitLog v2.0
+# 💪 FitLog v2.1
 
 > AI-Powered Fitness & Nutrition Tracker
 
@@ -7,6 +7,9 @@ A single-page web application for tracking workouts, nutrition, body metrics, an
 ## ✨ Features
 
 - **📊 Dashboard** — Daily calories, protein, workouts, streak tracking, steps, hydration, and weight
+- **🔥 Streak System** — Consecutive workout days with streak freezes
+  - Freezes = 7 - days/week selected in plan
+  - Uses freeze when missing non-rest days
 - **🍽️ Nutrition Logging**
   - AI chat to describe meals
   - Barcode scanning (Open Food Facts API)
@@ -14,6 +17,11 @@ A single-page web application for tracking workouts, nutrition, body metrics, an
   - Favorites for quick logging
 - **🏋️ Workout Studio**
   - AI-generated multi-week workout plans
+  - **Plan Preview** — Review AI-generated plans before accepting
+  - **Edit Mode** — Modify exercises, sets, reps per day
+  - **Exercise Picker** — Swap exercises with searchable list
+  - **AI Regenerate** — Regenerate any single day with AI
+  - **Start/Stop** — Pause or stop active plans
   - Quick workout generator
   - GIF demonstrations for exercises
   - Manual workout logging
