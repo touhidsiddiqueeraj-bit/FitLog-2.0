@@ -12,7 +12,7 @@
 /* ============================================
    FITLOG v3.0 — GLASSMORPHISM ANDROID EDITION
    ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
 :root {
   /* Deep space gradient bg */
@@ -148,7 +148,7 @@
 html { height:100%; font-size:16px; -webkit-text-size-adjust:100%; }
 
 body {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   background: var(--bg-base);
   background-image:
     radial-gradient(ellipse 80% 50% at 20% 10%, rgba(108,140,255,0.12) 0%, transparent 60%),
@@ -206,14 +206,15 @@ body {
 }
 
 .nav-brand {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+  background: linear-gradient(135deg, #00E5BB 0%, #00D4F5 50%, #6C8CFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   flex-shrink: 0;
+  font-family: 'Sora', sans-serif;
 }
 
 .nav-tabs-desktop { display:none; gap:4px; }
@@ -247,15 +248,15 @@ body {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.05rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all .2s;
+  transition: all .2s cubic-bezier(0.34,1.56,0.64,1);
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
 }
@@ -270,13 +271,14 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(6,8,18,0.88);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border-top: 1px solid var(--glass-border);
+  background: rgba(4,6,16,0.92);
+  backdrop-filter: blur(40px) saturate(220%);
+  -webkit-backdrop-filter: blur(40px) saturate(220%);
+  border-top: 1px solid rgba(255,255,255,0.08);
   z-index: 100;
   padding: 6px 0;
   padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
 }
 [data-theme="light"] #bottom-nav { background: rgba(240,242,255,0.88); }
 @media(min-width:1024px) { #bottom-nav { display:none; } }
@@ -292,19 +294,20 @@ body {
   padding: 6px 4px 4px;
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  color: rgba(180,190,220,0.5);
   cursor: pointer;
-  font-size: .6rem;
+  font-size: .58rem;
   font-weight: 600;
-  font-family: inherit;
+  font-family: 'Space Grotesk', sans-serif;
   gap: 3px;
-  transition: all .2s;
-  border-radius: 12px;
+  transition: all .2s cubic-bezier(0.34,1.56,0.64,1);
+  border-radius: 14px;
   margin: 0 3px;
+  letter-spacing: 0.02em;
 }
-#bottom-nav .bottom-tab .bottom-tab-icon { font-size: 1.25rem; transition: transform .2s; }
+#bottom-nav .bottom-tab .bottom-tab-icon { font-size: 1.3rem; transition: transform .25s cubic-bezier(0.34,1.56,0.64,1), filter .2s; }
 #bottom-nav .bottom-tab.active { color: var(--accent-primary); }
-#bottom-nav .bottom-tab.active .bottom-tab-icon { transform: scale(1.15); }
+#bottom-nav .bottom-tab.active .bottom-tab-icon { transform: scale(1.2); filter: drop-shadow(0 0 6px rgba(0,229,187,0.5)); }
 
 /* ---- VIEWS ---- */
 .view-container {
@@ -321,14 +324,15 @@ body {
 @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 
 .section-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  margin-bottom: 14px;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #fff 0%, rgba(180,190,220,0.8) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-family: 'Sora', sans-serif;
 }
 
 /* ---- GLASS CARDS ---- */
@@ -337,11 +341,11 @@ body {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 16px;
+  border-radius: 22px;
+  padding: 18px;
   margin-bottom: 12px;
   box-shadow: var(--glass-shadow);
-  transition: border-color .2s, box-shadow .2s;
+  transition: border-color .25s, box-shadow .25s, transform .2s;
 }
 .card:has(input:focus), .card:has(textarea:focus) {
   border-color: rgba(0,229,187,0.3);
@@ -349,13 +353,15 @@ body {
 }
 
 .card-header {
-  font-size: .9rem;
-  font-weight: 700;
-  margin-bottom: 12px;
+  font-size: .88rem;
+  font-weight: 600;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
+  font-family: 'Sora', sans-serif;
 }
 
 /* ---- GRIDS ---- */
@@ -371,25 +377,28 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 14px 10px;
+  border-radius: 18px;
+  padding: 16px 10px;
   text-align: center;
   cursor: pointer;
   transition: all .2s;
   box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
 }
-.stat-card:active { transform: scale(.95); border-color: var(--accent-primary); box-shadow: var(--glow-primary); }
+.stat-card::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(ellipse at 60% 0%, rgba(0,229,187,0.06), transparent 60%); pointer-events:none; }
+.stat-card:active { transform: scale(.94); border-color: var(--accent-primary); box-shadow: var(--glow-primary); }
 
 .stat-card .stat-value {
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 1.7rem;
+  font-weight: 700;
   color: var(--accent-primary);
-  letter-spacing: -0.03em;
-  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.04em;
+  font-family: 'Sora', sans-serif;
 }
 .stat-card .stat-value.highlight { color: var(--accent-secondary); }
 .stat-card .stat-value.blue { color: var(--accent-blue); }
-.stat-card .stat-label { font-size: .68rem; color: var(--text-secondary); margin-top: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.stat-card .stat-label { font-size: .65rem; color: var(--text-secondary); margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Space Grotesk', sans-serif; }
 
 /* ---- INPUTS ---- */
 input, textarea, select {
@@ -439,11 +448,12 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 .btn:active { transform: scale(.95); }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary), rgba(0,229,187,0.8));
+  background: linear-gradient(135deg, #00E5BB 0%, #00C9A8 60%, #00B5F5 100%);
   color: #020c0a;
-  box-shadow: 0 4px 16px rgba(0,229,187,0.3);
+  box-shadow: 0 4px 20px rgba(0,229,187,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+  font-family: 'Space Grotesk', sans-serif;
 }
-.btn-primary:active { box-shadow: 0 2px 8px rgba(0,229,187,0.2); }
+.btn-primary:active { box-shadow: 0 2px 8px rgba(0,229,187,0.2); transform: scale(.96); }
 
 .btn-secondary {
   background: var(--glass-1);
@@ -460,9 +470,10 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, var(--accent-purple), rgba(179,136,255,0.8));
+  background: linear-gradient(135deg, #B388FF 0%, #9C6FFF 60%, #7B5EA7 100%);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(179,136,255,0.25);
+  box-shadow: 0 4px 20px rgba(179,136,255,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .btn-cyan {
@@ -642,22 +653,23 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 /* ---- TOAST ---- */
 .toast {
   position: fixed;
-  bottom: calc(80px + env(safe-area-inset-bottom,0px));
-  left: 16px;
-  right: 16px;
-  background: var(--glass-1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--glass-border-strong);
+  bottom: calc(86px + env(safe-area-inset-bottom,0px));
+  left: 20px;
+  right: 20px;
+  background: rgba(12,16,36,0.92);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.14);
   color: var(--text-primary);
-  padding: 13px 18px;
-  border-radius: 14px;
+  padding: 14px 20px;
+  border-radius: 18px;
   z-index: 1000;
-  animation: slideUp .25s ease;
-  box-shadow: var(--glass-shadow);
+  animation: slideUp .3s cubic-bezier(0.34,1.2,0.64,1);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.06);
   font-size: .85rem;
   text-align: center;
   font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
 }
 @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
@@ -665,33 +677,33 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 .gif-modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--modal-overlay);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   z-index: 300;
-  padding: 16px;
+  padding: 0;
   animation: fadeInBg .2s ease;
 }
 .gif-modal {
-  background: var(--glass-1);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border: 1px solid var(--glass-border-strong);
-  border-radius: 20px;
+  background: rgba(6,8,22,0.96);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 28px 28px 0 0;
   width: 100%;
-  max-width: 420px;
-  max-height: 80vh;
+  max-width: 480px;
+  max-height: 88vh;
   overflow: hidden;
-  animation: scaleIn .2s ease;
-  box-shadow: var(--glass-shadow-lg);
+  animation: modalUp .3s cubic-bezier(0.34,1.2,0.64,1);
+  box-shadow: 0 -8px 60px rgba(0,0,0,0.6);
 }
-.gif-modal-header { display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--glass-border); }
+.gif-modal-header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px 12px; border-bottom:1px solid rgba(255,255,255,0.06); }
 .gif-modal-header h3 { font-size:1rem; margin:0; font-weight:700; }
-.gif-modal-body { padding:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); min-height:250px; position:relative; overflow:hidden; }
-.gif-modal-body img { max-width:100%; max-height:350px; object-fit:contain; }
+.gif-modal-body { padding:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,8,0.5); min-height:280px; max-height:55vh; position:relative; overflow:hidden; }
+.gif-modal-body img { width:100%; height:100%; object-fit:contain; max-height:55vh; }
 .gif-modal-body .gif-loading { color:var(--text-secondary); text-align:center; padding:20px; font-size:.9rem; }
 .gif-modal-footer { padding:12px 16px; border-top:1px solid var(--glass-border); display:flex; gap:6px; flex-wrap:wrap; }
 .gif-tag { display:inline-block; padding:4px 10px; border-radius:12px; font-size:.68rem; font-weight:600; background:var(--glass-2); border:1px solid var(--glass-border); }
@@ -772,19 +784,19 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 .hydrate-btn:active { transform: scale(.95); border-color: var(--accent-primary); }
 
 .hydrate-bar {
-  height: 10px;
-  background: var(--glass-2);
-  border-radius: 5px;
+  height: 12px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
   overflow: hidden;
-  margin: 8px 0;
-  border: 1px solid var(--glass-border);
+  margin: 10px 0;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
 }
 .hydrate-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
-  border-radius: 5px;
-  transition: width .5s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 10px rgba(0,212,245,0.4);
+  background: linear-gradient(90deg, #00D4F5, #6C8CFF);
+  border-radius: 8px;
+  transition: width .6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 14px rgba(0,212,245,0.45);
 }
 
 /* ---- PROGRESS BARS ---- */
@@ -839,7 +851,7 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 
 /* ---- STEPS ---- */
 .step-display { text-align:center; padding:8px; }
-.step-number { font-size:2.8rem; font-weight:800; color:var(--accent-blue); font-family:'JetBrains Mono',monospace; letter-spacing:-0.03em; }
+.step-number { font-size:3rem; font-weight:700; color:var(--accent-blue); font-family:'Sora',sans-serif; letter-spacing:-0.05em; text-shadow: 0 0 30px rgba(108,140,255,0.4); }
 .step-controls { display:flex; gap:6px; justify-content:center; margin-top:8px; flex-wrap:wrap; }
 
 /* ---- PLAN MANAGEMENT ---- */
@@ -1137,12 +1149,13 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
 
 /* ---- XP SYSTEM ---- */
-.xp-bar-wrap{background:var(--glass-2);border:1px solid var(--glass-border);border-radius:20px;padding:12px 14px;margin-bottom:10px}
+.xp-bar-wrap{background:linear-gradient(135deg,rgba(179,136,255,0.08),rgba(108,140,255,0.05));border:1px solid rgba(179,136,255,0.2);border-radius:20px;padding:14px 16px;margin-bottom:12px;position:relative;overflow:hidden}
+.xp-bar-wrap::before{content:'';position:absolute;top:-40px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(179,136,255,0.15),transparent 70%);border-radius:50%;pointer-events:none}
 .xp-level-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.xp-level-badge{background:linear-gradient(135deg,var(--accent-purple),var(--accent-blue);color:#fff;font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+.xp-level-badge{background:linear-gradient(135deg,var(--accent-purple),var(--accent-blue));color:#fff;font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
 .xp-label{font-size:.75rem;color:var(--text-secondary);font-weight:600}
-.xp-bar{height:8px;background:var(--glass-3);border-radius:8px;overflow:hidden;margin-bottom:4px}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent-purple),var(--accent-blue));border-radius:8px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.xp-bar{height:10px;background:rgba(255,255,255,0.05);border-radius:10px;overflow:hidden;margin-bottom:4px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.3)}
+.xp-fill{height:100%;background:linear-gradient(90deg,#B388FF,#6C8CFF,#00D4F5);border-radius:10px;transition:width .8s cubic-bezier(.4,0,.2,1);box-shadow:0 0 12px rgba(108,140,255,0.5)}
 .xp-numbers{font-size:.72rem;color:var(--text-secondary);text-align:right}
 
 /* Daily Quest */
@@ -1159,19 +1172,198 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
 .quest-done .quest-title{color:var(--accent-primary)}
 .quest-done .quest-xp-badge{background:rgba(0,229,187,.15);color:var(--accent-primary)}
 
-/* Achievements */
-.achievement-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--glass-border)}
-.achievement-item:last-child{border-bottom:none}
-.achievement-icon{font-size:1.4rem;min-width:32px;text-align:center;filter:grayscale(1);opacity:.4;transition:all .3s}
-.achievement-item.unlocked .achievement-icon{filter:none;opacity:1}
-.achievement-name{font-size:.82rem;font-weight:700;color:var(--text-secondary)}
-.achievement-item.unlocked .achievement-name{color:var(--text-primary)}
-.achievement-desc{font-size:.72rem;color:var(--text-secondary)}
-.achievement-item.unlocked .achievement-desc{color:var(--accent-primary)}
+/* Achievements — Card Grid */
+#achievements-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 4px;
+}
+.achievement-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px 12px;
+  border-radius: 16px;
+  background: var(--glass-2);
+  border: 1px solid var(--glass-border);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+  cursor: default;
+  /* lock state */
+  filter: grayscale(1);
+  opacity: .45;
+}
+.achievement-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,255,255,0.04), transparent 70%);
+  pointer-events: none;
+}
+/* Unlocked */
+.achievement-item.unlocked {
+  filter: none;
+  opacity: 1;
+  border-color: rgba(0,229,187,0.25);
+  background: linear-gradient(145deg, rgba(0,229,187,0.08), rgba(0,212,245,0.04));
+  box-shadow: 0 4px 18px rgba(0,229,187,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.achievement-item.unlocked::before {
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,229,187,0.15), transparent 70%);
+}
+.achievement-item.unlocked:active { transform: scale(.96); }
+
+/* Unlocked badge */
+.achievement-item.unlocked::after {
+  content: '✓';
+  position: absolute;
+  top: 7px;
+  right: 9px;
+  font-size: .6rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  background: rgba(0,229,187,0.15);
+  border: 1px solid rgba(0,229,187,0.35);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.achievement-icon {
+  font-size: 1.75rem;
+  min-width: unset;
+  filter: none;
+  opacity: 1;
+  transition: transform .3s;
+  line-height: 1;
+}
+.achievement-item.unlocked .achievement-icon { animation: achievePop .4s cubic-bezier(.34,1.56,.64,1) both; }
+@keyframes achievePop {
+  0%   { transform: scale(0.6); }
+  100% { transform: scale(1); }
+}
+.achievement-name {
+  font-size: .73rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+.achievement-item.unlocked .achievement-name { color: var(--text-primary); }
+.achievement-desc {
+  font-size: .65rem;
+  color: var(--text-secondary);
+  opacity: .7;
+  line-height: 1.3;
+}
+.achievement-item.unlocked .achievement-desc {
+  color: var(--accent-primary);
+  opacity: 1;
+}
 
 /* XP Toast popup */
-.xp-toast{position:fixed;top:70px;right:14px;background:linear-gradient(135deg,var(--accent-purple),var(--accent-blue);color:#fff;padding:8px 14px;border-radius:20px;font-size:.82rem;font-weight:700;z-index:2000;animation:xpPop .5s cubic-bezier(.34,1.56,.64,1) forwards;box-shadow:0 4px 16px rgba(179,136,255,.4)}
+.xp-toast{position:fixed;top:70px;right:14px;background:linear-gradient(135deg,var(--accent-purple),var(--accent-blue));color:#fff;padding:8px 14px;border-radius:20px;font-size:.82rem;font-weight:700;z-index:2000;animation:xpPop .5s cubic-bezier(.34,1.56,.64,1) forwards;box-shadow:0 4px 16px rgba(179,136,255,.4)}
 @keyframes xpPop{0%{opacity:0;transform:translateY(10px) scale(.8)}60%{opacity:1;transform:translateY(-4px) scale(1.05)}100%{opacity:1;transform:translateY(0) scale(1)}}
+
+/* ---- PREMIUM ADDITIONS ---- */
+/* Swipe handle on gif modal */
+.gif-modal-handle {
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+/* Active nav pill indicator */
+#bottom-nav .bottom-tab.active {
+  background: rgba(0,229,187,0.06);
+}
+/* Streak card glow */
+.streak-glow {
+  color: var(--accent-secondary);
+  text-shadow: 0 0 20px rgba(255,94,125,0.5);
+}
+/* Premium step card */
+.step-display { text-align:center; padding:10px 8px 4px; }
+/* Smooth page transitions */
+.view.active {
+  animation: pageIn .28s cubic-bezier(0.4,0,0.2,1) both;
+}
+@keyframes pageIn {
+  from { opacity:0; transform:translateY(12px) scale(0.99); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+/* Workout plan exercise hover */
+.exercise-clickable {
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.exercise-clickable:active {
+  transform: scale(.98);
+  border-color: var(--accent-primary) !important;
+}
+/* Premium input */
+input, textarea, select {
+  font-family: 'Space Grotesk', sans-serif;
+}
+/* Card hover on desktop */
+@media(hover:hover) {
+  .card:hover { border-color: rgba(255,255,255,0.15); }
+  .stat-card:hover { border-color: rgba(0,229,187,0.3); transform: translateY(-2px); }
+}
+/* Inline gif upgrade */
+.inline-gif-wrap {
+  border-radius: 14px;
+  margin-top: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.inline-gif-wrap img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+}
+/* Exercise gif label overlay */
+.gif-play-hint {
+  position: absolute;
+  bottom: 8px; right: 10px;
+  font-size: .6rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  background: rgba(0,0,0,0.3);
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+/* Fancy scrollbar */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+/* Quest card upgrade */
+.quest-card {
+  background: linear-gradient(135deg,rgba(179,136,255,.1),rgba(108,140,255,.06));
+  border: 1px solid rgba(179,136,255,.2);
+}
+/* Notification badge */
+.nav-badge {
+  position: absolute;
+  top: -2px; right: -2px;
+  width: 8px; height: 8px;
+  background: var(--accent-secondary);
+  border-radius: 50%;
+  border: 2px solid var(--bg-base);
+  box-shadow: 0 0 8px rgba(255,94,125,0.6);
+}
+
 </style>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00E5BB">
@@ -1243,7 +1435,7 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         </div>
 
 <!-- GIF Demo Modal -->
-        <div id="gif-modal" class="gif-modal-overlay" style="display:none" onclick="closeGifModal(event)"><div class="gif-modal" onclick="event.stopPropagation()"><div class="gif-modal-header"><h3 id="gif-modal-title">Demo</h3><button class="btn btn-secondary btn-sm" onclick="closeGifModal()">✕</button></div><div class="gif-modal-body" id="gif-modal-body"><div class="gif-loading">Loading...</div></div><div class="gif-modal-footer" id="gif-modal-footer"></div></div></div>
+        <div id="gif-modal" class="gif-modal-overlay" style="display:none" onclick="closeGifModal(event)"><div class="gif-modal" onclick="event.stopPropagation()" id="gif-modal-sheet"><div class="gif-modal-handle"></div><div class="gif-modal-header"><h3 id="gif-modal-title">Demo</h3><button class="btn btn-secondary btn-sm" onclick="closeGifModal()">✕</button></div><div class="gif-modal-body" id="gif-modal-body"><div class="gif-loading">Loading...</div></div><div class="gif-modal-footer" id="gif-modal-footer"></div></div></div>
 
         <!-- Scanner Modal -->
         <div id="scanner-modal" class="modal-overlay" style="display:none"><div class="modal"><button class="modal-close" onclick="closeScanner()">✕</button><h3>📷 Scan Barcode</h3><p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:10px">Point camera at a food barcode</p><div id="scanner-container"></div><div id="scan-result"></div><button class="btn btn-secondary btn-block btn-sm" onclick="closeScanner()" style="margin-top:10px">Cancel</button></div></div>
@@ -1270,14 +1462,14 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         <!-- Main Content -->
         <div class="view-container">
             <!-- Dashboard -->
-<section id="view-dashboard" class="view active"><div class="section-title">📊 Today</div><div class="grid-4"><div class="stat-card" onclick="go('nutrition')"><div class="stat-value" id="stat-calories">0</div><div class="stat-label">Calories</div></div><div class="stat-card"><div class="stat-value" id="stat-protein">0g</div><div class="stat-label">Protein</div></div><div class="stat-card" onclick="go('workout')"><div class="stat-value highlight" id="stat-workouts">0</div><div class="stat-label">Workouts</div></div><div class="stat-card"><div class="stat-value blue" id="stat-burned">0</div><div class="stat-label">Burned</div></div></div>
+<section id="view-dashboard" class="view active"><div class="section-title">📊 Today</div><div class="grid-4"><div class="stat-card" onclick="go('nutrition')"><div class="stat-value" id="stat-calories">0</div><div class="stat-label">Eaten</div></div><div class="stat-card"><div class="stat-value" id="stat-protein">0g</div><div class="stat-label">Protein</div></div><div class="stat-card" onclick="go('workout')"><div class="stat-value highlight" id="stat-workouts">0</div><div class="stat-label">Workouts</div></div><div class="stat-card"><div class="stat-value blue" id="stat-burned">0</div><div class="stat-label">Burned</div></div></div><div class="stat-card" id="net-cal-bar" style="margin-top:8px;display:none;align-items:center;justify-content:space-between;padding:12px 18px"><div style="font-size:.75rem;color:var(--text-secondary);font-weight:700;text-transform:uppercase;letter-spacing:.08em">⚡ Net Cal</div><div style="font-size:1.4rem;font-weight:700;font-family:'Sora',sans-serif" id="stat-net">—</div><div style="font-size:.7rem;color:var(--text-secondary)">eaten − (BMR + burned)</div></div>
 <!-- XP Bar -->
 <div class="xp-bar-wrap" style="margin-top:10px"><div class="xp-level-row"><span class="xp-level-badge" id="xp-level-badge">Level 1</span><span class="xp-label" id="xp-title-label">Rookie</span></div><div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div><div class="xp-numbers"><span id="xp-current">0</span> / <span id="xp-next">100</span> XP</div></div>
 <!-- Daily Quest -->
 <div id="daily-quest-card" class="quest-card"><div class="quest-header"><span class="quest-title">⚔️ Daily Quest</span><span class="quest-xp-badge" id="quest-xp-badge">+50 XP</span></div><div class="quest-desc" id="quest-desc">Loading...</div><div class="quest-progress-bar"><div class="quest-progress-fill" id="quest-progress-fill" style="width:0%"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="quest-status" id="quest-status">0 / 1 complete</span><button class="btn btn-xs btn-accent" onclick="logQuestProgress()" id="quest-btn">✔ Log Progress</button></div></div>
 <div class="card" style="margin-top:0"><div class="card-header">🔥 Streak <span class="streak-flame" id="streak-flame">🔥</span></div><div style="font-size:1.8rem;font-weight:700;text-align:center;color:var(--accent-secondary)" id="streak-count">0</div><div style="text-align:center;font-size:.8rem;color:var(--text-secondary)">consecutive days</div><div style="text-align:center;margin-top:6px;font-size:.85rem;color:var(--accent-blue)">❄️ <span id="streak-freezes">0</span> streak freezes</div></div><div class="card"><div class="card-header">👣 Steps</div><div class="step-display"><div class="step-number" id="step-count">0</div><div class="step-controls"><button class="hydrate-btn" onclick="addSteps(500)">+500</button><button class="hydrate-btn" onclick="addSteps(1000)">+1k</button><button class="hydrate-btn" onclick="addSteps(2000)">+2k</button><button class="hydrate-btn" onclick="addSteps(5000)">+5k</button></div></div></div><div class="card"><div class="card-header">💧 Hydration</div><div style="display:flex;justify-content:space-between;font-size:.9rem"><span><strong id="hydrate-current">0</strong> / <span id="hydrate-goal">2500</span> ml</span><span id="hydrate-pct">0%</span></div><div class="hydrate-bar"><div class="hydrate-fill" id="hydrate-fill" style="width:0%"></div></div><div style="display:flex;gap:6px"><button class="hydrate-btn" onclick="addWater(200)">+200</button><button class="hydrate-btn" onclick="addWater(400)">+400</button><button class="hydrate-btn" onclick="addWater(600)">+600</button><button class="hydrate-btn" onclick="openWaterModal()">+More</button></div></div><div class="card"><div class="card-header">⚖️ Weight</div><div style="display:flex;justify-content:space-between"><span style="font-size:1.3rem;font-weight:700" id="dashboard-weight">-- kg</span><span id="dashboard-weight-date"></span></div><button class="hydrate-btn" onclick="openWeightModal()" style="margin-top:6px">⚖️ Log</button></div>
 <!-- Achievements -->
-<div class="card"><div class="card-header">🏆 Achievements</div><div id="achievements-list"></div></div>
+<div class="card"><div class="card-header" style="justify-content:space-between">🏆 Achievements <span id="achievement-progress" style="font-size:.72rem;font-weight:600;color:var(--accent-primary);background:rgba(0,229,187,0.12);border:1px solid rgba(0,229,187,0.25);padding:2px 9px;border-radius:20px;letter-spacing:.03em">0 / 13</span></div><div id="achievements-list"></div></div>
 <div class="card"><div class="card-header">📅 Plans</div><div id="active-plans-dashboard"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No plans</p></div></div></div><div class="card"><div class="card-header">⭐ Quick Log</div><div id="dashboard-favorites"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No favorites</p></div></div></div></section>
 
             <!-- Nutrition -->
@@ -1302,7 +1494,7 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         <div id="coach-panel" class="coach-panel"><div style="padding:16px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between"><h3>🤖 AI Coach</h3><button class="btn btn-secondary btn-sm" onclick="toggleCoach()">✕</button></div><div id="coach-messages" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px"><div class="chat-message ai">👋 I'm your AI fitness coach! Ask me about nutrition, workouts, or your progress.</div></div><div style="padding:12px;border-top:1px solid var(--border-color);display:flex;gap:8px"><input type="text" id="coach-input" placeholder="Ask your coach..." onkeypress="if(event.key==='Enter')sendCoachMsg()"><button class="btn btn-primary btn-sm" onclick="sendCoachMsg()">Send</button></div></div>
 
         <!-- Bottom Nav -->
-        <nav id="bottom-nav"><button class="bottom-tab active" data-view="dashboard"><span class="bottom-tab-icon">📊</span><span>Home</span></button><button class="bottom-tab" data-view="nutrition"><span class="bottom-tab-icon">🍽️</span><span>Food</span></button><button class="bottom-tab" data-view="workout"><span class="bottom-tab-icon">🏋️</span><span>Train</span></button><button class="bottom-tab" data-view="body"><span class="bottom-tab-icon">📐</span><span>Body</span></button><button class="bottom-tab" data-view="progress"><span class="bottom-tab-icon">📈</span><span>Stats</span></button></nav>
+        <nav id="bottom-nav"><button class="bottom-tab active" data-view="dashboard"><span class="bottom-tab-icon">🏠</span><span>Home</span></button><button class="bottom-tab" data-view="nutrition"><span class="bottom-tab-icon">🥗</span><span>Nutrition</span></button><button class="bottom-tab" data-view="workout"><span class="bottom-tab-icon">💪</span><span>Train</span></button><button class="bottom-tab" data-view="body"><span class="bottom-tab-icon">📐</span><span>Body</span></button><button class="bottom-tab" data-view="progress"><span class="bottom-tab-icon">📈</span><span>Stats</span></button></nav>
     </div>
 
     
@@ -1313,8 +1505,169 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         const OFF_API='https://world.openfoodfacts.org/api/v2/product/';
 
         const EX=[{id:'bp',n:'Barbell Bench Press',m:'Chest',e:'barbell',t:'strength',cal:8},{id:'dbp',n:'Dumbbell Bench Press',m:'Chest',e:'dumbbells',t:'strength',cal:7},{id:'inc_bp',n:'Incline Barbell Bench Press',m:'Upper Chest',e:'barbell',t:'strength',cal:8},{id:'inc_dbp',n:'Incline Dumbbell Press',m:'Upper Chest',e:'dumbbells',t:'strength',cal:7},{id:'dec_bp',n:'Decline Bench Press',m:'Lower Chest',e:'barbell',t:'strength',cal:8},{id:'mp',n:'Machine Chest Press',m:'Chest',e:'machines',t:'strength',cal:7},{id:'dp',n:'Chest Dips',m:'Chest',e:'bodyweight',t:'strength',cal:8},{id:'cable_fly',n:'Cable Chest Fly',m:'Chest',e:'cables',t:'strength',cal:6},{id:'db_fly',n:'Dumbbell Fly',m:'Chest',e:'dumbbells',t:'strength',cal:5},{id:'pec_deck',n:'Pec Deck Machine',m:'Chest',e:'machines',t:'strength',cal:5},{id:'psh',n:'Push-Ups',m:'Chest',e:'bodyweight',t:'endurance',cal:5},{id:'diamond_psh',n:'Diamond Push-Ups',m:'Chest/Triceps',e:'bodyweight',t:'strength',cal:6},{id:'wide_psh',n:'Wide Push-Ups',m:'Chest',e:'bodyweight',t:'endurance',cal:5},{id:'declinedl',n:'Decline Dumbbell Press',m:'Lower Chest',e:'dumbbells',t:'strength',cal:7},{id:'dl',n:'Conventional Deadlift',m:'Back',e:'barbell',t:'strength',cal:12},{id:'rdl',n:'Romanian Deadlift',m:'Back/Legs',e:'barbell',t:'strength',cal:10},{id:'sdl',n:'Sumo Deadlift',m:'Back/Legs',e:'barbell',t:'strength',cal:12},{id:'br',n:'Barbell Row',m:'Back',e:'barbell',t:'strength',cal:8},{id:'dbr',n:'Dumbbell Row',m:'Back',e:'dumbbells',t:'strength',cal:7},{id:'pendlay_row',n:'Pendlay Row',m:'Back',e:'barbell',t:'strength',cal:8},{id:'tbar_row',n:'T-Bar Row',m:'Back',e:'barbell',t:'strength',cal:8},{id:'seal_row',n:'Seal Row',m:'Back',e:'barbell',t:'strength',cal:7},{id:'pu',n:'Pull-Ups',m:'Back',e:'bodyweight',t:'strength',cal:9},{id:'chin_up',n:'Chin-Ups',m:'Back/Biceps',e:'bodyweight',t:'strength',cal:9},{id:'lat_pd',n:'Lat Pulldown',m:'Back',e:'cables',t:'strength',cal:7},{id:'seated_row',n:'Seated Cable Row',m:'Back',e:'cables',t:'strength',cal:7},{id:'lat_pd_under',n:'Underhand Lat Pulldown',m:'Back',e:'cables',t:'strength',cal:7},{id:'straight_arm_pd',n:'Straight Arm Pulldown',m:'Back',e:'cables',t:'strength',cal:6},{id:'cable_pull_over',n:'Cable Pull Over',m:'Back',e:'cables',t:'strength',cal:6},{id:'cp',n:'Chest-Supported Row',m:'Back',e:'dumbbells',t:'strength',cal:6},{id:'ytp',n:'Yates Row',m:'Back',e:'barbell',t:'strength',cal:8},{id:'fp',n:'Face Pulls',m:'Rear Delts',e:'cables',t:'endurance',cal:5},{id:'supermans',n:'Supermans',m:'Lower Back',e:'bodyweight',t:'rehab',cal:3},{id:'inverted_row',n:'Inverted Row',m:'Back',e:'bodyweight',t:'endurance',cal:5},{id:'ohp',n:'Overhead Press',m:'Shoulders',e:'barbell',t:'strength',cal:8},{id:'db_ohp',n:'Dumbbell Shoulder Press',m:'Shoulders',e:'dumbbells',t:'strength',cal:7},{id:'arnold',n:'Arnold Press',m:'Shoulders',e:'dumbbells',t:'strength',cal:7},{id:'machine_ohp',n:'Machine Shoulder Press',m:'Shoulders',e:'machines',t:'strength',cal:6},{id:'lr',n:'Lateral Raise',m:'Shoulders',e:'dumbbells',t:'endurance',cal:4},{id:'fr',n:'Front Raise',m:'Shoulders',e:'dumbbells',t:'endurance',cal:4},{id:'rr',n:'Rear Delt Fly',m:'Shoulders',e:'dumbbells',t:'endurance',cal:4},{id:'upright_row',n:'Upright Row',m:'Shoulders',e:'barbell',t:'strength',cal:6},{id:'cable_lateral',n:'Cable Lateral Raise',m:'Shoulders',e:'cables',t:'endurance',cal:4},{id:'landmine',n:'Landmine Press',m:'Shoulders',e:'barbell',t:'strength',cal:6},{id:'bc',n:'Barbell Curl',m:'Biceps',e:'barbell',t:'strength',cal:5},{id:'dbc',n:'Dumbbell Curl',m:'Biceps',e:'dumbbells',t:'strength',cal:4},{id:'hc',n:'Hammer Curl',m:'Biceps',e:'dumbbells',t:'strength',cal:4},{id:'preacher_curl',n:'Preacher Curl',m:'Biceps',e:'barbell',t:'strength',cal:5},{id:'incline_curl',n:'Incline Dumbbell Curl',m:'Biceps',e:'dumbbells',t:'strength',cal:4},{id:'cable_curl',n:'Cable Curl',m:'Biceps',e:'cables',t:'strength',cal:4},{id:'concentration_curl',n:'Concentration Curl',m:'Biceps',e:'dumbbells',t:'strength',cal:3},{id:'ez_curl',n:'EZ Bar Curl',m:'Biceps',e:'barbell',t:'strength',cal:5},{id:'reverse_curl',n:'Reverse Curl',m:'Biceps/Forearms',e:'barbell',t:'strength',cal:4},{id:'td',n:'Tricep Dips',m:'Triceps',e:'bodyweight',t:'strength',cal:6},{id:'pushdown',n:'Tricep Pushdown',m:'Triceps',e:'cables',t:'strength',cal:4},{id:'skull_crusher',n:'Skull Crusher',m:'Triceps',e:'barbell',t:'strength',cal:5},{id:'overhead_ext',n:'Overhead Tricep Extension',m:'Triceps',e:'dumbbells',t:'strength',cal:4},{id:'close_grip_bp',n:'Close Grip Bench Press',m:'Triceps',e:'barbell',t:'strength',cal:6},{id:'tricep_kickback',n:'Tricep Kickback',m:'Triceps',e:'dumbbells',t:'strength',cal:3},{id:'rope_pushdown',n:'Rope Pushdown',m:'Triceps',e:'cables',t:'strength',cal:4},{id:'diamond_dp',n:'Diamond Dips',m:'Triceps',e:'bodyweight',t:'strength',cal:6},{id:'sq',n:'Barbell Squat',m:'Legs',e:'barbell',t:'strength',cal:10},{id:'fs',n:'Front Squat',m:'Legs',e:'barbell',t:'strength',cal:10},{id:'goblet_sq',n:'Goblet Squat',m:'Legs',e:'dumbbells',t:'strength',cal:8},{id:'hack_sq',n:'Hack Squat',m:'Legs',e:'machines',t:'strength',cal:9},{id:'leg_press',n:'Leg Press',m:'Legs',e:'machines',t:'strength',cal:9},{id:'lunge',n:'Walking Lunges',m:'Legs',e:'dumbbells',t:'strength',cal:7},{id:'bulgarian_split',n:'Bulgarian Split Squat',m:'Legs',e:'dumbbells',t:'strength',cal:7},{id:'step_up',n:'Box Step-Up',m:'Legs',e:'dumbbells',t:'strength',cal:6},{id:'hip_thrust',n:'Hip Thrust',m:'Glutes',e:'barbell',t:'strength',cal:8},{id:'glute_bridge',n:'Glute Bridge',m:'Glutes',e:'bodyweight',t:'strength',cal:5},{id:'rdl_leg',n:'Single Leg RDL',m:'Hamstrings',e:'dumbbells',t:'strength',cal:6},{id:'leg_curl',n:'Lying Leg Curl',m:'Hamstrings',e:'machines',t:'strength',cal:5},{id:'seated_leg_curl',n:'Seated Leg Curl',m:'Hamstrings',e:'machines',t:'strength',cal:5},{id:'good_morning',n:'Good Morning',m:'Back/Legs',e:'barbell',t:'strength',cal:7},{id:'calf_raise',n:'Standing Calf Raise',m:'Calves',e:'machines',t:'strength',cal:4},{id:'seated_calf',n:'Seated Calf Raise',m:'Calves',e:'machines',t:'strength',cal:4},{id:'leg_extension',n:'Leg Extension',m:'Quads',e:'machines',t:'strength',cal:5},{id:'squat_jump',n:'Jump Squat',m:'Legs',e:'bodyweight',t:'plyometric',cal:8},{id:'plank',n:'Plank',m:'Core',e:'bodyweight',t:'endurance',cal:3},{id:'crunch',n:'Crunches',m:'Core',e:'bodyweight',t:'endurance',cal:4},{id:'leg_raise',n:'Hanging Leg Raise',m:'Core',e:'bodyweight',t:'endurance',cal:5},{id:'russian_twist',n:'Russian Twist',m:'Core',e:'bodyweight',t:'endurance',cal:4},{id:'cable_crunch',n:'Cable Crunch',m:'Core',e:'cables',t:'strength',cal:5},{id:'ab_wheel',n:'Ab Wheel Rollout',m:'Core',e:'bodyweight',t:'strength',cal:5},{id:'mountain_climber',n:'Mountain Climbers',m:'Core',e:'bodyweight',t:'cardio',cal:8},{id:'dead_bug',n:'Dead Bug',m:'Core',e:'bodyweight',t:'endurance',cal:3},{id:'bicycle_crunch',n:'Bicycle Crunch',m:'Core',e:'bodyweight',t:'endurance',cal:5},{id:'side_plank',n:'Side Plank',m:'Core',e:'bodyweight',t:'endurance',cal:3},{id:'burpee',n:'Burpees',m:'Full Body',e:'bodyweight',t:'cardio',cal:10},{id:'kb_swing',n:'Kettlebell Swing',m:'Full Body',e:'kettlebell',t:'cardio',cal:8},{id:'thruster',n:'Barbell Thruster',m:'Full Body',e:'barbell',t:'cardio',cal:10},{id:'clean',n:'Power Clean',m:'Full Body',e:'barbell',t:'strength',cal:10},{id:'snatch',n:'Snatch',m:'Full Body',e:'barbell',t:'strength',cal:10}];
-        const GL={bp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bench-Press.gif',dbp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif',inc_bp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Barbell-Bench-Press.gif',inc_dbp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif',dec_bp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Decline-Barbell-Bench-Press.gif',mp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Chest-Press.gif',dp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dips.gif',cable_fly:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Chest-Fly.gif',db_fly:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Fly.gif',pec_deck:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pec-Deck-Fly.gif',psh:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Push-Up.gif',diamond_psh:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Diamond-Push-Up.gif',wide_psh:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Wide-Push-Up.gif',declinedl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Decline-Dumbbell-Press.gif',dl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Conventional-Deadlift.gif',rdl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Romanian-Deadlift.gif',sdl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Sumo-Deadlift.gif',br:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Row.gif',dbr:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Row.gif',pendlay_row:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Row.gif',tbar_row:'https://fitnessprogramer.com/wp-content/uploads/2021/02/T-bar-row.gif',seal_row:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Row.gif',pu:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Pull-Up.gif',chin_up:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Chin-Up.gif',lat_pd:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif',seated_row:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Seated-Cable-Row.gif',lat_pd_under:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif',straight_arm_pd:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Standing-Pullover.gif',cable_pull_over:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Pullover.gif',cp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Row.gif',ytp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Row.gif',fp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif',supermans:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Superman.gif',inverted_row:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Inverted-Row.gif',ohp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Overhead-Press.gif',db_ohp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Shoulder-Press.gif',arnold:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Arnold-Press.gif',machine_ohp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Shoulder-Press.gif',lr:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif',fr:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Front-Raise.gif',rr:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Rear-Delt-Fly.gif',upright_row:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Upright-Row.gif',cable_lateral:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Lateral-Raise.gif',landmine:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Landmine-Press.gif',bc:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Curl.gif',dbc:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Curl.gif',hc:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Hammer-Curl.gif',preacher_curl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Preacher-Curl.gif',incline_curl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Curl.gif',cable_curl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Curl.gif',concentration_curl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Concentration-Curl.gif',ez_curl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Ez-Bar-Curl.gif',reverse_curl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Reverse-Curl.gif',td:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dips.gif',pushdown:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Tricep-Pushdown.gif',skull_crusher:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Skull-Crusher.gif',overhead_ext:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Overhead-Tricep-Extension.gif',close_grip_bp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Close-Grip-Bench-Press.gif',tricep_kickback:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Tricep-Kickback.gif',rope_pushdown:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Rope-Pushdown.gif',diamond_dp:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Diamond-Push-Up.gif',sq:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Squat.gif',fs:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Front-Squat.gif',goblet_sq:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Goblet-Squat.gif',hack_sq:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Hack-Squat.gif',leg_press:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Leg-Press.gif',lunge:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Walking-Lunges.gif',bulgarian_split:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Bulgarian-Split-Squat.gif',step_up:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Step-Up.gif',hip_thrust:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Hip-Thrust.gif',glute_bridge:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Glute-Bridge.gif',rdl_leg:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Single-Leg-Romanian-Deadlift.gif',leg_curl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Lying-Leg-Curl.gif',seated_leg_curl:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Seated-Leg-Curl.gif',good_morning:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Good-Morning.gif',calf_raise:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Standing-Calf-Raise.gif',seated_calf:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Seated-Calf-Raise.gif',leg_extension:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Leg-Extension.gif',squat_jump:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Jump-Squat.gif',plank:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Plank.gif',crunch:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Crunches.gif',leg_raise:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Leg-Raise.gif',russian_twist:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Russian-Twist.gif',cable_crunch:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Crunch.gif',ab_wheel:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Ab-Wheel-Rollout.gif',mountain_climber:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Mountain-Climber.gif',dead_bug:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Dead-Bug.gif',bicycle_crunch:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Bicycle-Crunch.gif',side_plank:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Side-Plank.gif',burpee:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Burpee.gif',kb_swing:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Kettlebell-Swing.gif',thruster:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Thruster.gif',clean:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Power-Clean.gif',snatch:'https://fitnessprogramer.com/wp-content/uploads/2021/02/Snatch.gif'};
+        
+        const BASE='https://fitnessprogramer.com/wp-content/uploads/2021/02/';
         const GIF_CACHE=SP(localStorage.getItem('fitlog_gifcache'),{});
+        const GL={
+  // CHEST
+  bp:BASE+'Barbell-Bench-Press.gif',
+  dbp:BASE+'Dumbbell-Press.gif',
+  inc_bp:BASE+'Incline-Barbell-Bench-Press.gif',
+  inc_dbp:BASE+'Incline-Dumbbell-Press.gif',
+  dec_bp:BASE+'Decline-Barbell-Bench-Press.gif',
+  mp:BASE+'Barbell-Chest-Press.gif',
+  dp:BASE+'Dips.gif',
+  cable_fly:BASE+'Cable-Chest-Fly.gif',
+  db_fly:BASE+'Dumbbell-Fly.gif',
+  pec_deck:BASE+'Pec-Deck-Fly.gif',
+  psh:BASE+'Push-Up.gif',
+  diamond_psh:BASE+'Diamond-Push-Up.gif',
+  wide_psh:BASE+'Wide-Push-Up.gif',
+  declinedl:BASE+'Decline-Dumbbell-Press.gif',
+  inc_cable_fly:BASE+'Incline-Cable-Chest-Fly.gif',
+  svend_press:BASE+'Svend-Press.gif',
+  // BACK
+  dl:BASE+'Conventional-Deadlift.gif',
+  rdl:BASE+'Barbell-Romanian-Deadlift.gif',
+  sdl:BASE+'Sumo-Deadlift.gif',
+  br:BASE+'Barbell-Row.gif',
+  dbr:BASE+'Dumbbell-Row.gif',
+  pendlay_row:BASE+'Barbell-Row.gif',
+  tbar_row:BASE+'T-bar-row.gif',
+  seal_row:BASE+'Barbell-Row.gif',
+  pu:BASE+'Pull-Up.gif',
+  chin_up:BASE+'Chin-Up.gif',
+  lat_pd:BASE+'Lat-Pulldown.gif',
+  seated_row:BASE+'Seated-Cable-Row.gif',
+  lat_pd_under:BASE+'Lat-Pulldown.gif',
+  straight_arm_pd:BASE+'Standing-Pullover.gif',
+  cable_pull_over:BASE+'Cable-Pullover.gif',
+  cp:BASE+'Dumbbell-Row.gif',
+  ytp:BASE+'Barbell-Row.gif',
+  fp:BASE+'Face-Pull.gif',
+  supermans:BASE+'Superman.gif',
+  inverted_row:BASE+'Inverted-Row.gif',
+  single_arm_lat_pd:BASE+'Single-Arm-Lat-Pulldown.gif',
+  meadows_row:BASE+'Dumbbell-Row.gif',
+  rack_pull:BASE+'Rack-Pull.gif',
+  // SHOULDERS
+  ohp:BASE+'Barbell-Overhead-Press.gif',
+  db_ohp:BASE+'Dumbbell-Shoulder-Press.gif',
+  arnold:BASE+'Arnold-Press.gif',
+  machine_ohp:BASE+'Barbell-Shoulder-Press.gif',
+  lr:BASE+'Dumbbell-Lateral-Raise.gif',
+  fr:BASE+'Dumbbell-Front-Raise.gif',
+  rr:BASE+'Dumbbell-Rear-Delt-Fly.gif',
+  upright_row:BASE+'Barbell-Upright-Row.gif',
+  cable_lateral:BASE+'Cable-Lateral-Raise.gif',
+  landmine:BASE+'Landmine-Press.gif',
+  scott_press:BASE+'Dumbbell-Shoulder-Press.gif',
+  push_press:BASE+'Barbell-Overhead-Press.gif',
+  lu_raises:BASE+'Dumbbell-Lateral-Raise.gif',
+  cable_rr:BASE+'Cable-Rear-Delt-Fly.gif',
+  // BICEPS
+  bc:BASE+'Barbell-Curl.gif',
+  dbc:BASE+'Dumbbell-Curl.gif',
+  hc:BASE+'Hammer-Curl.gif',
+  preacher_curl:BASE+'Preacher-Curl.gif',
+  incline_curl:BASE+'Incline-Dumbbell-Curl.gif',
+  cable_curl:BASE+'Cable-Curl.gif',
+  concentration_curl:BASE+'Concentration-Curl.gif',
+  ez_curl:BASE+'Ez-Bar-Curl.gif',
+  reverse_curl:BASE+'Reverse-Curl.gif',
+  spider_curl:BASE+'Spider-Curl.gif',
+  zottman_curl:BASE+'Zottman-Curl.gif',
+  cross_body_curl:BASE+'Cross-Body-Hammer-Curl.gif',
+  // TRICEPS
+  td:BASE+'Dips.gif',
+  pushdown:BASE+'Tricep-Pushdown.gif',
+  skull_crusher:BASE+'Skull-Crusher.gif',
+  overhead_ext:BASE+'Overhead-Tricep-Extension.gif',
+  close_grip_bp:BASE+'Close-Grip-Bench-Press.gif',
+  tricep_kickback:BASE+'Tricep-Kickback.gif',
+  rope_pushdown:BASE+'Rope-Pushdown.gif',
+  diamond_dp:BASE+'Diamond-Push-Up.gif',
+  single_arm_pushdown:BASE+'Single-Arm-Tricep-Pushdown.gif',
+  tate_press:BASE+'Tate-Press.gif',
+  jm_press:BASE+'Close-Grip-Bench-Press.gif',
+  // LEGS
+  sq:BASE+'Barbell-Squat.gif',
+  fs:BASE+'Front-Squat.gif',
+  goblet_sq:BASE+'Goblet-Squat.gif',
+  hack_sq:BASE+'Hack-Squat.gif',
+  leg_press:BASE+'Leg-Press.gif',
+  lunge:BASE+'Walking-Lunges.gif',
+  bulgarian_split:BASE+'Bulgarian-Split-Squat.gif',
+  step_up:BASE+'Step-Up.gif',
+  hip_thrust:BASE+'Barbell-Hip-Thrust.gif',
+  glute_bridge:BASE+'Glute-Bridge.gif',
+  rdl_leg:BASE+'Single-Leg-Romanian-Deadlift.gif',
+  leg_curl:BASE+'Lying-Leg-Curl.gif',
+  seated_leg_curl:BASE+'Seated-Leg-Curl.gif',
+  good_morning:BASE+'Good-Morning.gif',
+  calf_raise:BASE+'Standing-Calf-Raise.gif',
+  seated_calf:BASE+'Seated-Calf-Raise.gif',
+  leg_extension:BASE+'Leg-Extension.gif',
+  squat_jump:BASE+'Jump-Squat.gif',
+  sumo_squat:BASE+'Sumo-Squat.gif',
+  pistol_squat:BASE+'Pistol-Squat.gif',
+  lateral_lunge:BASE+'Side-Lunge.gif',
+  reverse_lunge:BASE+'Reverse-Lunge.gif',
+  nordic_curl:BASE+'Nordic-Curl.gif',
+  hip_abduction:BASE+'Hip-Abduction.gif',
+  hip_adduction:BASE+'Hip-Adduction.gif',
+  glute_kickback:BASE+'Glute-Kickback.gif',
+  donkey_kick:BASE+'Donkey-Kicks.gif',
+  // CORE
+  plank:BASE+'Plank.gif',
+  crunch:BASE+'Crunches.gif',
+  leg_raise:BASE+'Leg-Raise.gif',
+  russian_twist:BASE+'Russian-Twist.gif',
+  cable_crunch:BASE+'Cable-Crunch.gif',
+  ab_wheel:BASE+'Ab-Wheel-Rollout.gif',
+  mountain_climber:BASE+'Mountain-Climber.gif',
+  dead_bug:BASE+'Dead-Bug.gif',
+  bicycle_crunch:BASE+'Bicycle-Crunch.gif',
+  side_plank:BASE+'Side-Plank.gif',
+  hanging_knee_raise:BASE+'Hanging-Knee-Raise.gif',
+  toe_touch:BASE+'Toe-Touch-Crunch.gif',
+  v_up:BASE+'V-Up.gif',
+  flutter_kick:BASE+'Flutter-Kicks.gif',
+  dragon_flag:BASE+'Dragon-Flag.gif',
+  pallof_press:BASE+'Pallof-Press.gif',
+  wood_chop:BASE+'Wood-Chop.gif',
+  reverse_crunch:BASE+'Reverse-Crunch.gif',
+  // CARDIO & FULL BODY
+  burpee:BASE+'Burpee.gif',
+  kb_swing:BASE+'Kettlebell-Swing.gif',
+  thruster:BASE+'Barbell-Thruster.gif',
+  clean:BASE+'Power-Clean.gif',
+  snatch:BASE+'Snatch.gif',
+  box_jump:BASE+'Box-Jump.gif',
+  jumping_jack:BASE+'Jumping-Jacks.gif',
+  jump_rope:BASE+'Jump-Rope.gif',
+  high_knee:BASE+'High-Knees.gif',
+  bear_crawl:BASE+'Bear-Crawl.gif',
+  battle_rope:BASE+'Battle-Ropes.gif',
+  sled_push:BASE+'Sled-Push.gif',
+  kb_clean:BASE+'Kettlebell-Clean.gif',
+  kb_press:BASE+'Kettlebell-Press.gif',
+  kb_goblet:BASE+'Goblet-Squat.gif',
+  kb_deadlift:BASE+'Conventional-Deadlift.gif',
+  kb_row:BASE+'Dumbbell-Row.gif',
+  kb_snatch:BASE+'Snatch.gif',
+  man_maker:BASE+'Burpee.gif',
+  devil_press:BASE+'Burpee.gif',
+  // STRETCHING / MOBILITY
+  hip_flexor_stretch:BASE+'Hip-Flexor-Stretch.gif',
+  pigeon_pose:BASE+'Pigeon-Pose.gif',
+  cat_cow:BASE+'Cat-Cow-Stretch.gif',
+  world_greatest:BASE+'Worlds-Greatest-Stretch.gif',
+  // WRIST / FOREARM
+  wrist_curl:BASE+'Wrist-Curl.gif',
+  reverse_wrist_curl:BASE+'Reverse-Wrist-Curl.gif',
+  farmers_walk:BASE+'Farmers-Walk.gif',
+};
         function SP(j,f){try{const p=JSON.parse(j);return p&&typeof p==='object'?p:f}catch{return f}}
         function saveGifCache(){localStorage.setItem('fitlog_gifcache',JSON.stringify(GIF_CACHE))}
         const S={key:localStorage.getItem('fitlog_key')||'',meals:SP(localStorage.getItem('fitlog_meals'),[]),wkts:SP(localStorage.getItem('fitlog_wkts'),[]),wlog:SP(localStorage.getItem('fitlog_wlog'),[]),goals:SP(localStorage.getItem('fitlog_goals'),{}),favs:SP(localStorage.getItem('fitlog_favs'),[]),hydr:SP(localStorage.getItem('fitlog_hydr'),{tgt:2500,log:{}}),plans:SP(localStorage.getItem('fitlog_plans'),[]),steps:SP(localStorage.getItem('fitlog_steps'),{}),theme:localStorage.getItem('fitlog_theme')||'dark',view:'dashboard',lastCongratsDate:localStorage.getItem('fitlog_last_congrats')||''};
@@ -1360,7 +1713,11 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
 
         async function ai(prompt,sys='',img=null){if(!isOnline()){toast('📴 Offline — AI features unavailable');return null}if(!hk()){toast('⚠️ Set API key');openSettings();return null}const parts=[];if(img)parts.push({inlineData:{mimeType:img.mime,data:img.data}});parts.push({text:sys?`${sys}\n\n${prompt}`:prompt});const r=await fetch(`${API_URL}?key=${S.key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}],generationConfig:{temperature:0.4,maxOutputTokens:4096,responseMimeType:"application/json"}})});if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API error')}const d=await r.json();const txt=d?.candidates?.[0]?.content?.parts?.[0]?.text;if(!txt)throw new Error('Empty');try{return JSON.parse(txt)}catch{return{response:txt}}}
 
-        function addSteps(n){if(!S.steps||typeof S.steps!=='object')S.steps={};S.steps[gT()]=(S.steps[gT()]||0)+n;save('fitlog_steps',S.steps);updateStepsUI();renderDailyQuest();const el=document.getElementById('step-count');if(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),300)}}function updateStepsUI(){const sc=$('step-count');const val=S.steps&&typeof S.steps==='object'?S.steps[gT()]||0:0;if(sc)sc.textContent=val.toLocaleString()}
+        function stepsToCalories(steps){// ~0.04 kcal/step for avg person; scale by body weight if available
+            const weight=S.wlog&&S.wlog.length?S.wlog.slice(-1)[0].weight:70;
+            const factor=0.0005*weight; // MET-based: cal≈weight(kg)*0.0005*steps
+            return Math.round(steps*factor)}
+        function addSteps(n){if(!S.steps||typeof S.steps!=='object')S.steps={};S.steps[gT()]=(S.steps[gT()]||0)+n;save('fitlog_steps',S.steps);updateStepsUI();renderDailyQuest();refreshDash();const el=document.getElementById('step-count');if(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),300)}}function updateStepsUI(){const sc=$('step-count');const val=S.steps&&typeof S.steps==='object'?S.steps[gT()]||0:0;if(sc)sc.textContent=val.toLocaleString()}
         function openWaterModal(){$('water-modal').style.display='flex'}function closeWaterModal(){$('water-modal').style.display='none'}
         function addWater(ml){if(!ml)return;S.hydr.log[gT()]=(S.hydr.log[gT()]||0)+ml;save('fitlog_hydr',S.hydr);updateHydr();renderDailyQuest()}
         function updateHydr(){const cur=S.hydr.log[gT()]||0,tgt=S.hydr.tgt||2500,pct=Math.min(100,Math.round((cur/Math.max(1,tgt))*100));['hydrate-current','hydrate-goal','hydrate-pct','hydrate-fill'].forEach((id,i)=>{const el=$(id);if(el)i===3?el.style.width=pct+'%':el.textContent=i===0?cur:i===1?tgt:pct+'%'})}
@@ -1371,7 +1728,7 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
 
         function renderCharts(){drawWeightChart();drawCalorieChart()}
         function drawWeightChart(){const c=$('weight-chart-container');if(!c)return;const data=S.wlog.slice(-30);if(data.length<2){c.innerHTML='<div class="chart-empty-state">Need 2+ entries</div>';return}const isDark=S.theme==='dark',tc=isDark?'#A0A0B0':'#6B6B7B',gc=isDark?'#2A2A3A':'#E0E0E8',lc='#00D4AA';const w=340,h=240,p={t:20,r:20,b:40,l:50},pw=w-p.l-p.r,ph=h-p.t-p.b;const vals=data.map(d=>d.weight),min=Math.floor(Math.min(...vals)-1),max=Math.ceil(Math.max(...vals)+1),range=max-min||1;let svg=`<svg class="chart-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;for(let i=0;i<=4;i++){const y=p.t+(ph/4)*i;svg+=`<line x1="${p.l}" y1="${y}" x2="${w-p.r}" y2="${y}" stroke="${gc}" stroke-width="1"/><text x="${p.l-8}" y="${y+4}" fill="${tc}" font-size="10" text-anchor="end">${(max-(range/4)*i).toFixed(1)}</text>`}const pts=data.map((d,i)=>`${p.l+(pw/(data.length-1))*i},${p.t+ph-((d.weight-min)/range)*ph}`).join(' ');svg+=`<polyline points="${pts}" fill="none" stroke="${lc}" stroke-width="2.5"/>`;c.innerHTML=svg+'</svg>'}
-        function drawCalorieChart(){const c=$('calorie-chart-container');if(!c)return;const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const eaten=[],burned=[];for(let i=6;i>=0;i--){const d=gA(i);eaten.push({label:days[new Date(d).getDay()],y:S.meals.filter(m=>m.date===d).reduce((s,m)=>s+((m.totals||{}).calories||0),0)});burned.push({label:days[new Date(d).getDay()],y:S.wkts.filter(w=>w.date===d).reduce((s,w)=>s+(w.cal||0),0)})}if(eaten.every(p=>p.y===0)&&burned.every(p=>p.y===0)){c.innerHTML='<div class="chart-empty-state">Log meals</div>';return}const isDark=S.theme==='dark',tc=isDark?'#A0A0B0':'#6B6B7B',allVals=[...eaten.map(p=>p.y),...burned.map(p=>p.y)],max=Math.ceil(Math.max(...allVals,100)*1.2);const w=340,h=240,p={t:30,r:20,b:40,l:50},pw=w-p.l-p.r,ph=h-p.t-p.b,barW=(pw/eaten.length)*0.35;let svg=`<svg class="chart-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><rect x="${w-140}" y="8" width="12" height="12" rx="2" fill="#FF6B6B"/><text x="${w-124}" y="18" fill="${tc}" font-size="9">Eaten</text><rect x="${w-80}" y="8" width="12" height="12" rx="2" fill="#FFB84D"/><text x="${w-64}" y="18" fill="${tc}" font-size="9">Burned</text>`;eaten.forEach((pt,i)=>{const x=p.l+(pw/eaten.length)*i;if(pt.y>0){const bh=(pt.y/max)*ph;svg+=`<rect x="${x}" y="${p.t+ph-bh}" width="${barW}" height="${bh}" rx="3" fill="#FF6B6B" opacity="0.85"/>`}if(burned[i].y>0){const bh=(burned[i].y/max)*ph;svg+=`<rect x="${x+barW+2}" y="${p.t+ph-bh}" width="${barW}" height="${bh}" rx="3" fill="#FFB84D" opacity="0.85"/>`}svg+=`<text x="${x+barW}" y="${h-p.b+16}" fill="${tc}" font-size="9" text-anchor="middle">${pt.label}</text>`});c.innerHTML=svg+'</svg>'}
+        function drawCalorieChart(){const c=$('calorie-chart-container');if(!c)return;const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const eaten=[],burned=[];for(let i=6;i>=0;i--){const d=gA(i);const daySteps=S.steps&&typeof S.steps==='object'?S.steps[d]||0:0;eaten.push({label:days[new Date(d).getDay()],y:S.meals.filter(m=>m.date===d).reduce((s,m)=>s+((m.totals||{}).calories||0),0)});burned.push({label:days[new Date(d).getDay()],y:S.wkts.filter(w=>w.date===d).reduce((s,w)=>s+(w.cal||0),0)+stepsToCalories(daySteps)})}if(eaten.every(p=>p.y===0)&&burned.every(p=>p.y===0)){c.innerHTML='<div class="chart-empty-state">Log meals</div>';return}const isDark=S.theme==='dark',tc=isDark?'#A0A0B0':'#6B6B7B',allVals=[...eaten.map(p=>p.y),...burned.map(p=>p.y)],max=Math.ceil(Math.max(...allVals,100)*1.2);const w=340,h=240,p={t:30,r:20,b:40,l:50},pw=w-p.l-p.r,ph=h-p.t-p.b,barW=(pw/eaten.length)*0.35;let svg=`<svg class="chart-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><rect x="${w-140}" y="8" width="12" height="12" rx="2" fill="#FF6B6B"/><text x="${w-124}" y="18" fill="${tc}" font-size="9">Eaten</text><rect x="${w-80}" y="8" width="12" height="12" rx="2" fill="#FFB84D"/><text x="${w-64}" y="18" fill="${tc}" font-size="9">Burned</text>`;eaten.forEach((pt,i)=>{const x=p.l+(pw/eaten.length)*i;if(pt.y>0){const bh=(pt.y/max)*ph;svg+=`<rect x="${x}" y="${p.t+ph-bh}" width="${barW}" height="${bh}" rx="3" fill="#FF6B6B" opacity="0.85"/>`}if(burned[i].y>0){const bh=(burned[i].y/max)*ph;svg+=`<rect x="${x+barW+2}" y="${p.t+ph-bh}" width="${barW}" height="${bh}" rx="3" fill="#FFB84D" opacity="0.85"/>`}svg+=`<text x="${x+barW}" y="${h-p.b+16}" fill="${tc}" font-size="9" text-anchor="middle">${pt.label}</text>`});c.innerHTML=svg+'</svg>'}
 
         function calculateStreak(){const plan=getActivePlan();if(!plan)return 0;let streak=0,freezes=plan.streakFreezes||0;const start=new Date(plan.startedDate);for(let i=0;i<365;i++){const d=gA(i);const hasWkt=S.wkts.some(w=>w.date===d);if(hasWkt){streak++;continue}if(i===0)continue;const dayOffset=Math.floor((new Date()-start)/(86400000))-i;if(dayOffset<0)continue;let isRestDay=false;for(const w of plan.weeks||[]){for(const wd of w.days||[]){const off=((w.weekNumber-1)*(plan.weeks[0]?.days?.length||4))+wd.dayNumber-1;if(off===dayOffset){isRestDay=true;break}}if(isRestDay)break}if(isRestDay)continue;if(freezes>0){freezes--;plan.streakFreezes=freezes;save('fitlog_plans',S.plans);continue}break}return streak}
         function updateStreakUI(){const plan=getActivePlan();const freezes=plan?Math.max(0,plan.streakFreezes||0):0;const s=calculateStreak();$('streak-count').textContent=s;$('streak-flame').style.display=s>0?'inline-block':'none';if($('streak-freezes'))$('streak-freezes').textContent=freezes}
@@ -1486,7 +1843,18 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         function renderAchievements(){
             const el=$('achievements-list');if(!el)return;
             const unlocked=(S.xp?.unlockedAchievements)||[];
-            el.innerHTML=ACHIEVEMENTS.map(a=>`<div class="achievement-item ${unlocked.includes(a.id)?'unlocked':''}"><span class="achievement-icon">${a.icon}</span><div><div class="achievement-name">${a.name}</div><div class="achievement-desc">${unlocked.includes(a.id)?'✅ '+a.desc:a.desc}</div></div></div>`).join('')
+            const prog=$('achievement-progress');
+            if(prog)prog.textContent=unlocked.length+' / '+ACHIEVEMENTS.length;
+            el.style.cssText='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:4px';
+            el.innerHTML=ACHIEVEMENTS.map(function(a){
+              var done=unlocked.includes(a.id);
+              var baseStyle='position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px 12px;border-radius:16px;text-align:center;overflow:hidden;';
+              var cardStyle=done
+                ? baseStyle+'background:linear-gradient(145deg,rgba(0,229,187,0.1),rgba(0,212,245,0.05));border:1px solid rgba(0,229,187,0.3);box-shadow:0 4px 18px rgba(0,229,187,0.12);'
+                : baseStyle+'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);filter:grayscale(1);opacity:.4;';
+              var badge=done?'<span style="position:absolute;top:7px;right:9px;font-size:.6rem;font-weight:800;color:#00E5BB;background:rgba(0,229,187,0.15);border:1px solid rgba(0,229,187,0.35);border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center">&#10003;</span>':'';
+              return '<div style="'+cardStyle+'">'+badge+'<span style="font-size:1.75rem;line-height:1">'+a.icon+'</span><div style="font-size:.73rem;font-weight:700;color:'+(done?'#F0F2FF':'rgba(180,190,220,0.75)')+';line-height:1.2">'+a.name+'</div><div style="font-size:.63rem;color:'+(done?'#00E5BB':'rgba(180,190,220,0.5)')+';line-height:1.3">'+a.desc+'</div></div>';
+            }).join('');
         }
 
         // ── DAILY QUEST SYSTEM ───────────────────────────────────
@@ -1611,10 +1979,10 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
 
         function toggleHipField(){$('hip-field').style.display=$('bf-gender')?.value==='female'?'block':'none'}
         function calculateBodyFat(){const g=$('bf-gender')?.value||'male',h=parseFloat($('bf-height')?.value||0),w=parseFloat($('bf-weight')?.value||0),n=parseFloat($('bf-neck')?.value||0),waist=parseFloat($('bf-waist')?.value||0),hip=parseFloat($('bf-hip')?.value||0);if(!h||!w||!n||!waist){toast('⚠️ Fill fields');return}let bf=g==='male'?86.010*Math.log10(waist-n)-70.041*Math.log10(h)+36.76:163.205*Math.log10(waist+hip-n)-97.684*Math.log10(h)-78.387;bf=Math.max(2,Math.min(50,Math.round(bf*10)/10));const fm=Math.round(w*bf/100*10)/10,lm=Math.round((w-fm)*10)/10;$('bf-result-container').innerHTML=`<div style="text-align:center"><div style="font-size:2.2rem;font-weight:700">${bf}%</div><div class="grid-4" style="margin-top:8px"><div class="stat-card"><div class="stat-value">${fm}</div><div class="stat-label">Fat kg</div></div><div class="stat-card"><div class="stat-value">${lm}</div><div class="stat-label">Lean kg</div></div></div></div>`}
-        function calculateGoals(){const g=$('bf-gender')?.value||'male',w=parseFloat($('bf-weight')?.value||70),h=parseFloat($('bf-height')?.value||175),age=parseInt($('bf-age')?.value||25),act=parseFloat($('goal-activity')?.value||1.55),goal=$('goal-type')?.value||'maintain',bmr=g==='male'?(10*w)+(6.25*h)-(5*age)+5:(10*w)+(6.25*h)-(5*age)-161,tdee=Math.round(bmr*act),target=goal==='lose'?tdee-500:goal==='gain'?tdee+500:tdee;S.goals={tdee,targetCal:target,proteinG:Math.round(target*0.4/4),carbsG:Math.round(target*0.3/4),fatG:Math.round(target*0.3/9),goal};save('fitlog_goals',S.goals);$('goal-result-container').innerHTML=`<div style="border-top:1px solid var(--border-color);padding-top:10px"><div class="grid-4"><div class="stat-card"><div class="stat-value">${tdee}</div><div class="stat-label">TDEE</div></div><div class="stat-card"><div class="stat-value highlight">${target}</div><div class="stat-label">Target</div></div><div class="stat-card"><div class="stat-value">${S.goals.proteinG}g</div><div class="stat-label">Protein</div></div><div class="stat-card"><div class="stat-value">${S.goals.carbsG}g</div><div class="stat-label">Carbs</div></div></div></div>`;toast('🎯 Done!')}
-        function refreshBody(){if(S.goals?.targetCal){const g=S.goals;$('goal-result-container').innerHTML=`<div style="border-top:1px solid var(--border-color);padding-top:10px"><h4>Targets</h4><div class="grid-4"><div class="stat-card"><div class="stat-value">${g.tdee}</div><div class="stat-label">TDEE</div></div><div class="stat-card"><div class="stat-value highlight">${g.targetCal}</div><div class="stat-label">Target</div></div><div class="stat-card"><div class="stat-value">${g.proteinG}g</div><div class="stat-label">Protein</div></div><div class="stat-card"><div class="stat-value">${g.carbsG}g</div><div class="stat-label">Carbs</div></div></div></div>`}}
+        function calculateGoals(){const g=$('bf-gender')?.value||'male',w=parseFloat($('bf-weight')?.value||70),h=parseFloat($('bf-height')?.value||175),age=parseInt($('bf-age')?.value||25),act=parseFloat($('goal-activity')?.value||1.55),goal=$('goal-type')?.value||'maintain',bmr=Math.round(g==='male'?(10*w)+(6.25*h)-(5*age)+5:(10*w)+(6.25*h)-(5*age)-161),tdee=Math.round(bmr*act),target=goal==='lose'?tdee-500:goal==='gain'?tdee+500:tdee;S.goals={bmr,tdee,targetCal:target,proteinG:Math.round(target*0.4/4),carbsG:Math.round(target*0.3/4),fatG:Math.round(target*0.3/9),goal};save('fitlog_goals',S.goals);$('goal-result-container').innerHTML=`<div style="border-top:1px solid var(--border-color);padding-top:10px"><div class="grid-4"><div class="stat-card"><div class="stat-value" style="font-size:1.3rem">${bmr}</div><div class="stat-label">BMR</div></div><div class="stat-card"><div class="stat-value" style="font-size:1.3rem">${tdee}</div><div class="stat-label">TDEE</div></div><div class="stat-card"><div class="stat-value highlight" style="font-size:1.3rem">${target}</div><div class="stat-label">Target</div></div><div class="stat-card"><div class="stat-value" style="font-size:1.3rem">${S.goals.proteinG}g</div><div class="stat-label">Protein</div></div></div><p style="font-size:.72rem;color:var(--text-secondary);margin-top:8px;text-align:center">✅ Net calories now visible on dashboard</p></div>`;refreshDash();toast('🎯 Done!')}
+        function refreshBody(){if(S.goals?.targetCal){const g=S.goals;$('goal-result-container').innerHTML=`<div style="border-top:1px solid var(--border-color);padding-top:10px"><h4>Targets</h4><div class="grid-4"><div class="stat-card"><div class="stat-value" style="font-size:1.3rem">${g.bmr||'—'}</div><div class="stat-label">BMR</div></div><div class="stat-card"><div class="stat-value" style="font-size:1.3rem">${g.tdee}</div><div class="stat-label">TDEE</div></div><div class="stat-card"><div class="stat-value highlight" style="font-size:1.3rem">${g.targetCal}</div><div class="stat-label">Target</div></div><div class="stat-card"><div class="stat-value" style="font-size:1.3rem">${g.proteinG}g</div><div class="stat-label">Protein</div></div></div>${g.bmr?'':'<p style="font-size:.72rem;color:var(--text-secondary);margin-top:6px">Recalculate to unlock Net Cal on dashboard</p>'}</div>`}}
 
-        function refreshDash(){const tm=getTM();const todayWkts=S.wkts.filter(w=>w.date===gT());$('stat-calories').textContent=tm.reduce((s,m)=>s+((m.totals||{}).calories||0),0);$('stat-protein').textContent=tm.reduce((s,m)=>s+((m.totals||{}).protein_g||0),0).toFixed(1)+'g';$('stat-workouts').textContent=todayWkts.length;$('stat-burned').textContent=todayWkts.reduce((s,w)=>s+(w.cal||0),0);updateHydr();updateWeightUI();updateStepsUI();updateStreakUI();refreshFavs();refreshPlans();renderXPBar();renderDailyQuest()}
+        function refreshDash(){const tm=getTM();const todayWkts=S.wkts.filter(w=>w.date===gT());const eaten=tm.reduce((s,m)=>s+((m.totals||{}).calories||0),0);const todaySteps=S.steps&&typeof S.steps==='object'?S.steps[gT()]||0:0;const wktBurned=todayWkts.reduce((s,w)=>s+(w.cal||0),0);const stepsBurned=stepsToCalories(todaySteps);const totalBurned=wktBurned+stepsBurned;$('stat-calories').textContent=eaten;$('stat-protein').textContent=tm.reduce((s,m)=>s+((m.totals||{}).protein_g||0),0).toFixed(1)+'g';$('stat-workouts').textContent=todayWkts.length;$('stat-burned').textContent=totalBurned;const netEl=$('stat-net');const netBar=$('net-cal-bar');if(netEl&&netBar){const bmr=S.goals?.bmr||0;if(bmr){netBar.style.display='flex';const net=eaten-(bmr+totalBurned);netEl.textContent=(net>0?'+':'')+net;netEl.style.color=net>200?'var(--accent-secondary)':net<-200?'var(--accent-primary)':'var(--accent-yellow)'}else{netBar.style.display='none'}}updateHydr();updateWeightUI();updateStepsUI();updateStreakUI();refreshFavs();refreshPlans();renderXPBar();renderDailyQuest()}
         function initNetworkStatus(){function updateStatus(){const indicator=$('offline-indicator');if(indicator)indicator.style.display=navigator.onLine?'none':'inline'}window.addEventListener('online',()=>{updateStatus();toast('🟢 Back online!')});window.addEventListener('offline',()=>{updateStatus();toast('📴 You\'re offline. AI features unavailable.')});updateStatus()}
         function isOnline(){return navigator.onLine}
 
@@ -1861,6 +2229,43 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
                 setTimeout(()=>dot.remove(), 1600);
             }
         }
+
+        
+        // Swipe down to close gif modal
+        (function(){
+          var sheet=null,startY=0,curY=0,dragging=false;
+          document.addEventListener('touchstart',function(e){
+            var m=document.getElementById('gif-modal');
+            if(m&&m.style.display!=='none'){
+              sheet=document.getElementById('gif-modal-sheet');
+              startY=e.touches[0].clientY;dragging=true;
+            }
+          },{passive:true});
+          document.addEventListener('touchmove',function(e){
+            if(!dragging||!sheet)return;
+            curY=e.touches[0].clientY;
+            var dy=Math.max(0,curY-startY);
+            sheet.style.transform='translateY('+dy+'px)';
+            sheet.style.transition='none';
+          },{passive:true});
+          document.addEventListener('touchend',function(){
+            if(!dragging||!sheet)return;
+            dragging=false;
+            var dy=curY-startY;
+            sheet.style.transition='transform .3s cubic-bezier(0.4,0,0.2,1)';
+            if(dy>120){
+              sheet.style.transform='translateY(100%)';
+              setTimeout(function(){
+                var m=document.getElementById('gif-modal');
+                if(m)m.style.display='none';
+                sheet.style.transform='';
+                document.body.style.overflow='';
+              },300);
+            } else {
+              sheet.style.transform='';
+            }
+          });
+        })();
 
         document.addEventListener('DOMContentLoaded',()=>{
             $('settings-api-key').value=S.key;
