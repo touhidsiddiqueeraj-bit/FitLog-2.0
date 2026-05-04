@@ -1136,17 +1136,42 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 }
 input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
 
-/* Workout plan exercise hover */
-.workout-plan-exercise { transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease; }
-.workout-plan-exercise:hover { transform: translateX(3px); border-color: rgba(108,140,255,0.4); }
+/* ---- XP SYSTEM ---- */
+.xp-bar-wrap{background:var(--glass-2);border:1px solid var(--glass-border);border-radius:20px;padding:12px 14px;margin-bottom:10px}
+.xp-level-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.xp-level-badge{background:linear-gradient(135deg,var(--accent-purple),var(--accent-blue);color:#fff;font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+.xp-label{font-size:.75rem;color:var(--text-secondary);font-weight:600}
+.xp-bar{height:8px;background:var(--glass-3);border-radius:8px;overflow:hidden;margin-bottom:4px}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent-purple),var(--accent-blue));border-radius:8px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.xp-numbers{font-size:.72rem;color:var(--text-secondary);text-align:right}
 
-/* Nav brand logo spin on click */
-@keyframes logoSpin {
-  from { transform: rotate(0deg) scale(1); }
-  50%  { transform: rotate(180deg) scale(1.1); }
-  to   { transform: rotate(360deg) scale(1); }
-}
+/* Daily Quest */
+.quest-card{background:linear-gradient(135deg,rgba(179,136,255,.12),rgba(108,140,255,.08));border:1px solid rgba(179,136,255,.25);border-radius:16px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.quest-card::before{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;background:radial-gradient(circle,rgba(179,136,255,.2) 0%,transparent 70%);border-radius:50%}
+.quest-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.quest-title{font-size:.78rem;font-weight:800;color:var(--accent-purple);text-transform:uppercase;letter-spacing:.05em}
+.quest-xp-badge{background:rgba(179,136,255,.2);color:var(--accent-purple);font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px}
+.quest-desc{font-size:.88rem;font-weight:600;color:var(--text-primary);margin-bottom:10px}
+.quest-progress-bar{height:6px;background:var(--glass-3);border-radius:6px;overflow:hidden;margin-bottom:6px}
+.quest-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-purple),var(--accent-pink));border-radius:6px;transition:width .5s ease}
+.quest-status{font-size:.72rem;color:var(--text-secondary)}
+.quest-done{background:linear-gradient(135deg,rgba(0,229,187,.12),rgba(0,212,245,.08));border-color:rgba(0,229,187,.3)}
+.quest-done .quest-title{color:var(--accent-primary)}
+.quest-done .quest-xp-badge{background:rgba(0,229,187,.15);color:var(--accent-primary)}
 
+/* Achievements */
+.achievement-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--glass-border)}
+.achievement-item:last-child{border-bottom:none}
+.achievement-icon{font-size:1.4rem;min-width:32px;text-align:center;filter:grayscale(1);opacity:.4;transition:all .3s}
+.achievement-item.unlocked .achievement-icon{filter:none;opacity:1}
+.achievement-name{font-size:.82rem;font-weight:700;color:var(--text-secondary)}
+.achievement-item.unlocked .achievement-name{color:var(--text-primary)}
+.achievement-desc{font-size:.72rem;color:var(--text-secondary)}
+.achievement-item.unlocked .achievement-desc{color:var(--accent-primary)}
+
+/* XP Toast popup */
+.xp-toast{position:fixed;top:70px;right:14px;background:linear-gradient(135deg,var(--accent-purple),var(--accent-blue);color:#fff;padding:8px 14px;border-radius:20px;font-size:.82rem;font-weight:700;z-index:2000;animation:xpPop .5s cubic-bezier(.34,1.56,.64,1) forwards;box-shadow:0 4px 16px rgba(179,136,255,.4)}
+@keyframes xpPop{0%{opacity:0;transform:translateY(10px) scale(.8)}60%{opacity:1;transform:translateY(-4px) scale(1.05)}100%{opacity:1;transform:translateY(0) scale(1)}}
 </style>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00E5BB">
@@ -1245,7 +1270,15 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         <!-- Main Content -->
         <div class="view-container">
             <!-- Dashboard -->
-            <section id="view-dashboard" class="view active"><div class="section-title">📊 Today</div><div class="grid-4"><div class="stat-card" onclick="go('nutrition')"><div class="stat-value" id="stat-calories">0</div><div class="stat-label">Calories</div></div><div class="stat-card"><div class="stat-value" id="stat-protein">0g</div><div class="stat-label">Protein</div></div><div class="stat-card" onclick="go('workout')"><div class="stat-value highlight" id="stat-workouts">0</div><div class="stat-label">Workouts</div></div><div class="stat-card"><div class="stat-value blue" id="stat-burned">0</div><div class="stat-label">Burned</div></div></div><div class="card" style="margin-top:10px"><div class="card-header">🔥 Streak <span class="streak-flame" id="streak-flame">🔥</span></div><div style="font-size:1.8rem;font-weight:700;text-align:center;color:var(--accent-secondary)" id="streak-count">0</div><div style="text-align:center;font-size:.8rem;color:var(--text-secondary)">consecutive days</div><div style="text-align:center;margin-top:6px;font-size:.85rem;color:var(--accent-blue)">❄️ <span id="streak-freezes">0</span> streak freezes</div></div><div class="card"><div class="card-header">👣 Steps</div><div class="step-display"><div class="step-number" id="step-count">0</div><div class="step-controls"><button class="hydrate-btn" onclick="addSteps(500)">+500</button><button class="hydrate-btn" onclick="addSteps(1000)">+1k</button><button class="hydrate-btn" onclick="addSteps(2000)">+2k</button><button class="hydrate-btn" onclick="addSteps(5000)">+5k</button></div></div></div><div class="card"><div class="card-header">💧 Hydration</div><div style="display:flex;justify-content:space-between;font-size:.9rem"><span><strong id="hydrate-current">0</strong> / <span id="hydrate-goal">2500</span> ml</span><span id="hydrate-pct">0%</span></div><div class="hydrate-bar"><div class="hydrate-fill" id="hydrate-fill" style="width:0%"></div></div><div style="display:flex;gap:6px"><button class="hydrate-btn" onclick="addWater(200)">+200</button><button class="hydrate-btn" onclick="addWater(400)">+400</button><button class="hydrate-btn" onclick="addWater(600)">+600</button><button class="hydrate-btn" onclick="openWaterModal()">+More</button></div></div><div class="card"><div class="card-header">⚖️ Weight</div><div style="display:flex;justify-content:space-between"><span style="font-size:1.3rem;font-weight:700" id="dashboard-weight">-- kg</span><span id="dashboard-weight-date"></span></div><button class="hydrate-btn" onclick="openWeightModal()" style="margin-top:6px">⚖️ Log</button></div><div class="card"><div class="card-header">📅 Plans</div><div id="active-plans-dashboard"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No plans</p></div></div></div><div class="card"><div class="card-header">⭐ Quick Log</div><div id="dashboard-favorites"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No favorites</p></div></div></div></section>
+<section id="view-dashboard" class="view active"><div class="section-title">📊 Today</div><div class="grid-4"><div class="stat-card" onclick="go('nutrition')"><div class="stat-value" id="stat-calories">0</div><div class="stat-label">Calories</div></div><div class="stat-card"><div class="stat-value" id="stat-protein">0g</div><div class="stat-label">Protein</div></div><div class="stat-card" onclick="go('workout')"><div class="stat-value highlight" id="stat-workouts">0</div><div class="stat-label">Workouts</div></div><div class="stat-card"><div class="stat-value blue" id="stat-burned">0</div><div class="stat-label">Burned</div></div></div>
+<!-- XP Bar -->
+<div class="xp-bar-wrap" style="margin-top:10px"><div class="xp-level-row"><span class="xp-level-badge" id="xp-level-badge">Level 1</span><span class="xp-label" id="xp-title-label">Rookie</span></div><div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div><div class="xp-numbers"><span id="xp-current">0</span> / <span id="xp-next">100</span> XP</div></div>
+<!-- Daily Quest -->
+<div id="daily-quest-card" class="quest-card"><div class="quest-header"><span class="quest-title">⚔️ Daily Quest</span><span class="quest-xp-badge" id="quest-xp-badge">+50 XP</span></div><div class="quest-desc" id="quest-desc">Loading...</div><div class="quest-progress-bar"><div class="quest-progress-fill" id="quest-progress-fill" style="width:0%"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="quest-status" id="quest-status">0 / 1 complete</span><button class="btn btn-xs btn-accent" onclick="logQuestProgress()" id="quest-btn">✔ Log Progress</button></div></div>
+<div class="card" style="margin-top:0"><div class="card-header">🔥 Streak <span class="streak-flame" id="streak-flame">🔥</span></div><div style="font-size:1.8rem;font-weight:700;text-align:center;color:var(--accent-secondary)" id="streak-count">0</div><div style="text-align:center;font-size:.8rem;color:var(--text-secondary)">consecutive days</div><div style="text-align:center;margin-top:6px;font-size:.85rem;color:var(--accent-blue)">❄️ <span id="streak-freezes">0</span> streak freezes</div></div><div class="card"><div class="card-header">👣 Steps</div><div class="step-display"><div class="step-number" id="step-count">0</div><div class="step-controls"><button class="hydrate-btn" onclick="addSteps(500)">+500</button><button class="hydrate-btn" onclick="addSteps(1000)">+1k</button><button class="hydrate-btn" onclick="addSteps(2000)">+2k</button><button class="hydrate-btn" onclick="addSteps(5000)">+5k</button></div></div></div><div class="card"><div class="card-header">💧 Hydration</div><div style="display:flex;justify-content:space-between;font-size:.9rem"><span><strong id="hydrate-current">0</strong> / <span id="hydrate-goal">2500</span> ml</span><span id="hydrate-pct">0%</span></div><div class="hydrate-bar"><div class="hydrate-fill" id="hydrate-fill" style="width:0%"></div></div><div style="display:flex;gap:6px"><button class="hydrate-btn" onclick="addWater(200)">+200</button><button class="hydrate-btn" onclick="addWater(400)">+400</button><button class="hydrate-btn" onclick="addWater(600)">+600</button><button class="hydrate-btn" onclick="openWaterModal()">+More</button></div></div><div class="card"><div class="card-header">⚖️ Weight</div><div style="display:flex;justify-content:space-between"><span style="font-size:1.3rem;font-weight:700" id="dashboard-weight">-- kg</span><span id="dashboard-weight-date"></span></div><button class="hydrate-btn" onclick="openWeightModal()" style="margin-top:6px">⚖️ Log</button></div>
+<!-- Achievements -->
+<div class="card"><div class="card-header">🏆 Achievements</div><div id="achievements-list"></div></div>
+<div class="card"><div class="card-header">📅 Plans</div><div id="active-plans-dashboard"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No plans</p></div></div></div><div class="card"><div class="card-header">⭐ Quick Log</div><div id="dashboard-favorites"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No favorites</p></div></div></div></section>
 
             <!-- Nutrition -->
             <section id="view-nutrition" class="view"><div class="section-title">🍽️ Nutrition</div><div class="grid-2"><div><div class="card"><div class="card-header">💬 AI Meal Logger</div><div class="chat-container"><div class="chat-messages" id="nutrition-chat-messages"><div class="chat-message ai">👋 Describe your meal or scan a barcode with 📷</div></div><div class="chat-input-area"><input type="text" id="nutrition-chat-input" placeholder="Describe meal..." onkeypress="if(event.key==='Enter')sendMealMessage()"><button class="btn btn-primary btn-sm" onclick="sendMealMessage()">Send</button></div></div></div><div class="card"><div class="card-header">📷 Photo & Scan</div><div style="display:flex;gap:8px;margin-bottom:10px"><div style="flex:1;padding:16px;text-align:center;cursor:pointer;border:2px dashed var(--border-color);border-radius:12px" onclick="document.getElementById('meal-photo-input').click()">📸 Photo</div><div style="flex:1;padding:16px;text-align:center;cursor:pointer;border:2px dashed var(--accent-cyan);border-radius:12px" onclick="openScanner()">📷 Scan Code</div></div><input type="file" id="meal-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoSelect(event)"><img id="photo-preview" style="max-width:100%;max-height:200px;display:none;border-radius:8px;margin-top:8px"><button class="btn btn-primary btn-block btn-sm" id="analyze-photo-btn" onclick="analyzeMealPhoto()" disabled>🔍 Analyze Photo</button></div></div><div><div class="card"><div class="card-header">⭐ Favorites</div><div id="favorites-list"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">Save with ⭐</p></div></div></div><div class="card"><div class="card-header">📋 Today</div><div id="todays-food-log"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No food</p></div></div><div style="border-top:1px solid var(--border-color);margin-top:12px;padding-top:12px;display:none;gap:16px;font-size:.8rem" id="nutrition-totals"><span><strong>Cal:</strong> <span id="nutrition-total-calories">0</span></span><span><strong>P:</strong> <span id="nutrition-total-protein">0</span>g</span><span><strong>C:</strong> <span id="nutrition-total-carbs">0</span>g</span><span><strong>F:</strong> <span id="nutrition-total-fat">0</span>g</span></div></div></div></div></section>
@@ -1292,7 +1325,7 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         function hk(){return!!(S.key&&S.key.trim())}function gT(){return today}function gA(d){const dt=new Date();dt.setDate(dt.getDate()-d);return dt.toISOString().split('T')[0]}
         function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,9)}
         function toast(m,d=2500){const e=document.querySelector('.toast');if(e)e.remove();const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300)},d)}
-        function showCongrats(msg){if(S.lastCongratsDate===gT())return;S.lastCongratsDate=gT();localStorage.setItem('fitlog_last_congrats',gT());$('congrats-msg').textContent=msg||'You crushed your workout today!';$('congrats-overlay').style.display='flex';if(typeof triggerCongratsConfetti==='function')triggerCongratsConfetti();}
+        function showCongrats(msg){if(S.lastCongratsDate===gT())return;S.lastCongratsDate=gT();localStorage.setItem('fitlog_last_congrats',gT());$('congrats-msg').textContent=msg||'You crushed your workout today!';$('congrats-overlay').style.display='flex'}
         function closeCongrats(){$('congrats-overlay').style.display='none'}
         function findExercise(idOrName){let m=EX.find(e=>e.id===idOrName);if(!m)m=EX.find(e=>e.id.toLowerCase()===(idOrName||'').toLowerCase());if(!m)m=EX.find(e=>e.n.toLowerCase()===(idOrName||'').toLowerCase());if(!m)m=EX.find(e=>e.n.toLowerCase().includes((idOrName||'').toLowerCase()));if(!m)m=EX.find(e=>(idOrName||'').toLowerCase().includes(e.id.toLowerCase()));return m}
         function findGif(exId,exName){const ck=exId||exName;if(GIF_CACHE[ck])return GIF_CACHE[ck];if(GL[exId])return GL[exId];if(GL[(exId||'').toLowerCase()])return GL[(exId||'').toLowerCase()];const ex=findExercise(exId||exName);if(ex&&GL[ex.id])return GL[ex.id];if(GL[exName])return GL[exName];const sn=(exName||'').toLowerCase();for(const[k,v]of Object.entries(GL)){if(sn.includes(k)||k.includes(sn))return v}const clean=sn.replace(/[^a-z]/g,'');for(const[k,v]of Object.entries(GL)){const kclean=k.replace(/[^a-z]/g,'');if(kclean.length>4&&(clean.includes(kclean)||kclean.includes(clean)))return v}const keywords={'press':['bench','shoulder','ohp'],'curl':['bicep','arm'],'row':['back','row'],'squat':['squat','leg'],'deadlift':['dl','deadlift','rdl'],'dip':['dip','tricep'],'pull':['pull','lat','back'],'raise':['raise','shoulder','lateral','front','rear'],'fly':['fly','chest'],'crunch':['crunch','abs','core'],'plank':['plank','core','abs'],'lunge':['lunge','leg','split'],'extension':['extension','tricep']};for(const[cat,terms]of Object.entries(keywords)){let matchScore=0;for(const t of terms){if(sn.includes(t))matchScore++;if(k.includes(t))matchScore++}if(matchScore>=2)for(const[k,v]of Object.entries(GL)){if(k.includes(cat))return v}}return null}
@@ -1321,15 +1354,15 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         function addCoachSkel(){const c=$('coach-messages');if(!c)return'cs-0';const id='cs-'+Date.now();const d=document.createElement('div');d.id=id;d.className='chat-message ai';d.innerHTML='<div class="skeleton skeleton-text"></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;return id}
         function removeCoachSkel(id){const e=$(id);if(e)e.remove()}
 
-        function go(v){S.view=v;document.querySelectorAll('#nav-tabs-desktop .tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));document.querySelectorAll('#bottom-nav .bottom-tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));document.querySelectorAll('.view').forEach(vw=>vw.classList.remove('active'));const t=$('view-'+v);if(t)t.classList.add('active');if(v==='dashboard')refreshDash();if(v==='nutrition'){refreshNut();refreshFavs()}else{sp=null;const pp=$('photo-preview');if(pp){pp.style.display='none';pp.src=''}const mpi=$('meal-photo-input');if(mpi)mpi.value='';const apb=$('analyze-photo-btn');if(apb)apb.disabled=true}if(v==='workout'){refreshPlans();checkActivePlanToday()}if(v==='body')refreshBody();if(v==='progress')renderCharts();window.scrollTo({top:0,behavior:'smooth'})}
+        function go(v){S.view=v;document.querySelectorAll('#nav-tabs-desktop .tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));document.querySelectorAll('#bottom-nav .bottom-tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));document.querySelectorAll('.view').forEach(vw=>vw.classList.remove('active'));const t=$('view-'+v);if(t)t.classList.add('active');if(v==='dashboard')refreshDash();if(v==='nutrition'){refreshNut();refreshFavs()}if(v==='workout'){refreshPlans();checkActivePlanToday()}if(v==='body')refreshBody();if(v==='progress')renderCharts();window.scrollTo({top:0,behavior:'smooth'})}
         document.querySelectorAll('#nav-tabs-desktop .tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.view)));
         document.querySelectorAll('#bottom-nav .bottom-tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.view)));
 
         async function ai(prompt,sys='',img=null){if(!isOnline()){toast('📴 Offline — AI features unavailable');return null}if(!hk()){toast('⚠️ Set API key');openSettings();return null}const parts=[];if(img)parts.push({inlineData:{mimeType:img.mime,data:img.data}});parts.push({text:sys?`${sys}\n\n${prompt}`:prompt});const r=await fetch(`${API_URL}?key=${S.key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}],generationConfig:{temperature:0.4,maxOutputTokens:4096,responseMimeType:"application/json"}})});if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API error')}const d=await r.json();const txt=d?.candidates?.[0]?.content?.parts?.[0]?.text;if(!txt)throw new Error('Empty');try{return JSON.parse(txt)}catch{return{response:txt}}}
 
-        function addSteps(n){S.steps[gT()]=(S.steps[gT()]||0)+n;save('fitlog_steps',S.steps);updateStepsUI();if(typeof triggerStepPopAnim==='function')triggerStepPopAnim();}function updateStepsUI(){const sc=$('step-count');if(sc)sc.textContent=(S.steps[gT()]||0).toLocaleString()}
+        function addSteps(n){if(!S.steps||typeof S.steps!=='object')S.steps={};S.steps[gT()]=(S.steps[gT()]||0)+n;save('fitlog_steps',S.steps);updateStepsUI();renderDailyQuest();const el=document.getElementById('step-count');if(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),300)}}function updateStepsUI(){const sc=$('step-count');const val=S.steps&&typeof S.steps==='object'?S.steps[gT()]||0:0;if(sc)sc.textContent=val.toLocaleString()}
         function openWaterModal(){$('water-modal').style.display='flex'}function closeWaterModal(){$('water-modal').style.display='none'}
-        function addWater(ml){if(!ml)return;S.hydr.log[gT()]=(S.hydr.log[gT()]||0)+ml;save('fitlog_hydr',S.hydr);updateHydr()}
+        function addWater(ml){if(!ml)return;S.hydr.log[gT()]=(S.hydr.log[gT()]||0)+ml;save('fitlog_hydr',S.hydr);updateHydr();renderDailyQuest()}
         function updateHydr(){const cur=S.hydr.log[gT()]||0,tgt=S.hydr.tgt||2500,pct=Math.min(100,Math.round((cur/Math.max(1,tgt))*100));['hydrate-current','hydrate-goal','hydrate-pct','hydrate-fill'].forEach((id,i)=>{const el=$(id);if(el)i===3?el.style.width=pct+'%':el.textContent=i===0?cur:i===1?tgt:pct+'%'})}
         function openWeightModal(){$('weight-modal-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});$('weight-modal').style.display='flex';const l=S.wlog.slice(-1)[0];if(l)$('custom-weight-input').value=l.weight}function closeWeightModal(){$('weight-modal').style.display='none'}
         function quickWeight(delta){const l=S.wlog.slice(-1)[0];const w=l?Math.round((l.weight+delta)*10)/10:70;S.wlog.push({date:gT(),weight:w});save('fitlog_wlog',S.wlog);updateWeightUI()}
@@ -1340,45 +1373,8 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         function drawWeightChart(){const c=$('weight-chart-container');if(!c)return;const data=S.wlog.slice(-30);if(data.length<2){c.innerHTML='<div class="chart-empty-state">Need 2+ entries</div>';return}const isDark=S.theme==='dark',tc=isDark?'#A0A0B0':'#6B6B7B',gc=isDark?'#2A2A3A':'#E0E0E8',lc='#00D4AA';const w=340,h=240,p={t:20,r:20,b:40,l:50},pw=w-p.l-p.r,ph=h-p.t-p.b;const vals=data.map(d=>d.weight),min=Math.floor(Math.min(...vals)-1),max=Math.ceil(Math.max(...vals)+1),range=max-min||1;let svg=`<svg class="chart-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;for(let i=0;i<=4;i++){const y=p.t+(ph/4)*i;svg+=`<line x1="${p.l}" y1="${y}" x2="${w-p.r}" y2="${y}" stroke="${gc}" stroke-width="1"/><text x="${p.l-8}" y="${y+4}" fill="${tc}" font-size="10" text-anchor="end">${(max-(range/4)*i).toFixed(1)}</text>`}const pts=data.map((d,i)=>`${p.l+(pw/(data.length-1))*i},${p.t+ph-((d.weight-min)/range)*ph}`).join(' ');svg+=`<polyline points="${pts}" fill="none" stroke="${lc}" stroke-width="2.5"/>`;c.innerHTML=svg+'</svg>'}
         function drawCalorieChart(){const c=$('calorie-chart-container');if(!c)return;const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const eaten=[],burned=[];for(let i=6;i>=0;i--){const d=gA(i);eaten.push({label:days[new Date(d).getDay()],y:S.meals.filter(m=>m.date===d).reduce((s,m)=>s+((m.totals||{}).calories||0),0)});burned.push({label:days[new Date(d).getDay()],y:S.wkts.filter(w=>w.date===d).reduce((s,w)=>s+(w.cal||0),0)})}if(eaten.every(p=>p.y===0)&&burned.every(p=>p.y===0)){c.innerHTML='<div class="chart-empty-state">Log meals</div>';return}const isDark=S.theme==='dark',tc=isDark?'#A0A0B0':'#6B6B7B',allVals=[...eaten.map(p=>p.y),...burned.map(p=>p.y)],max=Math.ceil(Math.max(...allVals,100)*1.2);const w=340,h=240,p={t:30,r:20,b:40,l:50},pw=w-p.l-p.r,ph=h-p.t-p.b,barW=(pw/eaten.length)*0.35;let svg=`<svg class="chart-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><rect x="${w-140}" y="8" width="12" height="12" rx="2" fill="#FF6B6B"/><text x="${w-124}" y="18" fill="${tc}" font-size="9">Eaten</text><rect x="${w-80}" y="8" width="12" height="12" rx="2" fill="#FFB84D"/><text x="${w-64}" y="18" fill="${tc}" font-size="9">Burned</text>`;eaten.forEach((pt,i)=>{const x=p.l+(pw/eaten.length)*i;if(pt.y>0){const bh=(pt.y/max)*ph;svg+=`<rect x="${x}" y="${p.t+ph-bh}" width="${barW}" height="${bh}" rx="3" fill="#FF6B6B" opacity="0.85"/>`}if(burned[i].y>0){const bh=(burned[i].y/max)*ph;svg+=`<rect x="${x+barW+2}" y="${p.t+ph-bh}" width="${barW}" height="${bh}" rx="3" fill="#FFB84D" opacity="0.85"/>`}svg+=`<text x="${x+barW}" y="${h-p.b+16}" fill="${tc}" font-size="9" text-anchor="middle">${pt.label}</text>`});c.innerHTML=svg+'</svg>'}
 
-        function calculateStreak(){
-            const plan=getActivePlan();
-            // With active plan: use plan rest-day logic + streak freezes
-            if(plan&&plan.startedDate){
-                let streak=0,freezes=plan.streakFreezes||0;
-                const start=new Date(plan.startedDate);
-                for(let i=0;i<365;i++){
-                    const d=gA(i);
-                    const hasWkt=S.wkts.some(w=>w.date===d);
-                    if(hasWkt){streak++;continue}
-                    if(i===0)continue;
-                    const dayOffset=Math.floor((new Date()-start)/(86400000))-i;
-                    if(dayOffset<0)continue;
-                    let isRestDay=false;
-                    for(const w of plan.weeks||[]){
-                        for(const wd of w.days||[]){
-                            const off=((w.weekNumber-1)*(plan.weeks[0]?.days?.length||4))+wd.dayNumber-1;
-                            if(off===dayOffset){isRestDay=true;break}
-                        }
-                        if(isRestDay)break
-                    }
-                    if(isRestDay)continue;
-                    if(freezes>0){freezes--;plan.streakFreezes=freezes;save('fitlog_plans',S.plans);continue}
-                    break
-                }
-                return streak;
-            }
-            // Without plan: count consecutive days (today backwards) with any logged workout
-            let streak=0;
-            for(let i=0;i<365;i++){
-                const d=gA(i);
-                const hasWkt=S.wkts.some(w=>w.date===d);
-                if(hasWkt){streak++}
-                else if(i===0){continue} // allow today to be incomplete
-                else{break}
-            }
-            return streak;
-        }
-        function updateStreakUI(){const plan=getActivePlan();const freezes=plan?Math.max(0,plan.streakFreezes||0):0;const s=calculateStreak();$('streak-count').textContent=s;$('streak-flame').style.display=s>0?'inline-block':'none';const sf=$('streak-freezes');if(sf)sf.textContent=plan?freezes:'—'}
+        function calculateStreak(){const plan=getActivePlan();if(!plan)return 0;let streak=0,freezes=plan.streakFreezes||0;const start=new Date(plan.startedDate);for(let i=0;i<365;i++){const d=gA(i);const hasWkt=S.wkts.some(w=>w.date===d);if(hasWkt){streak++;continue}if(i===0)continue;const dayOffset=Math.floor((new Date()-start)/(86400000))-i;if(dayOffset<0)continue;let isRestDay=false;for(const w of plan.weeks||[]){for(const wd of w.days||[]){const off=((w.weekNumber-1)*(plan.weeks[0]?.days?.length||4))+wd.dayNumber-1;if(off===dayOffset){isRestDay=true;break}}if(isRestDay)break}if(isRestDay)continue;if(freezes>0){freezes--;plan.streakFreezes=freezes;save('fitlog_plans',S.plans);continue}break}return streak}
+        function updateStreakUI(){const plan=getActivePlan();const freezes=plan?Math.max(0,plan.streakFreezes||0):0;const s=calculateStreak();$('streak-count').textContent=s;$('streak-flame').style.display=s>0?'inline-block':'none';if($('streak-freezes'))$('streak-freezes').textContent=freezes}
 
         function getActivePlan(){return S.plans.find(p=>p.started)}
         function checkActivePlanToday(){
@@ -1387,25 +1383,202 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
             if(plan&&plan.startedDate){genSec.style.display='none';quickSec.style.display='none';activeSec.style.display='block';renderTodayPlanWorkout(plan)}
             else{genSec.style.display='block';quickSec.style.display='block';activeSec.style.display='none'}
         }
+        // Get a flat ordered list of all plan days: [{week, day, weekNum, dayNum}]
+        function getPlanDaysList(plan){const list=[];for(const w of plan.weeks){for(const d of w.days){list.push({week:w,day:d,weekNum:w.weekNumber,dayNum:d.dayNumber})}}return list}
+        // Get the current active day index (0-based into getPlanDaysList)
+        function getCurrentDayIndex(plan){if(typeof plan.currentDayIndex==='number')return plan.currentDayIndex;return 0}
         function renderTodayPlanWorkout(plan){
-            const start=new Date(plan.startedDate);const daysSinceStart=Math.floor((new Date()-start)/(86400000));let found=null,weekNum=0,dayWithinWeek=0;
-            for(const w of plan.weeks){for(const d of w.days){const dayOff=((w.weekNumber-1)*(plan.weeks[0]?.days?.length||4))+d.dayNumber-1;if(dayOff===daysSinceStart||dayOff===daysSinceStart+1){found=d;weekNum=w.weekNumber;dayWithinWeek=d.dayNumber;break}}if(found)break}
-            if(!found){$('active-plan-workout').innerHTML='<p style="color:var(--text-secondary)">Rest day or plan completed. Great job!</p>';return}
-            const isDone=plan.done?.[`${weekNum}-${dayWithinWeek}`];
-            const exDoneKey=`${weekNum}-${dayWithinWeek}`;
+            const days=getPlanDaysList(plan);const idx=getCurrentDayIndex(plan);
+            if(idx>=days.length){$('active-plan-workout').innerHTML='<p style="color:var(--text-secondary)">🎉 Plan complete! Amazing work!</p>';return}
+            const {week,day,weekNum,dayNum}=days[idx];
+            const isDone=plan.done?.[`${weekNum}-${dayNum}`];
+            const exDoneKey=`${weekNum}-${dayNum}`;
             const exDoneArr=plan.exerciseDone?.[exDoneKey]||[];
-            let html=`<h4>Week ${weekNum}, Day ${dayWithinWeek}: ${found.name||'Workout'}</h4>`;html+=`<span class="exercise-badge badge-${found.type||'strength'}">${found.type||'strength'}</span>`;if(found.warmup)html+=`<p style="font-size:.8rem;margin-top:4px"><strong>Warmup:</strong> ${found.warmup}</p>`;html+='<div style="margin-top:8px">';found.exercises.forEach((ex,i)=>{const db=findExercise(ex.id);const en=db?db.n:(ex.id||'Exercise');const exIsDone=exDoneArr[i];const gifUrl=findGif(db?db.id:'',en);const gifHtml=gifUrl?`<div class="inline-gif-wrap"><img src="${gifUrl}" alt="${en}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`:'';html+=`<div class="workout-plan-exercise-wrap" style="margin-bottom:8px"><div class="workout-plan-exercise exercise-clickable ${exIsDone?'completed':''}" style="padding:8px;margin-bottom:0" onclick="showExerciseGif('${db?db.id:''}','${en.replace(/'/g,"\\'")}')"><div style="flex:1;font-size:.85rem;${exIsDone?'text-decoration:line-through;opacity:0.6':''}">${i+1}. ${en} <span style="font-size:.75rem;color:var(--text-secondary)">${ex.sets}×${ex.reps}</span></div><button class="btn btn-done btn-sm ${exIsDone?'completed':''}" onclick="event.stopPropagation();toggleExerciseDone('${plan.id}',${weekNum},${dayWithinWeek},${i})">${exIsDone?'✅':'○'}</button></div>${gifHtml}</div>`});html+='</div>';if(found.cooldown)html+=`<p style="font-size:.8rem;margin-top:4px"><strong>Cooldown:</strong> ${found.cooldown}</p>`;html+=`<button class="btn btn-sm ${isDone?'btn-secondary':'btn-primary'} btn-block" onclick="completeTodayPlanDay()" style="margin-top:8px">${isDone?'↩️ Undo Completion':'✅ Mark Day Complete'}</button>`;html+=`<div class="plan-action-bar"><button class="btn btn-danger btn-sm" onclick="stopPlan('${plan.id}')">⏹️ Stop Plan</button></div>`;$('active-plan-workout').innerHTML=html}
-        function completeTodayPlanDay(){const plan=getActivePlan();if(!plan)return;const start=new Date(plan.startedDate);const daysSinceStart=Math.floor((new Date()-start)/(86400000));let wNum=0,dNum=0;for(const w of plan.weeks){for(const d of w.days){const off=((w.weekNumber-1)*(plan.weeks[0]?.days?.length||4))+d.dayNumber-1;if(off===daysSinceStart||off===daysSinceStart+1){wNum=w.weekNumber;dNum=d.dayNumber;break}}}if(!plan.done)plan.done={};const key=`${wNum}-${dNum}`;plan.done[key]=!plan.done[key];save('fitlog_plans',S.plans);checkActivePlanToday();refreshPlans();refreshDash();if(plan.done[key]){showCongrats('Workout complete! Your streak continues! 🔥');requestNotificationPermission()}}
+            let html=`<h4>Week ${weekNum}, Day ${dayNum}: ${day.name||'Workout'}</h4>`;html+=`<span class="exercise-badge badge-${day.type||'strength'}">${day.type||'strength'}</span>`;if(day.warmup)html+=`<p style="font-size:.8rem;margin-top:4px"><strong>Warmup:</strong> ${day.warmup}</p>`;html+='<div style="margin-top:8px">';day.exercises.forEach((ex,i)=>{const db=findExercise(ex.id);const en=db?db.n:(ex.id||'Exercise');const exIsDone=exDoneArr[i];const gifUrl=findGif(db?db.id:'',en);const gifHtml=gifUrl?`<div class="inline-gif-wrap"><img src="${gifUrl}" alt="${en}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`:'';html+=`<div class="workout-plan-exercise-wrap" style="margin-bottom:8px"><div class="workout-plan-exercise exercise-clickable ${exIsDone?'completed':''}" style="padding:8px;margin-bottom:0" onclick="showExerciseGif('${db?db.id:''}','${en.replace(/'/g,"\\'")}')"><div style="flex:1;font-size:.85rem;${exIsDone?'text-decoration:line-through;opacity:0.6':''}">${i+1}. ${en} <span style="font-size:.75rem;color:var(--text-secondary)">${ex.sets}×${ex.reps}</span></div><button class="btn btn-done btn-sm ${exIsDone?'completed':''}" onclick="event.stopPropagation();toggleExerciseDone('${plan.id}',${weekNum},${dayNum},${i})">${exIsDone?'✅':'○'}</button></div>${gifHtml}</div>`});html+='</div>';if(day.cooldown)html+=`<p style="font-size:.8rem;margin-top:4px"><strong>Cooldown:</strong> ${day.cooldown}</p>`;html+=`<button class="btn btn-sm ${isDone?'btn-secondary':'btn-primary'} btn-block" onclick="completeTodayPlanDay()" style="margin-top:8px">${isDone?'↩️ Undo':'✅ Mark Day Complete'}</button>`;html+=`<div class="plan-action-bar"><button class="btn btn-danger btn-sm" onclick="stopPlan('${plan.id}')">⏹️ Stop Plan</button></div>`;$('active-plan-workout').innerHTML=html}
+        function autoCompleteDay(pid,w,d){const p=S.plans.find(pl=>pl.id===pid);if(!p)return;if(!p.done)p.done={};const key=`${w}-${d}`;if(p.done[key])return;p.done[key]=true;// Log workout entry for dashboard
+            const days=getPlanDaysList(p);const dayObj=days.find(dy=>dy.weekNum===w&&dy.dayNum===d);if(dayObj){const exList=dayObj.day.exercises||[];const estCal=exList.reduce((s,ex)=>{const db=findExercise(ex.id);return s+(db?db.cal:6)*(ex.sets||3)},0)||200;S.wkts.push({id:uid(),ts:new Date().toISOString(),date:gT(),name:(p.planName||'Plan')+' — '+(dayObj.day.name||`W${w}D${d}`),dur:45,cal:estCal,type:dayObj.day.type||'strength',fromPlan:true,ex:exList.map(ex=>{const db=findExercise(ex.id);return{n:db?db.n:ex.id,d:`${ex.sets}×${ex.reps}`}})});save('fitlog_wkts',S.wkts)}// Advance to next day
+            const idx=getCurrentDayIndex(p);if(idx<days.length-1){p.currentDayIndex=idx+1}else{p.currentDayIndex=days.length}save('fitlog_plans',S.plans);giveXP(50,'Day complete! +50 XP');checkAchievements();showCongrats('All exercises done! Day complete! 🔥');checkActivePlanToday();refreshPlans();refreshDash()}
+        function completeTodayPlanDay(){const plan=getActivePlan();if(!plan)return;const days=getPlanDaysList(plan);const idx=getCurrentDayIndex(plan);if(idx>=days.length)return;const {week,day,weekNum,dayNum}=days[idx];if(!plan.done)plan.done={};const key=`${weekNum}-${dayNum}`;const completing=!plan.done[key];plan.done[key]=completing;if(completing){// Log a workout entry so dashboard tracks it
+            const exList=day.exercises||[];const estCal=exList.reduce((s,ex)=>{const db=findExercise(ex.id);return s+(db?db.cal:6)*(ex.sets||3)},0)||200;S.wkts.push({id:uid(),ts:new Date().toISOString(),date:gT(),name:(plan.planName||'Plan')+' — '+( day.name||`W${weekNum}D${dayNum}`),dur:45,cal:estCal,type:day.type||'strength',fromPlan:true,ex:exList.map(ex=>{const db=findExercise(ex.id);return{n:db?db.n:ex.id,d:`${ex.sets}×${ex.reps}`}})});save('fitlog_wkts',S.wkts);// Advance to next day
+            const nextIdx=idx+1;plan.currentDayIndex=nextIdx<days.length?nextIdx:days.length;giveXP(50,'Plan day complete! +50 XP');checkAchievements()}else{// Undo: remove the plan workout logged today, go back to this day
+            S.wkts=S.wkts.filter(w=>!(w.fromPlan&&w.date===gT()&&w.name&&w.name.includes(plan.planName||'Plan')));save('fitlog_wkts',S.wkts);plan.currentDayIndex=idx}save('fitlog_plans',S.plans);checkActivePlanToday();refreshPlans();refreshDash();if(completing){showCongrats('Workout complete! Your streak continues! 🔥');requestNotificationPermission()}}
 
-        function requestNotificationPermission(){if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}
+        // ── XP / LEVEL / ACHIEVEMENT SYSTEM ─────────────────────
+        const XP_LEVELS=[
+            {level:1,title:'Rookie',xpNeeded:0,next:100},
+            {level:2,title:'Trainee',xpNeeded:100,next:250},
+            {level:3,title:'Athlete',xpNeeded:250,next:500},
+            {level:4,title:'Warrior',xpNeeded:500,next:900},
+            {level:5,title:'Champion',xpNeeded:900,next:1400},
+            {level:6,title:'Legend',xpNeeded:1400,next:2100},
+            {level:7,title:'Elite',xpNeeded:2100,next:3000},
+            {level:8,title:'Master',xpNeeded:3000,next:4200},
+            {level:9,title:'Titan',xpNeeded:4200,next:6000},
+            {level:10,title:'Immortal',xpNeeded:6000,next:9999}
+        ];
+        const ACHIEVEMENTS=[
+            {id:'first_workout',icon:'💪',name:'First Sweat',desc:'Log your first workout',check:()=>S.wkts.length>=1},
+            {id:'five_workouts',icon:'🏋️',name:'Getting Serious',desc:'Log 5 workouts',check:()=>S.wkts.length>=5},
+            {id:'plan_started',icon:'📅',name:'Committed',desc:'Start a workout plan',check:()=>S.plans.some(p=>p.started)},
+            {id:'plan_day',icon:'✅',name:'Day One Done',desc:'Complete a plan day',check:()=>S.plans.some(p=>Object.values(p.done||{}).some(v=>v))},
+            {id:'streak3',icon:'🔥',name:'On Fire',desc:'3-day workout streak',check:()=>calculateStreak()>=3},
+            {id:'streak7',icon:'🌟',name:'Week Warrior',desc:'7-day streak',check:()=>calculateStreak()>=7},
+            {id:'hydrate',icon:'💧',name:'Hydrated',desc:'Log 2000ml of water',check:()=>(S.hydr.log[gT()]||0)>=2000},
+            {id:'steps10k',icon:'👟',name:'10K Steps',desc:'Hit 10,000 steps in a day',check:()=>Object.values(S.steps).some(v=>v>=10000)},
+            {id:'meals3',icon:'🍽️',name:'Meal Tracker',desc:'Log 3 meals',check:()=>S.meals.length>=3},
+            {id:'weight_log',icon:'⚖️',name:'Scale Watcher',desc:'Log your weight',check:()=>S.wlog.length>=1},
+            {id:'quest_done',icon:'⚔️',name:'Quest Taker',desc:'Complete a daily quest',check:()=>(S.xp?.questsDone||0)>=1},
+            {id:'level5',icon:'🏆',name:'Mid-Tier Legend',desc:'Reach Level 5',check:()=>getCurrentLevel().level>=5},
+            {id:'xp500',icon:'💎',name:'XP Collector',desc:'Earn 500 total XP',check:()=>(S.xp?.total||0)>=500},
+        ];
+
+        // Init XP state
+        if(!S.xp)S.xp={total:0,questsDone:0,questDate:'',questProgress:0,unlockedAchievements:[]};
+
+        function getCurrentLevel(){
+            const total=S.xp?.total||0;
+            let lv=XP_LEVELS[0];
+            for(const l of XP_LEVELS){if(total>=l.xpNeeded)lv=l;else break}
+            return lv
+        }
+
+        function giveXP(amount,label){
+            if(!S.xp)S.xp={total:0,questsDone:0,questDate:'',questProgress:0,unlockedAchievements:[]};
+            const prevLevel=getCurrentLevel().level;
+            S.xp.total=(S.xp.total||0)+amount;
+            save('fitlog_xp',S.xp);
+            // XP toast
+            const t=document.createElement('div');t.className='xp-toast';t.textContent='⚡ +'+amount+' XP';document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(()=>t.remove(),400)},1800);
+            const newLevel=getCurrentLevel().level;
+            if(newLevel>prevLevel){setTimeout(()=>showCongrats('🎉 Level Up! You\'re now '+getCurrentLevel().title+'!'),400)}
+            renderXPBar()
+        }
+
+        function renderXPBar(){
+            if(!S.xp)return;
+            const lv=getCurrentLevel();
+            const total=S.xp.total||0;
+            const pct=lv.level===10?100:Math.round(((total-lv.xpNeeded)/(lv.next-lv.xpNeeded))*100);
+            const badge=$('xp-level-badge'),fill=$('xp-fill'),cur=$('xp-current'),nxt=$('xp-next'),titleLbl=$('xp-title-label');
+            if(badge)badge.textContent='Level '+lv.level;
+            if(fill)fill.style.width=pct+'%';
+            if(cur)cur.textContent=total;
+            if(nxt)nxt.textContent=lv.next;
+            if(titleLbl)titleLbl.textContent=lv.title;
+            renderAchievements()
+        }
+
+        function checkAchievements(){
+            if(!S.xp)return;
+            const unlocked=S.xp.unlockedAchievements||[];
+            let newUnlocks=false;
+            for(const a of ACHIEVEMENTS){
+                if(!unlocked.includes(a.id)&&a.check()){
+                    unlocked.push(a.id);
+                    newUnlocks=true;
+                    giveXP(25,'Achievement: '+a.name+' +25 XP');
+                    setTimeout(()=>toast('🏆 Achievement: '+a.name+'!'),600)
+                }
+            }
+            if(newUnlocks){S.xp.unlockedAchievements=unlocked;save('fitlog_xp',S.xp);renderAchievements()}
+        }
+
+        function renderAchievements(){
+            const el=$('achievements-list');if(!el)return;
+            const unlocked=(S.xp?.unlockedAchievements)||[];
+            el.innerHTML=ACHIEVEMENTS.map(a=>`<div class="achievement-item ${unlocked.includes(a.id)?'unlocked':''}"><span class="achievement-icon">${a.icon}</span><div><div class="achievement-name">${a.name}</div><div class="achievement-desc">${unlocked.includes(a.id)?'✅ '+a.desc:a.desc}</div></div></div>`).join('')
+        }
+
+        // ── DAILY QUEST SYSTEM ───────────────────────────────────
+        const QUEST_POOL=[
+            {id:'pushups',desc:'Do 20 Push-Ups',xp:50,target:20,unit:'reps',exerciseId:'psh'},
+            {id:'squats',desc:'Do 30 Bodyweight Squats',xp:50,target:30,unit:'reps',exerciseId:'goblet_sq'},
+            {id:'plank',desc:'Hold a Plank for 60 seconds',xp:40,target:1,unit:'set',exerciseId:'plank'},
+            {id:'pullups',desc:'Do 10 Pull-Ups',xp:60,target:10,unit:'reps',exerciseId:'pu'},
+            {id:'burpees',desc:'Complete 15 Burpees',xp:70,target:15,unit:'reps',exerciseId:'burpee'},
+            {id:'lunges',desc:'Do 20 Walking Lunges',xp:45,target:20,unit:'reps',exerciseId:'lunge'},
+            {id:'workout',desc:'Log any workout today',xp:40,target:1,unit:'workout',exerciseId:null},
+            {id:'steps',desc:'Walk 8,000 steps today',xp:55,target:8000,unit:'steps',exerciseId:null},
+            {id:'water',desc:'Drink 2.5L of water',xp:35,target:2500,unit:'ml',exerciseId:null},
+            {id:'crunch',desc:'Do 40 Crunches',xp:40,target:40,unit:'reps',exerciseId:'crunch'},
+            {id:'dips',desc:'Complete 15 Tricep Dips',xp:55,target:15,unit:'reps',exerciseId:'td'},
+            {id:'mountain',desc:'Do 30 Mountain Climbers',xp:50,target:30,unit:'reps',exerciseId:'mountain_climber'},
+        ];
+
+        function getDailyQuest(){
+            if(!S.xp)S.xp={total:0,questsDone:0,questDate:'',questProgress:0,unlockedAchievements:[]};
+            // Pick a deterministic quest per day using date as seed
+            if(S.xp.questDate!==gT()){
+                // New day — pick new quest and reset progress
+                const seed=gT().split('-').join('')%QUEST_POOL.length;
+                const idx=parseInt(gT().replace(/-/g,''))%QUEST_POOL.length;
+                S.xp.questDate=gT();
+                S.xp.questId=QUEST_POOL[idx].id;
+                S.xp.questProgress=0;
+                S.xp.questAwarded=false;
+                save('fitlog_xp',S.xp)
+            }
+            return QUEST_POOL.find(q=>q.id===S.xp.questId)||QUEST_POOL[0]
+        }
+
+        function getAutoQuestProgress(quest){
+            // Auto-fill progress for step/water/workout quests
+            if(quest.unit==='steps')return Math.min(quest.target,S.steps[gT()]||0);
+            if(quest.unit==='ml')return Math.min(quest.target,S.hydr.log[gT()]||0);
+            if(quest.unit==='workout')return Math.min(1,S.wkts.filter(w=>w.date===gT()).length);
+            return Math.min(quest.target,S.xp?.questProgress||0)
+        }
+
+        function renderDailyQuest(){
+            const quest=getDailyQuest();
+            const card=$('daily-quest-card'),desc=$('quest-desc'),status=$('quest-status'),fill=$('quest-progress-fill'),xpBadge=$('quest-xp-badge'),btn=$('quest-btn');
+            if(!card||!desc)return;
+            const progress=getAutoQuestProgress(quest);
+            const done=progress>=quest.target;
+            const pct=Math.round((progress/quest.target)*100);
+            if(desc)desc.textContent=quest.desc;
+            if(xpBadge)xpBadge.textContent='+'+quest.xp+' XP';
+            if(fill)fill.style.width=pct+'%';
+            const unitLabel=quest.unit==='reps'?`${progress}/${quest.target} reps`:quest.unit==='steps'?`${progress.toLocaleString()}/${quest.target.toLocaleString()} steps`:quest.unit==='ml'?`${progress}/${quest.target} ml`:done?'Done!':'0/1';
+            if(status)status.textContent=unitLabel;
+            if(card)card.className='quest-card'+(done?' quest-done':'');
+            if(btn){
+                if(done){btn.textContent='✅ Done!';btn.disabled=true}
+                else if(quest.unit==='steps'||quest.unit==='ml'||quest.unit==='workout'){btn.textContent='Auto-tracked';btn.disabled=true}
+                else{btn.textContent='✔ Log Progress';btn.disabled=false}
+            }
+            // Award XP if newly done
+            if(done&&!S.xp.questAwarded){
+                S.xp.questAwarded=true;S.xp.questsDone=(S.xp.questsDone||0)+1;save('fitlog_xp',S.xp);
+                giveXP(quest.xp,'Quest complete!');checkAchievements();toast('⚔️ Quest Complete! +'+quest.xp+' XP')
+            }
+        }
+
+        function logQuestProgress(){
+            const quest=getDailyQuest();
+            if(!S.xp)return;
+            const increment=quest.unit==='reps'?5:quest.unit==='set'?1:1;
+            S.xp.questProgress=Math.min(quest.target,(S.xp.questProgress||0)+increment);
+            save('fitlog_xp',S.xp);
+            renderDailyQuest()
+        }
+
+        // Load XP from localStorage
+        const savedXP=SP(localStorage.getItem('fitlog_xp'),null);
+        if(savedXP)S.xp=savedXP;
+        if(!S.xp)S.xp={total:0,questsDone:0,questDate:'',questProgress:0,unlockedAchievements:[]};
+
+
         function scheduleDailyReminder(){if('Notification' in window&&Notification.permission==='granted'){const now=new Date();const reminder=new Date(now);reminder.setHours(8,0,0,0);if(reminder<now)reminder.setDate(reminder.getDate()+1);setTimeout(()=>{new Notification('FitLog Reminder',{body:'Time for your daily workout! 🏋️'});scheduleDailyReminder()},reminder-now)}}
+        function requestNotificationPermission(){if('Notification' in window&&Notification.permission==='default'){Notification.requestPermission().then(()=>{}).catch(()=>{})}}
 
         // FIXED: Multi-Week Plan Generator
         async function generateMultiWeekPlan(){if(!hk()){toast('⚠️ Set API key');openSettings();return}const goal=$('plan-goal')?.value==='custom'?($('custom-goal-input')?.value||'Fitness'):$('plan-goal')?.value;const dur=$('plan-duration')?.value||'4 weeks',dpw=parseInt($('plan-days-per-week')?.value||'4');const eq=getSelectedValues('plan-equipment');if(!eq.length)eq.push('bodyweight');const sess=$('plan-session-duration')?.value||'45',c=$('multi-week-plan-result');c.innerHTML='<div class="skeleton skeleton-text"></div><p style="font-size:.8rem">Generating plan...</p>';const avail=EX.filter(ex=>eq.some(e=>{const xe=(ex.e||'').toLowerCase(),se=e.toLowerCase();return xe===se||xe.includes(se)||se.includes(xe)||ex.e==='none'}));if(avail.length<3){c.innerHTML='<p style="color:var(--accent-secondary)">❌ Not enough exercises with selected equipment. Add Bodyweight or more equipment.</p>';return}const exList=avail.map(e=>({id:e.id,n:e.n})).slice(0,30);try{const r=await ai(`Create a ${dur} training plan for: "${goal}". ${dpw} days/week, ${sess} min/session.`, `Create a structured workout plan. Return ONLY valid JSON:\n{"planName":"...","goal":"${goal}","duration":"${dur}","weeks":[{"weekNumber":1,"focus":"...","days":[{"dayNumber":1,"name":"...","type":"strength","exercises":[{"id":"...","sets":3,"reps":"8-12","restSeconds":60}],"warmup":"5 min light cardio","cooldown":"5 min stretching"}]}]}\n\nPick exercise IDs ONLY from this list: ${JSON.stringify(exList)}`);if(!r||!r.weeks||!r.weeks.length){c.innerHTML='<p style="color:var(--accent-secondary)">❌ Could not generate plan. Try different settings.</p>';return}const planData={id:uid(),ts:new Date().toISOString(),planName:r.planName||goal,goal,duration:dur,daysPerWeek:dpw,overview:r.overview||'',weeks:r.weeks,done:{},started:false};c.innerHTML='<p style="color:var(--accent-primary);text-align:center;padding:10px">✅ Plan generated! Review below.</p>';openPlanPreviewModal(planData);refreshPlans()}catch(e){c.innerHTML=`<p style="color:var(--accent-secondary)">❌ ${e.message||'Error generating plan. Try again.'}</p>`;console.error('Plan generation error:',e)}}
         function renderPlan(plan,c){const total=plan.weeks.reduce((s,w)=>s+(w.days?.length||0),0);const done=Object.values(plan.done||{}).filter(v=>v).length;const pct=total>0?Math.round((done/total)*100):0;c.innerHTML=`<div style="border-top:1px solid var(--border-color);padding-top:10px"><div style="display:flex;justify-content:space-between"><h4>📅 ${plan.planName}</h4><div><button class="btn btn-primary btn-xs" onclick="startPlan('${plan.id}')">▶️</button><button class="btn btn-danger btn-xs" onclick="delPlan('${plan.id}')">🗑️</button></div></div><p style="font-size:.78rem;color:var(--text-secondary)">${plan.goal} • ${plan.duration}</p><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><p style="font-size:.7rem;text-align:right">${done}/${total} days</p>${plan.weeks.map(w=>`<div style="margin-top:8px"><h5 style="color:var(--accent-blue)">Week ${w.weekNumber}: ${w.focus||''}</h5>${(w.days||[]).map(d=>{const isDone=plan.done?.[`${w.weekNumber}-${d.dayNumber}`];const exKey=`${w.weekNumber}-${d.dayNumber}`;const exDoneArr=plan.exerciseDone?.[exKey]||[];return`<div class="plan-day-card"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><strong style="font-size:.85rem">Day ${d.dayNumber}: ${d.name||'Workout'}</strong><span class="day-badge ${isDone?'day-completed':'day-pending'}">${isDone?'✅':'⏳'}</span></div>${(d.exercises||[]).map((ex,i)=>{const db=findExercise(ex.id);const en=db?db.n:(ex.id||'Exercise');const exIsDone=exDoneArr[i];return`<div class="workout-plan-exercise exercise-clickable ${exIsDone?'completed':''}" style="padding:6px 10px" onclick="showExerciseGif('${db?db.id:''}','${en.replace(/'/g,"\\'")}')"><div style="flex:1;font-size:.8rem;${exIsDone?'text-decoration:line-through;opacity:0.6':''}">${i+1}. ${en} <span style="font-size:.72rem;color:var(--text-secondary)">${ex.sets}×${ex.reps}</span> <span class="gif-indicator">🎬</span></div><button class="btn btn-done btn-sm ${exIsDone?'completed':''}" onclick="event.stopPropagation();toggleExerciseDone('${plan.id}',${w.weekNumber},${d.dayNumber},${i})">${exIsDone?'✅':'○'}</button></div>`}).join('')}<button class="btn btn-sm ${isDone?'btn-secondary':'btn-primary'} btn-block" onclick="markDay('${plan.id}',${w.weekNumber},${d.dayNumber})">${isDone?'↩️ Undo':'✅ Done'}</button></div>`}).join('')}</div>`).join('')}</div>`}
         function markDay(pid,w,d){const p=S.plans.find(pl=>pl.id===pid);if(!p)return;if(!p.done)p.done={};p.done[`${w}-${d}`]=!p.done[`${w}-${d}`];save('fitlog_plans',S.plans);renderPlan(p,$('multi-week-plan-result'));refreshPlans();refreshDash();checkActivePlanToday()}
-        function toggleExerciseDone(pid,w,d,exIdx){const p=S.plans.find(pl=>pl.id===pid);if(!p)return;if(!p.exerciseDone)p.exerciseDone={};const key=`${w}-${d}`;if(!p.exerciseDone[key])p.exerciseDone[key]=[];p.exerciseDone[key][exIdx]=!p.exerciseDone[key][exIdx];save('fitlog_plans',S.plans);checkActivePlanToday();renderPlan(p,$('multi-week-plan-result'));refreshPlans()}
-        function startPlan(pid){const p=S.plans.find(pl=>pl.id===pid);if(p){p.started=true;p.startedDate=new Date().toISOString();const dpw=p.daysPerWeek||parseInt($('plan-days-per-week')?.value)||4;p.streakFreezes=Math.max(0,7-dpw);p.streakFreezesUsed=0;save('fitlog_plans',S.plans);refreshPlans();renderPlan(p,$('multi-week-plan-result'));checkActivePlanToday();toast('▶️ Plan started! '+p.streakFreezes+' streak freezes');scheduleDailyReminder()}}
+        function toggleExerciseDone(pid,w,d,exIdx){const p=S.plans.find(pl=>pl.id===pid);if(!p)return;if(!p.exerciseDone)p.exerciseDone={};const key=`${w}-${d}`;if(!p.exerciseDone[key])p.exerciseDone[key]=[];p.exerciseDone[key][exIdx]=!p.exerciseDone[key][exIdx];save('fitlog_plans',S.plans);// Auto-complete day when all exercises are done
+            let totalEx=0;for(const wk of p.weeks){for(const dy of wk.days){if(wk.weekNumber===w&&dy.dayNumber===d){totalEx=dy.exercises.length;break}}}const doneCount=(p.exerciseDone[key]||[]).filter(Boolean).length;if(doneCount>0&&doneCount===totalEx&&!p.done[key]){setTimeout(()=>autoCompleteDay(pid,w,d),300)}else{checkActivePlanToday();renderPlan(p,$('multi-week-plan-result'));refreshPlans()}}
+        function startPlan(pid){const p=S.plans.find(pl=>pl.id===pid);if(p){p.started=true;p.startedDate=new Date().toISOString();p.currentDayIndex=0;const dpw=p.daysPerWeek||parseInt($('plan-days-per-week')?.value)||4;p.streakFreezes=Math.max(0,7-dpw);p.streakFreezesUsed=0;save('fitlog_plans',S.plans);refreshPlans();renderPlan(p,$('multi-week-plan-result'));checkActivePlanToday();toast('▶️ Plan started! '+p.streakFreezes+' streak freezes');scheduleDailyReminder()}}
         function delPlan(pid){showConfirm('Delete Plan?','This action cannot be undone.',()=>{S.plans=S.plans.filter(p=>p.id!==pid);save('fitlog_plans',S.plans);$('multi-week-plan-result').innerHTML='';refreshPlans();refreshDash();checkActivePlanToday();toast('🗑️ Plan deleted')})}
         function refreshPlans(){const h=!S.plans.length?'<div class="empty-state" style="padding:10px"><p style="font-size:.8rem">No plans</p></div>':S.plans.map(p=>{const t=p.weeks.reduce((s,w)=>s+(w.days?.length||0),0),d=Object.values(p.done||{}).filter(v=>v).length,pct=t>0?Math.round((d/t)*100):0;return`<div class="plan-day-card" style="cursor:pointer;position:relative" onclick="openPlanEditModal('${p.id}')"><button class="plan-delete-btn" onclick="event.stopPropagation();delPlan('${p.id}')">✕</button><div style="display:flex;justify-content:space-between"><strong style="font-size:.85rem">${p.planName}</strong><span class="day-badge ${p.started?'day-today':'day-pending'}" style="font-size:.65rem">${p.started?'▶️':'⏸️'}</span></div><div style="font-size:.72rem;color:var(--text-secondary)">${p.goal} • ${p.duration}</div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`}).join('');const l=$('active-plans-list'),d2=$('active-plans-dashboard');if(l)l.innerHTML=h;if(d2)d2.innerHTML=h}
 
@@ -1413,10 +1586,10 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         async function generateWorkoutPlan(){if(!hk()){toast('⚠️ Set API key');openSettings();return}const type=$('gen-workout-type')?.value||'strength',dur=$('gen-duration')?.value||'45';const eq=getSelectedValues('gen-equipment');if(!eq.length)eq.push('bodyweight');const split=$('gen-split')?.value||'full body',c=$('generated-plan-container');c.innerHTML='<div class="skeleton skeleton-text"></div>';const avail=EX.filter(ex=>eq.some(e=>(ex.e||'').toLowerCase().includes(e.toLowerCase())||ex.e==='none'));if(avail.length<3){c.innerHTML='<p style="color:var(--accent-secondary)">❌ Select more equipment</p>';return}try{const r=await ai('Create workout',`Create ${type} ${split} workout (${dur} min). Pick from: ${JSON.stringify(avail.slice(0,25).map(e=>({id:e.id,n:e.n})))}\nReturn JSON: {"planName":"...","exercises":[{"id":"...","sets":num,"reps":"...","restSeconds":num}],"estimatedCalories":num}`);if(!r?.exercises?.length){c.innerHTML='<p style="color:var(--accent-secondary)">❌ Failed</p>';return}cw=r;cd={};renderGW(c);toast('✨ Generated!')}catch(e){c.innerHTML=`<p style="color:var(--accent-secondary)">❌ ${e.message}</p>`}}
         function renderGW(c){c.innerHTML=`<div style="border-top:1px solid var(--border-color);padding-top:10px"><h4>${cw.planName||'Workout'}</h4><p style="font-size:.8rem">🔥 ${cw.estimatedCalories||'?'} cal</p>${cw.exercises.map((ex,i)=>{const db=findExercise(ex.id);const en=db?db.n:(ex.id||'Exercise');const eid=db?db.id:'';const isD=cd[i];return`<div class="workout-plan-exercise exercise-clickable ${isD?'completed':''}" onclick="showExerciseGif('${eid}','${en.replace(/'/g,"\\'")}')"><div style="flex:1;font-size:.82rem">${i+1}. ${en} <span class="gif-indicator">🎬</span> ${ex.sets}×${ex.reps}</div><button class="btn btn-done btn-sm ${isD?'completed':''}" onclick="event.stopPropagation();markGD(${i})">${isD?'✅':'○'}</button></div>`}).join('')}<button class="btn btn-primary btn-sm btn-block" onclick="logGW()" style="margin-top:8px">💾 Log</button></div>`}
         function markGD(i){cd[i]=!cd[i];renderGW($('generated-plan-container'))}
-        function logGW(){if(!cw?.exercises)return;S.wkts.push({id:uid(),ts:new Date().toISOString(),date:gT(),name:cw.planName||'Workout',dur:parseInt($('gen-duration')?.value||'45'),type:$('gen-workout-type')?.value||'strength',cal:cw.estimatedCalories||300,ex:cw.exercises.map((ex,i)=>{const db=findExercise(ex.id);return{n:db?db.n:ex.id,d:`${ex.sets}×${ex.reps}`,done:!!cd[i]}})});save('fitlog_wkts',S.wkts);cw=null;cd={};$('generated-plan-container').innerHTML='<p style="color:var(--accent-primary)">✅ Logged!</p>';refreshDash();updateStreakUI();showCongrats('Quick workout done! 💪')}
+        function logGW(){if(!cw?.exercises)return;S.wkts.push({id:uid(),ts:new Date().toISOString(),date:gT(),name:cw.planName||'Workout',dur:parseInt($('gen-duration')?.value||'45'),type:$('gen-workout-type')?.value||'strength',cal:cw.estimatedCalories||300,ex:cw.exercises.map((ex,i)=>{const db=findExercise(ex.id);return{n:db?db.n:ex.id,d:`${ex.sets}×${ex.reps}`,done:!!cd[i]}})});save('fitlog_wkts',S.wkts);cw=null;cd={};$('generated-plan-container').innerHTML='<p style="color:var(--accent-primary)">✅ Logged!</p>';giveXP(30,'Workout logged! +30 XP');checkAchievements();refreshDash();updateStreakUI();showCongrats('Quick workout done! 💪')}
 
         function addExerciseEntry(){const c=$('exercise-entries');if(!c)return;const d=document.createElement('div');d.className='workout-exercise';d.innerHTML='<div style="flex:1"><input type="text" class="exercise-name-input" placeholder="Exercise" style="margin-bottom:4px" required><input type="text" class="exercise-details-input" placeholder="Sets × Reps × Weight"></div><button type="button" class="btn btn-danger btn-xs" onclick="this.parentElement.remove()">✕</button>';c.appendChild(d)}
-        function logWorkout(e){e.preventDefault();const name=$('workout-name')?.value?.trim(),dur=parseInt($('workout-duration')?.value||'0'),cal=parseInt($('workout-calories')?.value||'300');if(!name||!dur){toast('⚠️ Fill fields');return}const ex=[];document.querySelectorAll('#exercise-entries .workout-exercise').forEach(en=>{const n=en.querySelector('.exercise-name-input')?.value?.trim(),d=en.querySelector('.exercise-details-input')?.value?.trim();if(n)ex.push({n,d:d||'N/A'})});if(!ex.length){toast('⚠️ Add exercise');return}S.wkts.push({id:uid(),ts:new Date().toISOString(),date:gT(),name,dur,cal,type:'strength',ex});save('fitlog_wkts',S.wkts);$('workout-form').reset();$('workout-calories').value='300';$('exercise-entries').innerHTML='<div class="workout-exercise"><div><input type="text" class="exercise-name-input" placeholder="Exercise" style="margin-bottom:4px" required><input type="text" class="exercise-details-input" placeholder="Sets × Reps × Weight"></div></div>';refreshDash();updateStreakUI();showCongrats('Workout logged! 🎉')}
+        function logWorkout(e){e.preventDefault();const name=$('workout-name')?.value?.trim(),dur=parseInt($('workout-duration')?.value||'0'),cal=parseInt($('workout-calories')?.value||'300');if(!name||!dur){toast('⚠️ Fill fields');return}const ex=[];document.querySelectorAll('#exercise-entries .workout-exercise').forEach(en=>{const n=en.querySelector('.exercise-name-input')?.value?.trim(),d=en.querySelector('.exercise-details-input')?.value?.trim();if(n)ex.push({n,d:d||'N/A'})});if(!ex.length){toast('⚠️ Add exercise');return}S.wkts.push({id:uid(),ts:new Date().toISOString(),date:gT(),name,dur,cal,type:'strength',ex});save('fitlog_wkts',S.wkts);$('workout-form').reset();$('workout-calories').value='300';$('exercise-entries').innerHTML='<div class="workout-exercise"><div><input type="text" class="exercise-name-input" placeholder="Exercise" style="margin-bottom:4px" required><input type="text" class="exercise-details-input" placeholder="Sets × Reps × Weight"></div></div>';giveXP(30,'Workout logged! +30 XP');checkAchievements();refreshDash();updateStreakUI();showCongrats('Workout logged! 🎉')}
 
         async function sendMealMessage(){const input=$('nutrition-chat-input');if(!input)return;const msg=input.value.trim();if(!msg)return;addCM('user',msg);input.value='';const sid=addSK();try{const r=await ai(msg,'Return ONLY JSON: {"items":[{"name":"","calories":num,"protein_g":num,"carbs_g":num,"fat_g":num}],"totals":{"calories":num,"protein_g":num,"carbs_g":num,"fat_g":num}}');remSK(sid);if(r?.items?.length){const entry={id:uid(),ts:new Date().toISOString(),date:gT(),desc:msg,items:r.items,totals:r.totals||{}};S.meals.push(entry);save('fitlog_meals',S.meals);addCM('ai',`✅ ${r.items.map(i=>`${i.name}: ${i.calories}cal`).join(' | ')}<br><strong>Total: ${r.totals?.calories||0} cal</strong><br><button class="btn btn-xs btn-accent" onclick="saveFav('${entry.id}')">⭐ Save</button>`);refreshNut();refreshDash()}else addCM('ai','✅ Got it!')}catch(e){remSK(sid);addCM('ai',`❌ ${e.message}`)}}
         function addCM(t,m){const c=$('nutrition-chat-messages');if(!c)return;const d=document.createElement('div');d.className=`chat-message ${t}`;d.innerHTML=m;c.appendChild(d);c.scrollTop=c.scrollHeight}
@@ -1441,7 +1614,7 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         function calculateGoals(){const g=$('bf-gender')?.value||'male',w=parseFloat($('bf-weight')?.value||70),h=parseFloat($('bf-height')?.value||175),age=parseInt($('bf-age')?.value||25),act=parseFloat($('goal-activity')?.value||1.55),goal=$('goal-type')?.value||'maintain',bmr=g==='male'?(10*w)+(6.25*h)-(5*age)+5:(10*w)+(6.25*h)-(5*age)-161,tdee=Math.round(bmr*act),target=goal==='lose'?tdee-500:goal==='gain'?tdee+500:tdee;S.goals={tdee,targetCal:target,proteinG:Math.round(target*0.4/4),carbsG:Math.round(target*0.3/4),fatG:Math.round(target*0.3/9),goal};save('fitlog_goals',S.goals);$('goal-result-container').innerHTML=`<div style="border-top:1px solid var(--border-color);padding-top:10px"><div class="grid-4"><div class="stat-card"><div class="stat-value">${tdee}</div><div class="stat-label">TDEE</div></div><div class="stat-card"><div class="stat-value highlight">${target}</div><div class="stat-label">Target</div></div><div class="stat-card"><div class="stat-value">${S.goals.proteinG}g</div><div class="stat-label">Protein</div></div><div class="stat-card"><div class="stat-value">${S.goals.carbsG}g</div><div class="stat-label">Carbs</div></div></div></div>`;toast('🎯 Done!')}
         function refreshBody(){if(S.goals?.targetCal){const g=S.goals;$('goal-result-container').innerHTML=`<div style="border-top:1px solid var(--border-color);padding-top:10px"><h4>Targets</h4><div class="grid-4"><div class="stat-card"><div class="stat-value">${g.tdee}</div><div class="stat-label">TDEE</div></div><div class="stat-card"><div class="stat-value highlight">${g.targetCal}</div><div class="stat-label">Target</div></div><div class="stat-card"><div class="stat-value">${g.proteinG}g</div><div class="stat-label">Protein</div></div><div class="stat-card"><div class="stat-value">${g.carbsG}g</div><div class="stat-label">Carbs</div></div></div></div>`}}
 
-        function refreshDash(){const tm=getTM();$('stat-calories').textContent=tm.reduce((s,m)=>s+((m.totals||{}).calories||0),0);$('stat-protein').textContent=tm.reduce((s,m)=>s+((m.totals||{}).protein_g||0),0).toFixed(1)+'g';$('stat-workouts').textContent=S.wkts.filter(w=>w.date>=gA(7)).length;$('stat-burned').textContent=S.wkts.filter(w=>w.date===gT()).reduce((s,w)=>s+(w.cal||0),0);updateHydr();updateWeightUI();updateStepsUI();updateStreakUI();refreshFavs();refreshPlans()}
+        function refreshDash(){const tm=getTM();const todayWkts=S.wkts.filter(w=>w.date===gT());$('stat-calories').textContent=tm.reduce((s,m)=>s+((m.totals||{}).calories||0),0);$('stat-protein').textContent=tm.reduce((s,m)=>s+((m.totals||{}).protein_g||0),0).toFixed(1)+'g';$('stat-workouts').textContent=todayWkts.length;$('stat-burned').textContent=todayWkts.reduce((s,w)=>s+(w.cal||0),0);updateHydr();updateWeightUI();updateStepsUI();updateStreakUI();refreshFavs();refreshPlans();renderXPBar();renderDailyQuest()}
         function initNetworkStatus(){function updateStatus(){const indicator=$('offline-indicator');if(indicator)indicator.style.display=navigator.onLine?'none':'inline'}window.addEventListener('online',()=>{updateStatus();toast('🟢 Back online!')});window.addEventListener('offline',()=>{updateStatus();toast('📴 You\'re offline. AI features unavailable.')});updateStatus()}
         function isOnline(){return navigator.onLine}
 
@@ -1464,10 +1637,10 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         function openPlanEditModal(planId){currentEditPlanId=planId;$('plan-preview-modal').style.display='flex';renderPlanEdit(planId)}
         function renderPlanEdit(planId){const plan=S.plans.find(p=>p.id===planId);if(!plan){toast('Plan not found');return}const total=plan.weeks.reduce((s,w)=>s+(w.days?.length||0),0);const done=Object.values(plan.done||{}).filter(v=>v).length;const pct=total>0?Math.round((done/total)*100):0;let actionBtns='';if(plan.started){actionBtns=`<button class="btn btn-danger btn-sm" onclick="stopPlan('${planId}');closePlanEdit()">⏹️ Stop Plan</button><button class="btn btn-primary btn-sm" onclick="savePlanEdit('${planId}')">💾 Save</button>`}else{actionBtns=`<button class="btn btn-primary btn-sm" onclick="startPlanFromEdit('${planId}')">▶️ Start Plan</button><button class="btn btn-secondary btn-sm" onclick="savePlanEdit('${planId}')">💾 Save</button>`}const c=$('plan-preview-content');c.innerHTML=`<div class="plan-preview-header"><h2>✏️ ${plan.planName}</h2><p>${plan.goal} • ${plan.duration} • ${plan.daysPerWeek} days/week</p><div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${pct}%"></div></div><p style="font-size:.7rem;color:var(--text-secondary);margin-top:4px">${done}/${total} days completed</p></div><div style="max-height:45vh;overflow-y:auto" id="plan-edit-weeks">${plan.weeks.map((w,wi)=>`<div class="plan-edit-week"><div style="margin:12px 0 8px"><strong>Week ${w.weekNumber}: ${w.focus||'Training'}</strong></div>${(w.days||[]).map((d,di)=>{const isDone=plan.done?.[`${w.weekNumber}-${d.dayNumber}`];return`<div class="plan-edit-day" style="${isDone?'border-color:var(--done-border);background:var(--done-bg)':''}"><div class="plan-edit-day-header"><input type="text" value="${d.name||'Workout'}" onchange="updateDayField('${planId}',${wi},${di},'name',this.value)"><span class="exercise-badge badge-${d.type||'strength'}">${d.type||'strength'}</span><button class="btn btn-xs btn-cyan" onclick="regenerateDay(${wi},${di})">🔄</button></div>${(d.exercises||[]).map((ex,ei)=>{const db=findExercise(ex.id);const en=db?db.n:ex.id;return`<div class="plan-edit-exercise"><input type="number" value="${ex.sets||3}" style="width:50px" onchange="updateExerciseField('${planId}',${wi},${di},${ei},'sets',this.value)"><input type="text" value="${ex.reps||'8-12'}" style="width:70px" onchange="updateExerciseField('${planId}',${wi},${di},${ei},'reps',this.value)"><div class="exercise-name" onclick="openExercisePicker('${planId}',${wi},${di},${ei})">${en}</div><button class="remove-btn" onclick="removeExerciseFromDay('${planId}',${wi},${di},${ei})">✕</button></div>`}).join('')}<div class="plan-edit-add-exercise"><button class="btn btn-xs btn-secondary" onclick="addExerciseToDay('${planId}',${wi},${di})">+ Add Exercise</button></div></div>`}).join('')}</div>`).join('')}</div><div class="plan-preview-actions">${actionBtns}<button class="btn btn-danger btn-sm" onclick="delPlan('${planId}');closePlanEdit()">🗑️ Delete</button></div>`}
         function startPlanFromEdit(planId){const p=S.plans.find(pl=>pl.id===planId);if(p){p.started=true;p.startedDate=new Date().toISOString();const dpw=p.daysPerWeek||4;p.streakFreezes=Math.max(0,7-dpw);p.streakFreezesUsed=0;save('fitlog_plans',S.plans);closePlanEdit();refreshPlans();refreshDash();checkActivePlanToday();toast('▶️ Plan started! '+p.streakFreezes+' streak freezes');scheduleDailyReminder()}}
-        function updateDayField(planId,wIdx,dIdx,field,value){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]){p.weeks[wIdx].days[dIdx][field]=value;save('fitlog_plans',S.plans)}}
-        function updateExerciseField(planId,wIdx,dIdx,exIdx,field,value){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]&&p.weeks[wIdx].days[dIdx].exercises[exIdx]){p.weeks[wIdx].days[dIdx].exercises[exIdx][field]=field==='sets'?parseInt(value)||3:value;save('fitlog_plans',S.plans)}}
-        function addExerciseToDay(planId,wIdx,dIdx){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]){p.weeks[wIdx].days[dIdx].exercises.push({id:'bp',sets:3,reps:'8-12'});save('fitlog_plans',S.plans);renderPlanEdit(planId)}}
-        function removeExerciseFromDay(planId,wIdx,dIdx,exIdx){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]&&p.weeks[wIdx].days[dIdx].exercises){p.weeks[wIdx].days[dIdx].exercises.splice(exIdx,1);save('fitlog_plans',S.plans);renderPlanEdit(planId)}}
+        function updateDayField(planId,wIdx,dIdx,field,value){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]){p.weeks[wIdx].days[dIdx][field]=value}}
+        function updateExerciseField(planId,wIdx,dIdx,exIdx,field,value){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]&&p.weeks[wIdx].days[dIdx].exercises[exIdx]){p.weeks[wIdx].days[dIdx].exercises[exIdx][field]=field==='sets'?parseInt(value)||3:value}}
+        function addExerciseToDay(planId,wIdx,dIdx){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]){p.weeks[wIdx].days[dIdx].exercises.push({id:'bp',sets:3,reps:'8-12'});renderPlanEdit(planId)}}
+        function removeExerciseFromDay(planId,wIdx,dIdx,exIdx){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]&&p.weeks[wIdx].days[dIdx].exercises){p.weeks[wIdx].days[dIdx].exercises.splice(exIdx,1);renderPlanEdit(planId)}}
         function savePlanEdit(planId){save('fitlog_plans',S.plans);closePlanEdit();refreshPlans();refreshDash();toast('💾 Saved!')}
         function closePlanEdit(){$('plan-preview-modal').style.display='none';currentEditPlanId=null;refreshPlans()}
 
@@ -1476,7 +1649,7 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         function renderExercisePickerList(){const search=($('exercise-search')?.value||'').toLowerCase();const list=EX.filter(e=>e.n.toLowerCase().includes(search)).slice(0,30);$('exercise-picker-list').innerHTML=list.map(e=>`<div style="padding:10px;border-bottom:1px solid var(--border-color);cursor:pointer" onclick="selectExercise('${e.id}')"><strong>${e.n}</strong><br><span style="font-size:.75rem;color:var(--text-secondary)">${e.m} • ${e.e}</span></div>`).join('')||'<p style="padding:10px;color:var(--text-secondary)">No exercises found</p>'}
         function selectExercise(exId){const p=S.plans.find(pl=>pl.id===currentEditPlanId);if(p&&p.weeks[currentEditWeek]&&p.weeks[currentEditWeek].days[currentEditDay]&&p.weeks[currentEditWeek].days[currentEditDay].exercises[currentExPickerCallback]){p.weeks[currentEditWeek].days[currentEditDay].exercises[currentExPickerCallback].id=exId;save('fitlog_plans',S.plans);closeExercisePicker();renderPlanEdit(currentEditPlanId)}}
 
-        async function regenerateDay(wIdx,dIdx){const plan=S.plans.find(p=>p.id===currentEditPlanId);if(!plan)return;const day=plan.weeks[wIdx].days[dIdx];let eq=getSelectedValues('plan-equipment');if(!eq.length)eq=getSelectedValues('gen-equipment');if(!eq.length)eq=['bodyweight'];const avail=EX.filter(ex=>eq.some(e=>(ex.e||'').toLowerCase().includes(e.toLowerCase())||ex.e==='none')).slice(0,20);const btn=event.target;btn.disabled=true;btn.textContent='...';try{const r=await ai(`Generate exercises for ${day.name||'workout'} day. Goal: ${plan.goal}.`,"Create 4-6 exercises. Return JSON: {\"exercises\":[{\"id\":\"...\",\"sets\":3,\"reps\":\"8-12\"}]}. Use ONLY: "+JSON.stringify(avail.map(e=>({id:e.id,n:e.n}))));if(r?.exercises?.length){plan.weeks[wIdx].days[dIdx].exercises=r.exercises;save('fitlog_plans',S.plans);renderPlanEdit(currentEditPlanId);toast('🔄 Day regenerated!')}else{toast('⚠️ Could not regenerate')}}catch(e){toast('❌ '+e.message)}btn.disabled=false;btn.textContent='🔄'}
+        async function regenerateDay(wIdx,dIdx){const plan=S.plans.find(p=>p.id===currentEditPlanId);if(!plan)return;const day=plan.weeks[wIdx].days[dIdx];const eq=getSelectedValues('plan-equipment');if(!eq.length)eq.push('bodyweight');const avail=EX.filter(ex=>eq.some(e=>(ex.e||'').toLowerCase().includes(e.toLowerCase())||ex.e==='none')).slice(0,20);const btn=event.target;btn.disabled=true;btn.textContent='...';try{const r=await ai(`Generate exercises for ${day.name||'workout'} day. Goal: ${plan.goal}.`,"Create 4-6 exercises. Return JSON: {\"exercises\":[{\"id\":\"...\",\"sets\":3,\"reps\":\"8-12\"}]}. Use ONLY: "+JSON.stringify(avail.map(e=>({id:e.id,n:e.n}))));if(r?.exercises?.length){plan.weeks[wIdx].days[dIdx].exercises=r.exercises;save('fitlog_plans',S.plans);renderPlanEdit(currentEditPlanId);toast('🔄 Day regenerated!')}else{toast('⚠️ Could not regenerate')}}catch(e){toast('❌ '+e.message)}btn.disabled=false;btn.textContent='🔄'}
 
         // CONFIRM MODAL
         function showConfirm(title,msg,onOk){$('confirm-title').textContent=title;$('confirm-msg').textContent=msg;confirmCallback=onOk;$('confirm-modal').style.display='flex'}
@@ -1544,7 +1717,7 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
             return {
                 meals: S.meals, wkts: S.wkts, wlog: S.wlog,
                 goals: S.goals, favs: S.favs, hydr: S.hydr,
-                plans: S.plans, steps: S.steps,
+                plans: S.plans, steps: S.steps, xp: S.xp,
                 exportedAt: new Date().toISOString(), version: '3.0'
             };
         }
@@ -1666,14 +1839,12 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
         setInterval(spawnOrb, 3500);
         spawnOrb(); spawnOrb();
 
-        // ── STEP POP ANIMATION (inline — no function redeclaration) ──
-        function triggerStepPopAnim() {
-            const el = document.getElementById('step-count');
-            if (el) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); setTimeout(()=>el.classList.remove('pop'),300); }
-        }
+        // ── STEP POP ANIMATION (added to original function) ─────────────────
 
-        // ── CONFETTI ON CONGRATS (inline — no function redeclaration) ──
-        function triggerCongratsConfetti() {
+        // ── CONFETTI ON CONGRATS ──────────────────────────────────
+        const _origShowCongrats = showCongrats;
+        function showCongrats(msg) {
+            _origShowCongrats(msg);
             const box = document.querySelector('.congrats-box');
             if (!box) return;
             const colors = ['#00E5BB','#6C8CFF','#FFB84D','#FF5E7D','#B388FF'];
@@ -1705,7 +1876,7 @@ input:focus, textarea:focus { animation: inputGlow 0.25s ease forwards; }
             if(goalSelect){goalSelect.addEventListener('change',function(){$('custom-goal-container').style.display=this.value==='custom'?'block':'none'})}
             refreshDash();refreshNut();refreshFavs();refreshPlans();updateHydr();updateWeightUI();updateStepsUI();checkActivePlanToday();
             requestNotificationPermission();scheduleDailyReminder();
-            initCloudStatus(); updateSettingsThemeBtn(); console.log('💪 FitLog — Glassmorphism Edition');
+            initCloudStatus(); updateSettingsThemeBtn(); renderXPBar(); renderDailyQuest(); checkAchievements(); console.log('💪 FitLog — Glassmorphism Edition');
         });
     
 </script>
