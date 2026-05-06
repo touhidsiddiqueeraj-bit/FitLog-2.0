@@ -799,7 +799,7 @@
         function haptic(pattern=[10]){if(navigator.vibrate)navigator.vibrate(pattern);}
 
         // ── CLEAR ALL DATA ───────────────────────────────────────────
-        function clearAllData(){showConfirm('Clear All Data?','This will permanently delete ALL your workouts, meals, plans, and settings. This cannot be undone.',()=>{['fitlog_meals','fitlog_wkts','fitlog_wlog','fitlog_goals','fitlog_favs','fitlog_hydr','fitlog_plans','fitlog_steps','fitlog_xp','fitlog_key','fitlog_theme','fitlog_last_congrats','fitlog_gifcache','fitlog_custom_foods','fitlog_fasting','fitlog_cloud_code','fitlog_onboarded'].forEach(k=>localStorage.removeItem(k));toast('🗑️ All data cleared. Reloading…');setTimeout(()=>location.reload(),1200);})}
+        function clearAllData(){showConfirm('Clear All Data?','This will permanently delete ALL your workouts, meals, plans, and settings. This cannot be undone.',()=>{['fitlog_meals','fitlog_wkts','fitlog_wlog','fitlog_goals','fitlog_favs','fitlog_hydr','fitlog_plans','fitlog_steps','fitlog_xp','fitlog_key','fitlog_theme','fitlog_last_congrats','fitlog_gifcache','fitlog_custom_foods','fitlog_fasting','fitlog_cloud_code','fitlog_onboarded','fitlog_perms_asked','fitlog_motion_perm'].forEach(k=>localStorage.removeItem(k));toast('🗑️ All data cleared. Reloading…');setTimeout(()=>location.reload(),1200);})}
 
         // ── SHOWCONFETTI standalone ─────────────────────────────────
         function spawnConfetti(el){if(!el)return;const colors=['#00E5BB','#6C8CFF','#FFB84D','#FF5E7D','#B388FF'];for(let i=0;i<18;i++){const dot=document.createElement('div');dot.className='confetti-dot';dot.style.cssText=`background:${colors[i%colors.length]};left:${10+Math.random()*80}%;top:${20+Math.random()*40}%;animation-delay:${Math.random()*0.4}s;`;el.appendChild(dot);setTimeout(()=>dot.remove(),1600);}}
@@ -2302,4 +2302,9 @@
 
             GFit.init(); // ← Google Fit auto-sync
             console.log('💪 FitLog — Glassmorphism Edition');
+
+            // ── Permissions: show for already-onboarded users who haven't been asked ──
+            if(localStorage.getItem('fitlog_onboarded') && typeof FitLogPermissions !== 'undefined'){
+                setTimeout(() => FitLogPermissions.showModal(), 800);
+            }
         });
