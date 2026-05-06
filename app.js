@@ -511,7 +511,15 @@
 
 
         function scheduleDailyReminder(){if('Notification' in window&&Notification.permission==='granted'){const now=new Date();const reminder=new Date(now);reminder.setHours(8,0,0,0);if(reminder<now)reminder.setDate(reminder.getDate()+1);setTimeout(()=>{new Notification('FitLog Reminder',{body:'Time for your daily workout! 🏋️'});scheduleDailyReminder()},reminder-now)}}
-        function requestNotificationPermission(){if('Notification' in window&&Notification.permission==='default'){Notification.requestPermission().then(()=>{}).catch(()=>{})}}
+        function requestNotificationPermission(){
+            if(typeof FitLogPermissions!=='undefined'){
+                FitLogPermissions.isGranted('notifications').then(g=>{
+                    if(!g) FitLogPermissions._requestSingle('notifications');
+                });
+            } else if('Notification' in window&&Notification.permission==='default'){
+                Notification.requestPermission().then(()=>{}).catch(()=>{});
+            }
+        }
 
         // FIXED: Multi-Week Plan Generator
         async function generateMultiWeekPlan(){if(!hk()){toast('⚠️ Set API key');openSettings();return}const goal=$('plan-goal')?.value==='custom'?($('custom-goal-input')?.value||'Fitness'):$('plan-goal')?.value;const dur=$('plan-duration')?.value||'4 weeks',dpw=parseInt($('plan-days-per-week')?.value||'4');const eq=getSelectedValues('plan-equipment');if(!eq.length)eq.push('bodyweight');const sess=$('plan-session-duration')?.value||'45',c=$('multi-week-plan-result');c.innerHTML='<div class="skeleton skeleton-text"></div><p style="font-size:.8rem">Generating plan...</p>';const avail=EX.filter(ex=>eq.some(e=>{const xe=(ex.e||'').toLowerCase(),se=e.toLowerCase();return xe===se||xe.includes(se)||se.includes(xe)||ex.e==='none'}));if(avail.length<3){c.innerHTML='<p style="color:var(--accent-secondary)">❌ Not enough exercises with selected equipment. Add Bodyweight or more equipment.</p>';return}const exList=avail.map(e=>({id:e.id,n:e.n})).slice(0,30);try{const r=await ai(`Create a ${dur} training plan for: "${goal}". ${dpw} days/week, ${sess} min/session.`, `Create a structured workout plan. Return ONLY valid JSON:\n{"planName":"...","goal":"${goal}","duration":"${dur}","weeks":[{"weekNumber":1,"focus":"...","days":[{"dayNumber":1,"name":"...","type":"strength","exercises":[{"id":"...","sets":3,"reps":"8-12","restSeconds":60}],"warmup":"5 min light cardio","cooldown":"5 min stretching"}]}]}\n\nPick exercise IDs ONLY from this list: ${JSON.stringify(exList)}`);if(!r||!r.weeks||!r.weeks.length){c.innerHTML='<p style="color:var(--accent-secondary)">❌ Could not generate plan. Try different settings.</p>';return}const planData={id:uid(),ts:new Date().toISOString(),planName:r.planName||goal,goal,duration:dur,daysPerWeek:dpw,overview:r.overview||'',weeks:r.weeks,done:{},started:false};c.innerHTML='<p style="color:var(--accent-primary);text-align:center;padding:10px">✅ Plan generated! Review below.</p>';openPlanPreviewModal(planData);refreshPlans()}catch(e){c.innerHTML=`<p style="color:var(--accent-secondary)">❌ ${e.message||'Error generating plan. Try again.'}</p>`;console.error('Plan generation error:',e)}}
@@ -771,7 +779,15 @@
         el.innerHTML=ring(t.p,tgt.proteinG||150,'var(--accent-primary)','Protein','g')+ring(t.c,tgt.carbsG||200,'var(--accent-blue)','Carbs','g')+ring(t.f,tgt.fatG||65,'var(--accent-yellow)','Fat','g');}
 
         // ── ONBOARDING ──────────────────────────────────────────────
-        function dismissOnboarding(){localStorage.setItem('fitlog_onboarded','1');const el=$('onboarding-overlay');if(el){el.style.opacity='0';el.style.transition='opacity .4s';setTimeout(()=>el.style.display='none',400)}}
+        function dismissOnboarding(){
+            localStorage.setItem('fitlog_onboarded','1');
+            const el=$('onboarding-overlay');
+            if(el){ el.style.opacity='0'; el.style.transition='opacity .4s'; setTimeout(()=>el.style.display='none',400); }
+            // Show permissions modal after onboarding completes
+            if(typeof FitLogPermissions!=='undefined'){
+                FitLogPermissions.requestAfterOnboarding();
+            }
+        }
         function initOnboarding(){if(!localStorage.getItem('fitlog_onboarded')){const el=$('onboarding-overlay');if(el)el.style.display='flex'}}
 
         // ── PWA INSTALL ─────────────────────────────────────────────

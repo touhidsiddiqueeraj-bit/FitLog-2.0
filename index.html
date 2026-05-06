@@ -105,6 +105,11 @@
     <p style="font-size:.75rem;color:var(--text-secondary);margin-top:6px" id="pwa-installed-note">Use your browser's "Add to Home Screen" option to install FitLog as an app.</p>
   </div>
   <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label>🔐 App Permissions</label>
+    <p style="font-size:.75rem;color:var(--text-secondary);margin-top:4px;margin-bottom:8px">Manage camera, notifications &amp; motion access</p>
+    <button class="btn btn-secondary btn-block" onclick="FitLogPermissions.openSettings()" style="margin-top:2px">🔐 Manage Permissions</button>
+  </div>
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
     <label style="color:var(--accent-secondary)">⚠️ Danger Zone</label>
     <button class="btn btn-danger btn-block" onclick="clearAllData()" style="margin-top:6px;opacity:.8">🗑️ Clear All Data</button>
   </div>
@@ -294,6 +299,7 @@
 
     
 
+    <script src="permissions.js"></script>
     <script src="app.js"></script>
     <script>
       if ('serviceWorker' in navigator) {
