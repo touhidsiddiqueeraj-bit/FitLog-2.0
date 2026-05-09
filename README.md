@@ -1,4 +1,4 @@
-# 💪 FitLog v2.1
+# FitLog v2.1
 
 > AI-Powered Fitness & Nutrition Tracker
 
@@ -54,13 +54,10 @@ Live at: https://touhidsiddiqueeraj-bit.github.io/FitLog-2.0/
 The API key is stored locally in your browser and never sent to any server except Google's.
 
 ## 🛠️ Tech Stack
-
-- **Single HTML file** — No build step, no dependencies
 - **LocalStorage** — Data persists in your browser
 - **Google Gemini API** — AI-powered meal & workout generation
 - **Open Food Facts API** — Barcode food lookup
-- **html5-qrcode** — Barcode scanning (via CDN)
-- **Vanilla CSS/JS** — No frameworks
+- *
 
 ## 📱 Browser Support
 
