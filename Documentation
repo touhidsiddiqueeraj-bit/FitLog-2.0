@@ -1,0 +1,385 @@
+💪  FitLog v2.1
+AI-Powered Fitness & Nutrition Tracker
+Complete Developer & User Documentation
+Version 2.1  ·  2026  ·  MIT License
+Live Demo: https://touhidsiddiqueeraj-bit.github.io/FitLog-2.0/
+ 
+Table of Contents
+•	1.  Overview & Purpose
+•	2.  Repository Structure
+•	3.  Technology Stack
+•	4.  Quick Start Guide
+•	5.  API Key Configuration
+•	6.  Core Modules
+•	    6.1  Dashboard
+•	    6.2  Nutrition Logging
+•	    6.3  Workout Studio
+•	    6.4  Body Metrics
+•	    6.5  Progress Charts
+•	7.  Streak System
+•	8.  Integrations
+•	    8.1  Google Gemini AI
+•	    8.2  Open Food Facts (Barcode)
+•	    8.3  Google Fit
+•	    8.4  Mi Band / BLE
+•	9.  Cloud Sync & Data Export
+•	10. Progressive Web App (PWA)
+•	11. Permissions System
+•	12. User Interface & Theming
+•	13. Data Storage Architecture
+•	14. Modal & Overlay Inventory
+•	15. Keyboard & Accessibility
+•	16. Browser Support
+•	17. Privacy & Security
+•	18. License
+•	19. Known Limitations & Roadmap
+ 
+1. Overview & Purpose
+FitLog v2.1 is a zero-dependency, single-page web application (SPA) that runs entirely in the browser. It was designed around one core principle: a user should be able to open a single HTML file and immediately begin tracking their fitness journey — no account, no installation, no backend server required.
+The application integrates Google Gemini AI to deliver experiences that would traditionally require a server-side system: natural-language meal parsing, photo-based body-fat estimation, AI-generated multi-week workout plans, and per-day plan regeneration on demand.
+FitLog v2.1 is the second major iteration of the project and introduces a production-grade Workout Studio (with plan preview, edit mode, exercise picker, and a full-screen active workout mode), a streak-freeze system, Google Fit and Mi Band BLE integration, cloud sync via a sync-code mechanism, and Progressive Web App support for installability on mobile and desktop devices.
+
+2. Repository Structure
+The repository is intentionally flat — all source files live at the root level, making the project easy to clone and run.
+File / Directory	Description
+index.html	Single-page application shell. Contains all HTML markup, inline SVG icons, all modal templates, and the navigation structure. 314 lines; 146 KB.
+app.js	Primary application logic (48 % of codebase). Covers all feature modules: Dashboard, Nutrition, Workout Studio, Body Metrics, Progress Charts, AI calls, Streak system, Cloud Sync, PWA install, and all modal controllers.
+styles.css	Global stylesheet (15 % of codebase). CSS custom-property theming, responsive layout, glass-morphism card system, workout active-mode layout, rest-timer overlay, and dark/light theme support.
+sw.js	Service Worker for PWA offline caching. Intercepts fetch events and serves cached assets when the network is unavailable.
+manifest.json	PWA Web App Manifest. Declares app name, icons, theme colour (#00E5BB), and display mode for installability.
+permissions.js	Dedicated module (FitLogPermissions) for requesting and managing browser permissions: camera, notifications, and device motion.
+icons/	Directory containing PWA icon assets referenced by manifest.json.
+LICENSE	MIT licence file. Personal, non-commercial use only.
+README.md	GitHub README covering features, quick start, tech stack, browser support, and privacy summary.
+
+
+3. Technology Stack
+FitLog is a deliberately dependency-light project. There are no build tools, no npm packages, and no frameworks. Everything runs natively in the browser.
+Layer	Technology	Purpose
+UI Rendering	Vanilla HTML5 + CSS3	Semantic markup, CSS custom properties, Flexbox/Grid layout
+Application Logic	Vanilla JavaScript (ES6+)	All feature logic — no frameworks or bundlers
+Data Persistence	localStorage (browser)	All user data stored client-side; no database required
+AI / NLP	Google Gemini API (gemini-pro / gemini-pro-vision)	Meal parsing, workout generation, body-fat estimation
+Food Lookup	Open Food Facts REST API	Barcode scanning → product nutrition data
+Barcode Scanning	html5-qrcode v2.3.8 (CDN)	Camera-based barcode scanning in the browser
+Fitness Wearable	Web Bluetooth API	BLE connection to Mi Band / compatible pedometers
+Health Platform	Google Fit REST API	OAuth2 sync of steps, weight, calories
+Offline / Install	Service Worker + Web App Manifest	PWA capabilities: offline caching, Add to Home Screen
+Permissions	Permissions API + getUserMedia	Camera, notifications, device motion
+Exercise GIFs	External GIF service	Animated demonstrations rendered in the GIF modal
+
+
+4. Quick Start Guide
+Option A — GitHub Pages (Recommended)
+Visit the live deployment directly — no setup needed:
+    https://touhidsiddiqueeraj-bit.github.io/FitLog-2.0/
+The page loads instantly. On first visit, an onboarding overlay walks through the key features. Dismiss it, configure your Gemini API key (Section 5), and begin.
+Option B — Local File
+1.	Clone or download the repository:
+    git clone https://github.com/touhidsiddiqueeraj-bit/FitLog-2.0.git
+2.	Open index.html in any modern browser.
+3.	Click ⚙️ in the top navigation bar.
+4.	Paste your Gemini API key and press Save.
+No web server is required for the core features. The barcode scanner requires camera access and may need HTTPS in some browsers (serve with a simple HTTP server or use GitHub Pages).
+Option C — PWA Install
+On supported browsers (Chrome, Edge, Safari on iOS), FitLog prompts for installation. Alternatively, use the Install App button in Settings. Once installed, the app launches like a native application and works offline for previously visited data.
+
+5. API Key Configuration
+FitLog's AI features are powered by Google Gemini. A free API key (with a generous daily quota) is available from Google AI Studio.
+Obtaining a Key
+5.	Navigate to https://aistudio.google.com/apikey
+6.	Sign in with a Google account.
+7.	Click Create API Key.
+8.	Copy the generated key.
+Configuring FitLog
+9.	In FitLog, click the ⚙️ (Settings) icon in the top navigation bar.
+10.	Locate the Gemini API Key field.
+11.	Paste the key into the password-type input.
+12.	Press 💾 Save API Key. The key is validated and a status indicator confirms it is active.
+Storage & Security
+The key is stored exclusively in the browser's localStorage under a dedicated key. It is transmitted only to Google's Gemini API endpoint when the user explicitly invokes an AI feature. It is never sent to any server operated by FitLog or its author.
+⚠️  Security Note
+Because localStorage is accessible to JavaScript running on the same origin, treat your API key as a secret. Do not share your browser profile or exported localStorage data with others.
+If you suspect the key has been exposed, regenerate it immediately at Google AI Studio and update FitLog's Settings.
+
+
+6. Core Modules
+FitLog is divided into five primary feature modules, accessible via the bottom navigation bar.
+6.1  Dashboard  📊
+The Dashboard is the application's home screen. It provides a high-level summary of the user's activity for the current day.
+Metrics Displayed
+•	Daily Calories — Total kilocalories consumed and burned.
+•	Protein — Grams of protein logged for the day.
+•	Workouts — Number of workout sessions completed.
+•	Streak — Current consecutive active-day streak (see Section 7).
+•	Steps — Step count (sourced from Google Fit or Mi Band if connected, otherwise manual).
+•	Hydration — Water intake in millilitres against a configurable daily target.
+•	Weight — Today's logged body weight (kg), with quick-entry modal.
+Quick-Log Controls
+The Dashboard provides one-tap access to the Water modal (250 ml / 500 ml / 750 ml / 1000 ml presets, or a custom value) and the Weight modal (−0.5 / Same / +0.5 kg quick buttons, or a manual input).
+6.2  Nutrition Logging  🍽️
+The Nutrition module provides four distinct pathways for logging food intake, catering to different use-case scenarios.
+A. AI Chat Logging
+The most natural input method. The user types or speaks a description of a meal (e.g. "I had two boiled eggs, a slice of toast with butter, and a glass of orange juice"). FitLog sends the description to the Gemini API, which returns structured JSON containing estimated calories, protein, carbohydrates, and fat. The result is parsed and added to the day's nutrition log.
+B. Barcode Scanning
+Powered by html5-qrcode (loaded from CDN) and the Open Food Facts API. The user opens the scanner via Settings > Open Scanner or the scan button in the Nutrition section. The camera activates and continuously scans for a barcode. On detection, FitLog queries the Open Food Facts REST API with the barcode value and retrieves the product's nutritional data per 100 g. The user confirms the serving size and the item is logged.
+C. Photo-Based Meal Analysis
+The user captures or uploads a photo of their meal. FitLog sends the image (base64-encoded) to the Gemini Vision API with a structured prompt requesting nutrition estimation. The AI returns an approximate calorie and macronutrient breakdown which is presented to the user for confirmation before logging.
+D. Favorites & Quick Logging
+Frequently logged items can be saved as Favorites for one-tap re-entry. Favourites are stored in localStorage and rendered in the Nutrition log view as quick-action cards.
+Food Search & Custom Foods
+The Food Search modal queries Open Food Facts by name. Users can also create Custom Foods — a named entry with manually entered calories, protein, carbohydrates, fat, and serving size. Custom foods appear in a dedicated list within the Food Search modal.
+6.3  Workout Studio  🏋️
+The Workout Studio is the most complex module in FitLog. It covers the full lifecycle of a workout plan: AI generation, preview, editing, execution, and manual logging.
+AI-Generated Multi-Week Plans
+The user specifies goals, fitness level, available equipment, and workout days per week. FitLog constructs a detailed prompt and submits it to the Gemini API. The AI returns a structured JSON plan defining exercises, sets, reps, and rest durations for each day across multiple weeks.
+Plan Preview Modal
+Before accepting an AI-generated plan, the user sees a full preview: each week, each day, and each exercise with its prescribed sets and reps. The user can Accept the plan or Discard it and request a new generation.
+Edit Mode
+Once a plan is accepted and active, the user can enter Edit Mode on any day. In this mode:
+•	Exercise names can be changed via the Exercise Picker.
+•	Sets and reps can be edited inline.
+•	Individual days can be regenerated by AI (AI Regenerate).
+•	Days can be marked as rest days.
+Exercise Picker
+A searchable modal listing exercises categorised by muscle group. Used to swap a planned exercise for an alternative. Typing in the search field filters the list in real time.
+Active Workout Mode
+Tapping Start on a scheduled day launches the full-screen Active Workout Mode. This mode presents each exercise as a slide. For each exercise:
+•	The exercise name, prescribed sets × reps, and a GIF demonstration are shown.
+•	A rest timer (ring animation with countdown) triggers automatically between sets.
+•	The user can tap Skip to bypass the rest timer or +15s to extend it.
+•	Navigation arrows (Prev / Next) and a Done button are available.
+•	A progress bar tracks completion across all exercises.
+•	An elapsed-time timer runs in the header.
+On completion, a Congratulations overlay celebrates the finished session, increments the streak, and records the workout.
+Plan Start / Stop / Pause
+Active plans can be paused (preserving the current week and day position) or stopped (clearing the plan). A stopped plan can be regenerated fresh.
+Quick Workout Generator
+For users who prefer spontaneous sessions, the Quick Workout Generator produces a single-day workout without a multi-week plan context.
+Manual Workout Logging
+Users can log any workout manually by selecting a date, entering exercises, sets, reps, and optional notes. These entries are stored alongside AI-plan workout sessions.
+Exercise History Modal
+For any exercise, tapping its name opens a history modal showing all previous logged instances: date, sets, reps, and progression over time.
+6.4  Body Metrics  📐
+US Navy Body Fat Calculator
+Implements the US Navy circumference method for estimating body fat percentage. For males: neck and waist measurements (cm). For females: neck, waist, and hip measurements (cm) plus height (cm). The formula produces an estimated body fat percentage displayed alongside an interpretation (e.g. Fitness, Acceptable, Obese).
+AI Photo Body Fat Estimation
+The user uploads or captures a full-body photo. FitLog sends the image to the Gemini Vision API with a body-fat-estimation prompt. The AI returns an estimated percentage range. This feature is clearly labelled as an approximation and not a clinical measurement.
+TDEE & Macro Calculator
+Accepts age, sex, height, weight, and activity level, then calculates:
+•	BMR (Basal Metabolic Rate) via the Mifflin-St Jeor equation.
+•	TDEE (Total Daily Energy Expenditure) by applying an activity multiplier.
+•	Recommended macro split (protein, carbohydrates, fat) in grams based on configurable goals (maintenance, cut, bulk).
+6.5  Progress Charts  📈
+The Progress section renders interactive charts for long-term tracking. Charts are implemented in pure Canvas / SVG without an external charting library.
+•	Weight Over Time — Plots daily weigh-ins as a line chart. Highlights trend direction.
+•	Weekly Calorie Intake vs Burned — A grouped bar chart comparing calories consumed against an estimated calories-burned value derived from workouts and TDEE, grouped by calendar week.
+
+7. Streak System  🔥
+The Streak System incentivises consistent training by tracking consecutive active days.
+How Streaks Work
+A streak increments when the user completes a workout session (via Active Workout Mode or by manually logging a workout) on a given calendar day. Consecutive days with logged workouts build the streak. Missing a day that was scheduled as a training day breaks the streak — unless a Streak Freeze is consumed.
+Streak Freezes
+Streak freezes are automatically calculated based on the user's selected plan frequency:
+Freeze Count = 7 − (days/week selected in plan)
+For example, a user on a 5-day plan receives 2 freezes per week. If a non-rest day is missed and a freeze is available, the freeze is automatically consumed to maintain the streak. The freeze count resets each week.
+Dashboard Display
+The current streak count is shown prominently on the Dashboard. A fire emoji (🔥) is displayed alongside the count for visual reinforcement. The streak resets to zero if a training day is missed without an available freeze.
+
+8. Integrations
+8.1  Google Gemini AI
+All AI features share a common API call pattern: the user's Gemini API key (stored in localStorage) is attached to an HTTP POST to the Gemini REST endpoint. The request body includes the model name and a content array containing the user prompt and, where applicable, base64-encoded image data.
+Models Used
+•	gemini-pro — text-only tasks: meal description parsing, workout plan generation.
+•	gemini-pro-vision — multimodal tasks: photo meal analysis, photo body-fat estimation.
+Error Handling
+If the API returns an error (invalid key, quota exceeded, network failure), FitLog displays an inline error message prompting the user to check their key or try again. No partial data is committed to the log on failure.
+8.2  Open Food Facts API
+Open Food Facts is a free, open food products database with over 3 million items. FitLog uses two endpoints:
+•	Barcode lookup: GET /api/v2/product/{barcode}.json — fetches product by EAN/UPC barcode.
+•	Name search: GET /cgi/search.pl?search_terms={query} — returns a list of matching products.
+No API key is required for Open Food Facts. Data returned includes product name, brand, energy (kcal per 100 g), protein, carbohydrates, fat, and optional fields like fibre and sodium.
+8.3  Google Fit Integration
+Google Fit integration uses OAuth 2.0 (browser-side Google Sign-In). Once connected:
+•	Steps for the current day are fetched and displayed on the Dashboard.
+•	Weight entries logged in FitLog can be written back to Google Fit.
+•	Calorie burn data from Google Fit can supplement FitLog's burned-calories estimate.
+Connect / Disconnect Flow
+The Settings modal contains a dedicated Google Fit section with a Sign in with Google button, a sync summary grid (showing last-sync details), a Sync Now button, and a Disconnect button. The status dot (green = connected, grey = not connected) provides at-a-glance status.
+8.4  Mi Band / BLE Fitness Band
+FitLog uses the Web Bluetooth API to connect to Xiaomi Mi Band 2/3/4/5 or any BLE device exposing the Step Counter characteristic (UUID 0x2A5B).
+•	Supported browsers: Chrome and Edge on Android, Chrome on desktop (with experimental Bluetooth flags enabled on some platforms).
+•	The Connect Band button in Settings triggers the browser's Bluetooth device picker.
+•	Once connected, the step count is polled and synced to the Dashboard steps metric.
+•	The Disconnect button cleanly terminates the BLE session.
+The Mi Band section in Settings shows a status dot, a status label, and the timestamp of the last successful sync.
+
+9. Cloud Sync & Data Export
+Sync Code Mechanism
+FitLog does not have a proprietary backend. Instead, it uses a sync-code mechanism: the user's localStorage data is serialised to JSON and stored against a short alphanumeric sync code on a lightweight cloud service. The user can share the code across devices to restore their data.
+Backup Flow
+13.	Open Settings > ☁️ Open Cloud Sync.
+14.	Generate a new sync code (or use the existing one shown).
+15.	Press ☁️ Backup Now. The data is uploaded and associated with the code.
+16.	Copy the code (📋 Copy button) and keep it safe.
+Restore Flow
+17.	On a new device, open Cloud Sync.
+18.	Enter the sync code in the Restore from Code field.
+19.	Press Restore. The data is downloaded and written to localStorage.
+JSON Export
+The Export JSON button downloads a complete snapshot of all FitLog localStorage data as a .json file. This file can be used as a manual backup or inspected for debugging purposes.
+Cloud Status
+Two status indicators (cloud-status-dot and cloud-status-text) appear both inside the Cloud Sync modal and in the main Settings modal for quick access.
+
+10. Progressive Web App (PWA)
+Manifest
+manifest.json declares FitLog as an installable PWA with the following key properties:
+Property	Value
+name	FitLog — AI Fitness Tracker
+short_name	FitLog
+theme_color	#00E5BB (teal accent)
+background_color	#060812 (deep dark)
+display	standalone
+start_url	index.html
+icons	Multiple sizes in icons/ directory
+
+Service Worker (sw.js)
+The Service Worker intercepts network requests and serves cached responses when the device is offline. The offline pill at the top of the page (📴 You're offline) is displayed when the browser detects no network connectivity. This allows users to view their previously logged data even without an internet connection.
+Install Prompt
+FitLog listens for the beforeinstallprompt browser event. When detected, an Add to Home Screen button is revealed in Settings. Tapping it triggers the browser's native install prompt. On iOS Safari, users are guided to use the browser's Share > Add to Home Screen flow since iOS does not support the programmatic install prompt API.
+
+11. Permissions System
+FitLog uses a dedicated FitLogPermissions module (permissions.js) to manage browser permission requests in a user-friendly way.
+Permission	Feature Used For
+Camera	Barcode scanning, photo meal analysis, photo body-fat estimation
+Notifications	Workout reminders, rest-timer completion alerts
+Device Motion	Step counting without a wearable on supported mobile devices
+
+The Permissions modal (Settings > 🔐 Manage Permissions) shows the current status of each permission (Granted / Denied / Not Requested) and provides buttons to request or re-request each one. Denied permissions display guidance on how to reset them via the browser's site settings.
+
+12. User Interface & Theming
+Design Language
+FitLog uses a glass-morphism design language: semi-transparent cards with blurred backgrounds and subtle borders, layered on a deep dark (#060812) base. The accent colour is a vibrant teal (#00E5BB) that signals interactive elements, progress indicators, and the brand identity.
+Dark / Light Themes
+Toggling the theme applies a data-theme attribute to the <body> element. CSS custom properties defined under [data-theme="dark"] and [data-theme="light"] switch the full colour palette without a page reload. The preference is persisted in localStorage and restored on next visit.
+CSS Custom Properties
+All colours and spacings are defined as CSS custom properties (variables), making global theming changes trivial. Key properties include:
+•	--accent-primary: Main teal (#00E5BB)
+•	--accent-secondary: Coral/orange accent for warnings
+•	--glass-bg: Card background (rgba with backdrop-filter: blur)
+•	--glass-border: Subtle card border
+•	--text-primary / --text-secondary: Content text colours
+Navigation
+The top navigation bar contains the FitLog brand logo (inline PNG, base64-encoded), a streak display, and the ⚙️ Settings icon. The bottom navigation provides tab buttons for Dashboard, Nutrition, Workout, Metrics, and Progress.
+Responsive Design
+The layout is fully responsive using CSS Flexbox and Grid. Cards stack vertically on narrow viewports. The Active Workout Mode uses a full-viewport fixed layout for immersive focus. The rest-timer overlay uses an SVG ring animation centred on screen.
+
+13. Data Storage Architecture
+All application data is persisted in the browser's localStorage as JSON strings. There is no IndexedDB, no cookies, and no remote database. The following logical data stores are used:
+localStorage Key (conceptual)	Contents
+fitlog_nutrition_log	Array of daily nutrition entries: date, meal name, calories, protein, carbs, fat
+fitlog_workouts	Array of completed workout sessions: date, exercises, sets, reps, duration
+fitlog_active_plan	Current AI workout plan: weeks, days, exercises, current position
+fitlog_body_metrics	Array of body measurement entries: date, weight, body fat %
+fitlog_hydration	Daily water intake log
+fitlog_steps	Daily step count entries
+fitlog_streak	Current streak count, freeze count, last active date
+fitlog_custom_foods	User-created custom food entries
+fitlog_favorites	Favourite food items for quick logging
+fitlog_gemini_key	Encrypted Gemini API key
+fitlog_theme	User's last selected theme (dark/light)
+fitlog_sync_code	Cloud sync code for backup/restore
+fitlog_onboarded	Boolean — whether onboarding has been dismissed
+
+localStorage has a per-origin limit of approximately 5–10 MB depending on the browser. Heavy users (years of daily entries) are unlikely to approach this limit given the compact JSON format used.
+💡  Data Portability Tip
+Use Settings > ☁️ Cloud Sync > 💾 Export JSON at any time to download a full snapshot of your data. This JSON file can be imported into a spreadsheet or used as an offline backup.
+The Clear All Data button in the Danger Zone of Settings permanently erases all localStorage data for the FitLog origin. This action is irreversible.
+
+
+14. Modal & Overlay Inventory
+FitLog uses a rich modal system. All modals are pre-rendered in index.html and shown/hidden via display: none / flex toggling from JavaScript.
+Modal ID	Purpose
+settings-modal	App settings: API key, theme, barcode, cloud sync, Google Fit, Mi Band, install, permissions, danger zone
+cloud-modal	Cloud backup and restore via sync codes
+gif-modal	Full-screen exercise GIF demonstration with title and navigation footer
+scanner-modal	Live camera barcode scanning using html5-qrcode
+water-modal	Quick water intake logging (preset + custom)
+weight-modal	Daily weight logging (quick-delta + custom input)
+plan-preview-modal	Full preview of AI-generated workout plan before acceptance
+confirm-modal	Generic confirmation dialog (e.g. clear data, stop plan)
+exercise-picker-modal	Searchable exercise list for swapping planned exercises
+ex-history-modal	Exercise history: all logged instances of a given exercise
+food-search-modal	Open Food Facts search + custom food management
+custom-food-modal	Form for creating a new custom food entry
+workout-active-modal	Full-screen active workout mode with slide navigation and progress bar
+rest-timer-overlay	SVG ring rest-timer countdown between sets
+congrats-overlay	Celebration screen shown on workout completion
+onboarding-overlay	First-launch feature introduction (dismissed on '🚀 Let's Go!')
+network-pill	Offline status notification (📴 You're offline)
+
+
+15. Keyboard & Accessibility
+FitLog is primarily designed for touch/mouse interaction. The following accessibility provisions are present:
+•	All interactive buttons use native <button> elements, inheriting keyboard focusability.
+•	Modal close buttons are accessible via Tab + Enter/Space.
+•	The app title, description, and application-name meta tags are set for assistive technologies.
+•	SVG icons embedded in the nav use aria-hidden where they are decorative.
+•	The theme colour meta tag (#00E5BB) hints the browser chrome on mobile.
+Full ARIA landmark roles, skip navigation, and screen-reader-optimised flows are noted as potential future improvements (see Section 19).
+
+16. Browser Support
+Browser	Support Level
+Chrome (latest)	Full — all features including BLE and PWA install
+Edge (latest)	Full — all features including BLE and PWA install
+Firefox (latest)	Full — except Web Bluetooth (BLE), which Firefox does not implement
+Safari (latest, iOS/macOS)	Full — except Web Bluetooth; PWA install via Share > Add to Home Screen
+Samsung Internet	Full for core features; BLE availability depends on Android version
+Opera	Full (Chromium-based)
+
+Minimum requirements: ES6 (arrow functions, template literals, destructuring, Promises, async/await), localStorage, Fetch API, CSS custom properties.
+
+17. Privacy & Security
+Data Residency
+All user data — workout logs, nutrition entries, body metrics, and preferences — resides exclusively in the user's own browser localStorage. FitLog's author has no access to this data.
+External Data Transmissions
+FitLog transmits data to third-party services only in the following explicitly user-initiated scenarios:
+•	Google Gemini API — when the user invokes any AI feature (meal logging, workout generation, photo analysis). Data sent: the prompt text and/or base64-encoded image. The Gemini API key is included in the request header.
+•	Open Food Facts API — when the user scans a barcode or searches for a food by name. Data sent: the barcode string or search query. No user identity is transmitted.
+•	Google Fit API — when the user is signed in with Google Fit and taps Sync Now. Data sent: fitness metrics (steps, weight, calories) to and from Google's servers, governed by Google's own privacy policy.
+•	Cloud Sync service — when the user explicitly clicks Backup Now or Restore. Data sent: the full localStorage JSON payload.
+API Key Storage
+The Gemini API key is stored in localStorage. It is not obfuscated or encrypted beyond the browser's own same-origin isolation. Users should treat it as a sensitive credential.
+No Tracking, No Analytics
+FitLog does not include any analytics libraries, tracking pixels, or telemetry scripts. There are no third-party advertising or behavioural tracking integrations.
+
+18. License
+Copyright © 2026. This software is published under a personal, non-commercial use licence. The MIT Licence file is present in the repository for compatibility purposes, but the following additional restrictions apply:
+•	✅ You may use this software for personal purposes.
+•	✅ You may modify and adapt it for your own personal use.
+•	❌ You may NOT use this software for commercial purposes.
+•	❌ You may NOT sell, distribute, or monetise this software.
+•	❌ You may NOT sublicence or transfer rights to others.
+For commercial licensing enquiries, contact the repository author via GitHub.
+
+19. Known Limitations & Roadmap
+Current Limitations
+•	localStorage size cap (~5 MB): Long-term users with years of daily entries may eventually approach the browser's storage limit. A future migration to IndexedDB would provide significantly more headroom.
+•	Gemini API quota: The free tier of the Gemini API has per-minute and per-day call limits. Heavy AI usage (repeated regeneration of workout plans, frequent photo analysis) may result in temporary quota errors.
+•	Web Bluetooth (BLE): Not supported in Firefox or Safari. Mi Band connectivity is limited to Chromium-based browsers.
+•	Offline AI: All Gemini AI calls require an internet connection. The app works offline for data review and manual logging, but AI features are unavailable without connectivity.
+•	Multi-user: FitLog has no user account system. All data belongs to the single browser profile using the app.
+•	Accessibility: Full ARIA landmark roles, focus management in modals, and screen-reader-optimised flows are incomplete.
+•	Calorie burn estimation: The calories-burned figure on the Dashboard is an estimate based on TDEE and workout duration, not a direct measurement.
+Potential Roadmap Items
+•	IndexedDB migration for larger data capacity.
+•	Export to CSV for nutrition and workout data.
+•	Configurable macro goals and daily calorie targets.
+•	Notification scheduler for workout reminders.
+•	Social sharing of streaks and milestones.
+•	Full WCAG 2.1 AA accessibility audit and remediation.
+•	Additional AI models (e.g. Claude, GPT-4) as user-selectable backends.
+•	Expanded exercise GIF library with muscle-group diagrams.
+
+FitLog v2.1 — Documentation Generated May 2026
+Built with ❤️ for fitness enthusiasts
