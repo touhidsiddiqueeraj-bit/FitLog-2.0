@@ -7,6 +7,7 @@
         
         const BASE='https://fitnessprogramer.com/wp-content/uploads/2021/02/';
         const GIF_CACHE=SP(localStorage.getItem('fitlog_gifcache'),{});
+FitLogAdaptive.refresh()
         const GL={
   // CHEST
   bp:BASE+'Barbell-Bench-Press.gif',
