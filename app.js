@@ -1,5 +1,4 @@
-
-        const GM='gemini-2.5-flash-lite';
+const GM='gemini-2.5-flash-lite';
         const API_URL='https://generativelanguage.googleapis.com/v1beta/models/'+GM+':generateContent';
         const OFF_API='https://world.openfoodfacts.org/api/v2/product/';
 
@@ -7,7 +6,6 @@
         
         const BASE='https://fitnessprogramer.com/wp-content/uploads/2021/02/';
         const GIF_CACHE=SP(localStorage.getItem('fitlog_gifcache'),{});
-FitLogAdaptive.refresh()
         const GL={
   // CHEST
   bp:BASE+'Barbell-Bench-Press.gif',
@@ -170,12 +168,12 @@ FitLogAdaptive.refresh()
 };
         function SP(j,f){try{const p=JSON.parse(j);return p&&typeof p==='object'?p:f}catch{return f}}
         function saveGifCache(){localStorage.setItem('fitlog_gifcache',JSON.stringify(GIF_CACHE))}
-        const S={key:localStorage.getItem('fitlog_key')||'',meals:SP(localStorage.getItem('fitlog_meals'),[]),wkts:SP(localStorage.getItem('fitlog_wkts'),[]),wlog:SP(localStorage.getItem('fitlog_wlog'),[]),goals:SP(localStorage.getItem('fitlog_goals'),{}),favs:SP(localStorage.getItem('fitlog_favs'),[]),hydr:SP(localStorage.getItem('fitlog_hydr'),{tgt:2500,log:{}}),plans:SP(localStorage.getItem('fitlog_plans'),[]),steps:SP(localStorage.getItem('fitlog_steps'),{}),theme:localStorage.getItem('fitlog_theme')||'dark',view:'dashboard',lastCongratsDate:localStorage.getItem('fitlog_last_congrats')||'',customFoods:SP(localStorage.getItem('fitlog_custom_foods'),[]),fasting:SP(localStorage.getItem('fitlog_fasting'),{active:false,startTs:null,targetHours:16})};
+        const S={key:localStorage.getItem('fitlog_key')||'',rapidapi_key:localStorage.getItem('fitlog_rapidapi_key')||'',meals:SP(localStorage.getItem('fitlog_meals'),[]),wkts:SP(localStorage.getItem('fitlog_wkts'),[]),wlog:SP(localStorage.getItem('fitlog_wlog'),[]),goals:SP(localStorage.getItem('fitlog_goals'),{}),favs:SP(localStorage.getItem('fitlog_favs'),[]),hydr:SP(localStorage.getItem('fitlog_hydr'),{tgt:2500,log:{}}),plans:SP(localStorage.getItem('fitlog_plans'),[]),steps:SP(localStorage.getItem('fitlog_steps'),{}),theme:localStorage.getItem('fitlog_theme')||'dark',view:'dashboard',lastCongratsDate:localStorage.getItem('fitlog_last_congrats')||'',customFoods:SP(localStorage.getItem('fitlog_custom_foods'),[]),fasting:SP(localStorage.getItem('fitlog_fasting'),{active:false,startTs:null,targetHours:16})};
         const today=new Date().toISOString().split('T')[0];
         if(!S.hydr.log)S.hydr.log={};if(typeof S.hydr.log[today]!=='number')S.hydr.log[today]=0;if(typeof S.steps[today]!=='number')S.steps[today]=0;
         function save(k,v){localStorage.setItem(k,JSON.stringify(v))}save('fitlog_hydr',S.hydr);save('fitlog_steps',S.steps);
         const $=id=>document.getElementById(id);
-        function hk(){return!!(S.key&&S.key.trim())}function gT(){return today}function gA(d){const dt=new Date();dt.setDate(dt.getDate()-d);return dt.toISOString().split('T')[0]}
+        function hk(){return!!(S.key&&S.key.trim())}function gT(){return new Date().toISOString().split('T')[0]}function gA(d){const dt=new Date();dt.setDate(dt.getDate()-d);return dt.toISOString().split('T')[0]}
         function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,9)}
         function toast(m,d=2500){const e=document.querySelector('.toast');if(e)e.remove();const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300)},d)}
         function showCongrats(msg){$('congrats-msg').textContent=msg||'You crushed it today!';$('congrats-overlay').style.display='flex';haptic([50,30,80]);const box=document.querySelector('.congrats-box');if(box)spawnConfetti(box);}
@@ -226,7 +224,27 @@ FitLogAdaptive.refresh()
         }
         function buildLiveGifUrl(exName){let n=exName.replace(/\(.*?\)/g,'').replace(/[^a-zA-Z0-9 ]/g,'').trim();n=n.replace(/\bdb\b/gi,'Dumbbell').replace(/\bbb\b/gi,'Barbell').replace(/\bkb\b/gi,'Kettlebell').replace(/\bkg\b/gi,'').replace(/\blbs?\b/gi,'').replace(/\breps?\b/gi,'').replace(/\bsets\b/gi,'').replace(/\bwith\b/gi,'').replace(/\busing\b/gi,'').replace(/\bthe\b/gi,'').replace(/\band\b/gi,'').replace(/\bfor\b/gi,'').replace(/\bof\b/gi,'').replace(/\bto\b/gi,'').replace(/\bor\b/gi,' ').replace(/\s+/g,' ').trim();const f=n.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join('-');return`https://fitnessprogramer.com/wp-content/uploads/2021/02/${f}.gif`}
         function showExerciseGif(exId,exName){const m=$('gif-modal'),t=$('gif-modal-title'),b=$('gif-modal-body'),ft=$('gif-modal-footer');t.textContent=exName;b.innerHTML='<div class="gif-loading">Searching...</div>';ft.innerHTML='';tryLoadGif(exId,exName,b,ft,0);m.style.display='flex';document.body.style.overflow='hidden'}
-        function tryLoadGif(exId,exName,b,ft,att){let url=null,label='';if(att===0){url=findGif(exId,exName);label='Form'}else if(att===1){url=buildLiveGifUrl(exName);label='Web'}else if(att===2){const n=exName.replace(/\(.*?\)/g,'').trim();url=buildLiveGifUrl(n);label='Alt'}else{const fb=`https://www.youtube.com/results?search_query=${encodeURIComponent(exName+' exercise')}`;b.innerHTML=`<div style="text-align:center;padding:30px"><p>No demo found</p><a href="${fb}" target="_blank" class="btn btn-primary btn-sm">📹 YouTube</a></div>`;ft.innerHTML=`<span class="gif-tag">🔍 ${exId||'Not found'}</span>`;return}if(url){b.innerHTML=`<div class="gif-loading">Loading...</div>`;const img=new Image(),to=setTimeout(()=>{if(img.complete)return;tryLoadGif(exId,exName,b,ft,att+1)},5000);img.onload=()=>{clearTimeout(to);b.innerHTML='';img.style.maxWidth='100%';img.style.maxHeight='350px';img.style.objectFit='contain';b.appendChild(img);GIF_CACHE[exId||exName]=url;saveGifCache();ft.innerHTML=`<span class="gif-tag">📹 Demo</span><span class="gif-tag">🔄 ${label}</span>`};img.onerror=()=>{clearTimeout(to);tryLoadGif(exId,exName,b,ft,att+1)};img.src=url}else{tryLoadGif(exId,exName,b,ft,att+1)}}
+        async function fetchExerciseDBGif(exName){try{const q=encodeURIComponent(exName.replace(/\(.*?\)/g,'').trim().toLowerCase());const r=await fetch(`https://exercisedb.p.rapidapi.com/exercises/name/${q}?limit=1&offset=0`,{headers:{'x-rapidapi-host':'exercisedb.p.rapidapi.com','x-rapidapi-key':S.rapidapi_key||''}});if(!r.ok)return null;const d=await r.json();return(Array.isArray(d)&&d.length&&d[0].gifUrl)?d[0].gifUrl:null}catch{return null}}
+        async function fetchWgerGif(exName){try{const q=encodeURIComponent(exName.replace(/\(.*?\)/g,'').trim());const r=await fetch(`https://wger.de/api/v2/exercise/search/?term=${q}&language=english&format=json`);if(!r.ok)return null;const d=await r.json();const suggestions=d?.suggestions||[];for(const s of suggestions){const eid=s?.data?.id;if(!eid)continue;const er=await fetch(`https://wger.de/api/v2/exerciseimage/?exercise_base=${eid}&format=json`);if(!er.ok)continue;const ed=await er.json();const img=ed?.results?.find(i=>i.image&&(i.image.endsWith('.gif')||i.is_main));if(img?.image)return img.image;}return null}catch{return null}}
+        function tryLoadGif(exId,exName,b,ft,att){let url=null,label='';if(att===0){url=findGif(exId,exName);label='Form'}else if(att===1){url=buildLiveGifUrl(exName);label='Web'}else if(att===2){const n=exName.replace(/\(.*?\)/g,'').trim();url=buildLiveGifUrl(n);label='Alt'}else if(att===3){// ExerciseDB + Wger async fallback
+            b.innerHTML=`<div class="gif-loading">Searching database...</div>`;
+            (async()=>{
+                let gifUrl=null;
+                // Try ExerciseDB if user has a RapidAPI key stored
+                if(S.rapidapi_key){gifUrl=await fetchExerciseDBGif(exName);}
+                // Try Wger (no key needed)
+                if(!gifUrl){gifUrl=await fetchWgerGif(exName);}
+                if(gifUrl){
+                    // Wger returns static images not GIFs — show as image
+                    const img=new Image();
+                    img.onload=()=>{b.innerHTML='';img.style.maxWidth='100%';img.style.maxHeight='350px';img.style.objectFit='contain';b.appendChild(img);GIF_CACHE[exId||exName]=gifUrl;saveGifCache();ft.innerHTML=`<span class="gif-tag">📹 Demo</span><span class="gif-tag">🔄 DB</span>`;};
+                    img.onerror=()=>{tryLoadGif(exId,exName,b,ft,4);};
+                    img.src=gifUrl;
+                }else{tryLoadGif(exId,exName,b,ft,4);}
+            })();
+            return;
+        }else{const fb=`https://www.youtube.com/results?search_query=${encodeURIComponent(exName+' exercise')}`;b.innerHTML=`<div style="text-align:center;padding:30px"><p>No demo found</p><a href="${fb}" target="_blank" class="btn btn-primary btn-sm">📹 YouTube</a></div>`;ft.innerHTML=`<span class="gif-tag">🔍 ${exId||'Not found'}</span>`;return}
+        if(url){b.innerHTML=`<div class="gif-loading">Loading...</div>`;const img=new Image(),to=setTimeout(()=>{if(img.complete)return;tryLoadGif(exId,exName,b,ft,att+1)},5000);img.onload=()=>{clearTimeout(to);b.innerHTML='';img.style.maxWidth='100%';img.style.maxHeight='350px';img.style.objectFit='contain';b.appendChild(img);GIF_CACHE[exId||exName]=url;saveGifCache();ft.innerHTML=`<span class="gif-tag">📹 Demo</span><span class="gif-tag">🔄 ${label}</span>`};img.onerror=()=>{clearTimeout(to);tryLoadGif(exId,exName,b,ft,att+1)};img.src=url}else{tryLoadGif(exId,exName,b,ft,att+1)}}
         function closeGifModal(event){if(event&&event.target!==$('gif-modal'))return;$('gif-modal').style.display='none';document.body.style.overflow=''}
 
         // TAG CLOUD SYSTEM
@@ -239,8 +257,8 @@ FitLogAdaptive.refresh()
         function closeScanner(){if(scannerInstance){scannerInstance.stop().then(()=>scannerInstance.clear()).catch(()=>{});scannerInstance=null}$('scanner-modal').style.display='none'}
         async function lookupBarcode(bc){const rd=$('scan-result');rd.innerHTML='<div class="skeleton skeleton-text"></div>';try{const r=await fetch(OFF_API+bc+'.json');const d=await r.json();if(d.status===1&&d.product){const p=d.product,n=p.nutriments||{};const it=[{name:p.product_name||'Scanned',quantity:100,unit:'g',calories:Math.round(n['energy-kcal_100g']||0),protein_g:Math.round((n.proteins_100g||0)*10)/10,carbs_g:Math.round((n.carbohydrates_100g||0)*10)/10,fat_g:Math.round((n.fat_100g||0)*10)/10}];const tot={calories:it[0].calories,protein_g:it[0].protein_g,carbs_g:it[0].carbs_g,fat_g:it[0].fat_g};S.meals.push({id:uid(),ts:new Date().toISOString(),date:gT(),desc:'📷 '+p.product_name,items:it,totals:tot,isScanned:true});save('fitlog_meals',S.meals);rd.innerHTML='<p style="color:var(--accent-primary)">✅ Auto-logged!</p>';refreshNut();refreshDash();setTimeout(closeScanner,1500)}else{rd.innerHTML='<p style="color:var(--accent-secondary)">❌ Not found</p>'}}catch(e){rd.innerHTML='<p style="color:var(--accent-secondary)">❌ Error</p>'}}
 
-        function openSettings(){$('settings-modal').style.display='flex';$('settings-api-key').value=S.key;updateKeyStatus()}function closeSettings(){$('settings-modal').style.display='none'}
-        function saveSettingsKey(){const k=$('settings-api-key')?.value?.trim();if(k){S.key=k;localStorage.setItem('fitlog_key',k);closeSettings();toast('✅ Saved!')}}
+        function openSettings(){$('settings-modal').style.display='flex';$('settings-api-key').value=S.key;if($('settings-rapidapi-key'))$('settings-rapidapi-key').value=S.rapidapi_key||'';updateKeyStatus()}function closeSettings(){$('settings-modal').style.display='none'}
+        function saveSettingsKey(){const k=$('settings-api-key')?.value?.trim();const rk=$('settings-rapidapi-key')?.value?.trim();if(k){S.key=k;localStorage.setItem('fitlog_key',k);}if(rk!==undefined){S.rapidapi_key=rk;localStorage.setItem('fitlog_rapidapi_key',rk);}closeSettings();toast('✅ Saved!')}
         function updateKeyStatus(){const d=$('api-key-status-display');if(d)d.innerHTML=hk()?'<span style="color:var(--accent-primary)">✅ Key set</span>':'<span style="color:var(--accent-secondary)">⚠️ No key</span>'}
         function toggleTheme(){S.theme=S.theme==='dark'?'light':'dark';localStorage.setItem('fitlog_theme',S.theme);document.body.setAttribute('data-theme',S.theme);const _ttb=$('theme-toggle-btn');if(_ttb)_ttb.textContent=S.theme==='dark'?'🌙':'☀️';updateSettingsThemeBtn();if(S.view==='progress')renderCharts()}
         function toggleCoach(){const p=$('coach-panel');p.classList.toggle('open')}
@@ -253,7 +271,7 @@ FitLogAdaptive.refresh()
         document.querySelectorAll('#nav-tabs-desktop .tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.view)));
         document.querySelectorAll('#bottom-nav .bottom-tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.view)));
 
-        async function ai(prompt,sys='',img=null){if(!isOnline()){toast('📴 Offline — AI features unavailable');return null}if(!hk()){toast('⚠️ Set API key');openSettings();return null}const parts=[];if(img)parts.push({inlineData:{mimeType:img.mime,data:img.data}});parts.push({text:sys?`${sys}\n\n${prompt}`:prompt});const r=await fetch(`${API_URL}?key=${S.key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}],generationConfig:{temperature:0.4,maxOutputTokens:4096,responseMimeType:"application/json"}})});if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API error')}const d=await r.json();const txt=d?.candidates?.[0]?.content?.parts?.[0]?.text;if(!txt)throw new Error('Empty');try{return JSON.parse(txt)}catch{return{response:txt}}}
+        async function ai(prompt,sys='',img=null){if(!isOnline()){toast('📴 Offline — AI features unavailable');return null}if(!hk()){toast('⚠️ Set API key');openSettings();return null}const parts=[];if(img)parts.push({inlineData:{mimeType:img.mime,data:img.data}});parts.push({text:sys?`${sys}\n\n${prompt}`:prompt});const r=await fetch(`${API_URL}?key=${encodeURIComponent(S.key)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}],generationConfig:{temperature:0.4,maxOutputTokens:4096,responseMimeType:"application/json"}})});if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API error')}const d=await r.json();const txt=d?.candidates?.[0]?.content?.parts?.[0]?.text;if(!txt)throw new Error('Empty');try{return JSON.parse(txt)}catch{return{response:txt}}}
 
         function stepsToCalories(steps){
             // Standard: ~0.57 cal burned per kg per km; avg stride ~0.762m → 1312 steps/km
@@ -274,8 +292,8 @@ FitLogAdaptive.refresh()
         function drawWeightChart(){const c=$('weight-chart-container');if(!c)return;const data=S.wlog.slice(-30);if(data.length<2){c.innerHTML='<div class="chart-empty-state">Need 2+ entries</div>';return}const isDark=S.theme==='dark',tc=isDark?'#A0A0B0':'#6B6B7B',gc=isDark?'#2A2A3A':'#E0E0E8',lc='#00D4AA';const w=340,h=240,p={t:20,r:20,b:40,l:50},pw=w-p.l-p.r,ph=h-p.t-p.b;const vals=data.map(d=>d.weight),min=Math.floor(Math.min(...vals)-1),max=Math.ceil(Math.max(...vals)+1),range=max-min||1;let svg=`<svg class="chart-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;for(let i=0;i<=4;i++){const y=p.t+(ph/4)*i;svg+=`<line x1="${p.l}" y1="${y}" x2="${w-p.r}" y2="${y}" stroke="${gc}" stroke-width="1"/><text x="${p.l-8}" y="${y+4}" fill="${tc}" font-size="10" text-anchor="end">${(max-(range/4)*i).toFixed(1)}</text>`}const pts=data.map((d,i)=>`${p.l+(pw/(data.length-1))*i},${p.t+ph-((d.weight-min)/range)*ph}`).join(' ');svg+=`<polyline points="${pts}" fill="none" stroke="${lc}" stroke-width="2.5"/>`;c.innerHTML=svg+'</svg>'}
         function drawCalorieChart(){const c=$('calorie-chart-container');if(!c)return;const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const eaten=[],burned=[];for(let i=6;i>=0;i--){const d=gA(i);const daySteps=S.steps&&typeof S.steps==='object'?S.steps[d]||0:0;eaten.push({label:days[new Date(d).getDay()],y:S.meals.filter(m=>m.date===d).reduce((s,m)=>s+((m.totals||{}).calories||0),0)});burned.push({label:days[new Date(d).getDay()],y:S.wkts.filter(w=>w.date===d).reduce((s,w)=>s+(w.cal||0),0)+stepsToCalories(daySteps)})}if(eaten.every(p=>p.y===0)&&burned.every(p=>p.y===0)){c.innerHTML='<div class="chart-empty-state">Log meals</div>';return}const isDark=S.theme==='dark',tc=isDark?'#A0A0B0':'#6B6B7B',allVals=[...eaten.map(p=>p.y),...burned.map(p=>p.y)],max=Math.ceil(Math.max(...allVals,100)*1.2);const w=340,h=240,p={t:30,r:20,b:40,l:50},pw=w-p.l-p.r,ph=h-p.t-p.b,barW=(pw/eaten.length)*0.35;let svg=`<svg class="chart-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><rect x="${w-140}" y="8" width="12" height="12" rx="2" fill="#FF6B6B"/><text x="${w-124}" y="18" fill="${tc}" font-size="9">Eaten</text><rect x="${w-80}" y="8" width="12" height="12" rx="2" fill="#FFB84D"/><text x="${w-64}" y="18" fill="${tc}" font-size="9">Burned</text>`;eaten.forEach((pt,i)=>{const x=p.l+(pw/eaten.length)*i;if(pt.y>0){const bh=(pt.y/max)*ph;svg+=`<rect x="${x}" y="${p.t+ph-bh}" width="${barW}" height="${bh}" rx="3" fill="#FF6B6B" opacity="0.85"/>`}if(burned[i].y>0){const bh=(burned[i].y/max)*ph;svg+=`<rect x="${x+barW+2}" y="${p.t+ph-bh}" width="${barW}" height="${bh}" rx="3" fill="#FFB84D" opacity="0.85"/>`}svg+=`<text x="${x+barW}" y="${h-p.b+16}" fill="${tc}" font-size="9" text-anchor="middle">${pt.label}</text>`});c.innerHTML=svg+'</svg>'}
 
-        function calculateStreak(){const plan=getActivePlan();if(!plan)return 0;let streak=0,freezes=plan.streakFreezes||0;const start=new Date(plan.startedDate);for(let i=0;i<365;i++){const d=gA(i);const hasWkt=S.wkts.some(w=>w.date===d);if(hasWkt){streak++;continue}if(i===0)continue;const dayOffset=Math.floor((new Date()-start)/(86400000))-i;if(dayOffset<0)continue;let isRestDay=false;for(const w of plan.weeks||[]){for(const wd of w.days||[]){const off=((w.weekNumber-1)*(plan.weeks[0]?.days?.length||4))+wd.dayNumber-1;if(off===dayOffset){isRestDay=true;break}}if(isRestDay)break}if(isRestDay)continue;if(freezes>0){freezes--;plan.streakFreezes=freezes;save('fitlog_plans',S.plans);continue}break}return streak}
-        function updateStreakUI(){const plan=getActivePlan();const freezes=plan?Math.max(0,plan.streakFreezes||0):0;const s=calculateStreak();$('streak-count').textContent=s;$('streak-flame').style.display=s>0?'inline-block':'none';if($('streak-freezes'))$('streak-freezes').textContent=freezes}
+        function calculateStreak(){const plan=getActivePlan();if(!plan)return{streak:0,freezesUsed:0};let streak=0,freezesAvail=plan.streakFreezes||0,freezesUsed=0;const start=new Date(plan.startedDate);for(let i=0;i<365;i++){const d=gA(i);const hasWkt=S.wkts.some(w=>w.date===d);if(hasWkt){streak++;continue}if(i===0)continue;const dayOffset=Math.floor((new Date()-start)/(86400000))-i;if(dayOffset<0)continue;let isRestDay=false;for(const w of plan.weeks||[]){for(const wd of w.days||[]){const off=((w.weekNumber-1)*(plan.weeks[0]?.days?.length||4))+wd.dayNumber-1;if(off===dayOffset){isRestDay=true;break}}if(isRestDay)break}if(isRestDay)continue;if(freezesAvail>0){freezesAvail--;freezesUsed++;continue}break}return{streak,freezesUsed}}
+        function updateStreakUI(){const plan=getActivePlan();const {streak,freezesUsed}=calculateStreak();if(plan&&freezesUsed>0){plan.streakFreezes=Math.max(0,(plan.streakFreezes||0)-freezesUsed);save('fitlog_plans',S.plans);}const freezes=plan?Math.max(0,plan.streakFreezes||0):0;$('streak-count').textContent=streak;$('streak-flame').style.display=streak>0?'inline-block':'none';if($('streak-freezes'))$('streak-freezes').textContent=freezes}
 
         function getActivePlan(){return S.plans.find(p=>p.started)}
         function checkActivePlanToday(){
@@ -352,8 +370,8 @@ FitLogAdaptive.refresh()
             {id:'five_workouts',icon:'🏋️',name:'Getting Serious',desc:'Log 5 workouts',check:()=>S.wkts.length>=5},
             {id:'plan_started',icon:'📅',name:'Committed',desc:'Start a workout plan',check:()=>S.plans.some(p=>p.started)},
             {id:'plan_day',icon:'✅',name:'Day One Done',desc:'Complete a plan day',check:()=>S.plans.some(p=>Object.values(p.done||{}).some(v=>v))},
-            {id:'streak3',icon:'🔥',name:'On Fire',desc:'3-day workout streak',check:()=>calculateStreak()>=3},
-            {id:'streak7',icon:'🌟',name:'Week Warrior',desc:'7-day streak',check:()=>calculateStreak()>=7},
+            {id:'streak3',icon:'🔥',name:'On Fire',desc:'3-day workout streak',check:()=>calculateStreak().streak>=3},
+            {id:'streak7',icon:'🌟',name:'Week Warrior',desc:'7-day streak',check:()=>calculateStreak().streak>=7},
             {id:'hydrate',icon:'💧',name:'Hydrated',desc:'Log 2000ml of water',check:()=>(S.hydr.log[gT()]||0)>=2000},
             {id:'steps10k',icon:'👟',name:'10K Steps',desc:'Hit 10,000 steps in a day',check:()=>Object.values(S.steps).some(v=>v>=10000)},
             {id:'meals3',icon:'🍽️',name:'Meal Tracker',desc:'Log 3 meals',check:()=>S.meals.length>=3},
@@ -543,8 +561,9 @@ FitLogAdaptive.refresh()
         function addExerciseEntry(){const c=$('exercise-entries');if(!c)return;const d=document.createElement('div');d.className='workout-exercise';d.innerHTML='<div style="flex:1"><input type="text" class="exercise-name-input" placeholder="Exercise" style="margin-bottom:4px" required><input type="text" class="exercise-details-input" placeholder="Sets × Reps × Weight"></div><button type="button" class="btn btn-danger btn-xs" onclick="this.parentElement.remove()">✕</button>';c.appendChild(d)}
         function logWorkout(e){e.preventDefault();const name=$('workout-name')?.value?.trim(),dur=parseInt($('workout-duration')?.value||'0'),cal=parseInt($('workout-calories')?.value||'300');if(!name||!dur){toast('⚠️ Fill fields');return}const exercises=[];document.querySelectorAll('#exercise-entries .workout-exercise').forEach(en=>{const n=en.querySelector('.exercise-name-input')?.value?.trim(),d=en.querySelector('.exercise-details-input')?.value?.trim();if(n)exercises.push({name:n,details:d||''})});if(!exercises.length){toast('⚠️ Add exercise');return}S.wkts.push({id:uid(),ts:new Date().toISOString(),date:gT(),name,dur,cal,type:'strength',exercises,ex:exercises.map(e=>({n:e.name,d:e.details}))});save('fitlog_wkts',S.wkts);$('workout-form').reset();$('workout-calories').value='300';$('exercise-entries').innerHTML='<div class="workout-exercise"><div><input type="text" class="exercise-name-input" placeholder="Exercise" style="margin-bottom:4px" required><input type="text" class="exercise-details-input" placeholder="Sets × Reps × Weight"></div></div>';giveXP(30,'Workout logged! +30 XP');checkAchievements();refreshDash();updateStreakUI();renderExHistoryPreview();showCongrats('Workout logged! 🎉')}
 
-        async function sendMealMessage(){const input=$('nutrition-chat-input');if(!input)return;const msg=input.value.trim();if(!msg)return;addCM('user',msg);input.value='';const sid=addSK();try{const r=await ai(msg,'Return ONLY JSON: {"items":[{"name":"","calories":num,"protein_g":num,"carbs_g":num,"fat_g":num}],"totals":{"calories":num,"protein_g":num,"carbs_g":num,"fat_g":num}}');remSK(sid);if(r?.items?.length){const entry={id:uid(),ts:new Date().toISOString(),date:gT(),desc:msg,items:r.items,totals:r.totals||{}};S.meals.push(entry);save('fitlog_meals',S.meals);addCM('ai',`✅ ${r.items.map(i=>`${i.name}: ${i.calories}cal`).join(' | ')}<br><strong>Total: ${r.totals?.calories||0} cal</strong><br><button class="btn btn-xs btn-accent" onclick="saveFav('${entry.id}')">⭐ Save</button>`);refreshNut();refreshDash()}else addCM('ai','✅ Got it!')}catch(e){remSK(sid);addCM('ai',`❌ ${e.message}`)}}
-        function addCM(t,m){const c=$('nutrition-chat-messages');if(!c)return;const d=document.createElement('div');d.className=`chat-message ${t}`;d.innerHTML=m;c.appendChild(d);c.scrollTop=c.scrollHeight}
+        async function sendMealMessage(){const input=$('nutrition-chat-input');if(!input)return;const msg=input.value.trim();if(!msg)return;addCM('user',msg,false);input.value='';const sid=addSK();try{const r=await ai(msg,'Return ONLY JSON: {"items":[{"name":"","calories":num,"protein_g":num,"carbs_g":num,"fat_g":num}],"totals":{"calories":num,"protein_g":num,"carbs_g":num,"fat_g":num}}');remSK(sid);if(r?.items?.length){const entry={id:uid(),ts:new Date().toISOString(),date:gT(),desc:msg,items:r.items,totals:r.totals||{}};S.meals.push(entry);save('fitlog_meals',S.meals);addCM('ai',`✅ ${r.items.map(i=>`${escHtml(i.name)}: ${i.calories}cal`).join(' | ')}<br><strong>Total: ${r.totals?.calories||0} cal</strong><br><button class="btn btn-xs btn-accent" onclick="saveFav('${entry.id}')">⭐ Save</button>`,true);refreshNut();refreshDash()}else addCM('ai','✅ Got it!')}catch(e){remSK(sid);addCM('ai',`❌ ${e.message}`)}}
+        function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+        function addCM(t,m,isHtml=false){const c=$('nutrition-chat-messages');if(!c)return;const d=document.createElement('div');d.className=`chat-message ${t}`;if(isHtml){d.innerHTML=m}else{d.textContent=m}c.appendChild(d);c.scrollTop=c.scrollHeight}
         function addSK(){const c=$('nutrition-chat-messages');if(!c)return'sk-0';const id='sk-'+Date.now();const d=document.createElement('div');d.id=id;d.className='chat-message ai';d.innerHTML='<div class="skeleton skeleton-text"></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;return id}
         function remSK(id){const e=$(id);if(e)e.remove()}
         function getTM(){return S.meals.filter(m=>m.date===gT())}
@@ -554,6 +573,53 @@ FitLogAdaptive.refresh()
         function refreshFavs(){const h=!S.favs.length?'<div class="empty-state-rich"><div class="es-icon">⭐</div><div class="es-title">No favorites yet</div><div class="es-sub">Log a meal then tap ⭐ Save</div></div>':`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px">${S.favs.map(f=>`<div class="favorite-card" onclick="qlFav('${f.id}')"><div class="fav-name">${f.name}</div><div class="fav-cals">${(f.totals||{}).calories||0} cal</div></div>`).join('')}</div>`;const c1=$('favorites-list'),c2=$('dashboard-favorites');if(c1)c1.innerHTML=h;if(c2)c2.innerHTML=h}
 
         let sp=null;
+
+        // ── CAMERA HELPER ──────────────────────────────────────────────────
+        // Capacitor WebView: capture="environment" silently fails on some devices.
+        // Use getUserMedia→canvas for reliable in-app capture.
+        let _camStream=null;
+        async function _openCameraModal(onBlob){
+            const modal=document.getElementById('cam-capture-modal');
+            const vid=document.getElementById('cam-video');
+            const canvas=document.getElementById('cam-canvas');
+            if(!modal||!vid){onBlob(null);return;}
+            try{
+                _camStream=await navigator.mediaDevices.getUserMedia(
+                    {video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false}
+                );
+                vid.srcObject=_camStream; await vid.play();
+                modal.style.display='flex';
+                document.getElementById('cam-snap-btn').onclick=()=>{
+                    canvas.width=vid.videoWidth||640; canvas.height=vid.videoHeight||480;
+                    canvas.getContext('2d').drawImage(vid,0,0);
+                    canvas.toBlob(blob=>{_closeCameraModal();onBlob(blob);},'image/jpeg',0.92);
+                };
+                document.getElementById('cam-cancel-btn').onclick=()=>{_closeCameraModal();onBlob(null);}
+            }catch(err){_closeCameraModal();onBlob(null);}
+        }
+        function _closeCameraModal(){
+            if(_camStream){_camStream.getTracks().forEach(t=>t.stop());_camStream=null;}
+            const m=document.getElementById('cam-capture-modal');if(m)m.style.display='none';
+        }
+        function _blobToFile(blob,name){
+            return blob?new File([blob],name||'photo.jpg',{type:blob.type||'image/jpeg'}):null;
+        }
+        function openMealCamera(){
+            _openCameraModal(blob=>{
+                if(!blob){document.getElementById('meal-photo-input').click();return;}
+                sp=_blobToFile(blob,'meal.jpg');
+                $('photo-preview').src=URL.createObjectURL(blob);
+                $('photo-preview').style.display='block';$('analyze-photo-btn').disabled=false;
+            });
+        }
+        function openBfCamera(){
+            _openCameraModal(blob=>{
+                if(!blob){document.getElementById('bf-photo-input').click();return;}
+                bfPhoto=_blobToFile(blob,'body.jpg');
+                $('bf-photo-preview').src=URL.createObjectURL(blob);
+                $('bf-photo-preview').style.display='block';$('analyze-bf-btn').disabled=false;
+            });
+        }
         function handlePhotoSelect(e){const f=e.target.files?.[0];if(!f)return;sp=f;const r=new FileReader();r.onload=ev=>{$('photo-preview').src=ev.target.result;$('photo-preview').style.display='block';$('analyze-photo-btn').disabled=false};r.readAsDataURL(f)}
         async function analyzeMealPhoto(){if(!sp||!hk()){if(!hk()){toast('⚠️ Set API key');openSettings()}return}const btn=$('analyze-photo-btn');btn.disabled=true;btn.textContent='🔍...';try{const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(sp)});const r=await ai('Analyze meal','Return JSON: {"items":[{"name":"","calories":num,"protein_g":num,"carbs_g":num,"fat_g":num}],"totals":{"calories":num,"protein_g":num,"carbs_g":num,"fat_g":num}}',{data:b64,mime:sp.type||'image/jpeg'});if(r?.items?.length){S.meals.push({id:uid(),ts:new Date().toISOString(),date:gT(),desc:'📷 Meal',items:r.items,totals:r.totals,isPhoto:true});save('fitlog_meals',S.meals);refreshNut();refreshDash();toast('📷 Logged!')}else toast('⚠️ Could not identify')}catch(e){toast('❌ '+e.message)}btn.disabled=false;btn.textContent='🔍 Analyze';sp=null;$('meal-photo-input').value='';$('photo-preview').style.display='none'}
 
@@ -596,7 +662,7 @@ FitLogAdaptive.refresh()
         function discardPlanFromPreview(){showConfirm('Discard Plan?','This plan will be deleted.',()=>{closePlanPreview();toast('Plan discarded')})}
 
         function openPlanEditModal(planId){currentEditPlanId=planId;$('plan-preview-modal').style.display='flex';renderPlanEdit(planId)}
-        function renderPlanEdit(planId){const plan=S.plans.find(p=>p.id===planId);if(!plan){toast('Plan not found');return}const total=plan.weeks.reduce((s,w)=>s+(w.days?.length||0),0);const done=Object.values(plan.done||{}).filter(v=>v).length;const pct=total>0?Math.round((done/total)*100):0;let actionBtns='';if(plan.started){actionBtns=`<button class="btn btn-danger btn-sm" onclick="stopPlan('${planId}');closePlanEdit()">⏹️ Stop Plan</button><button class="btn btn-primary btn-sm" onclick="savePlanEdit('${planId}')">💾 Save</button>`}else{actionBtns=`<button class="btn btn-primary btn-sm" onclick="startPlanFromEdit('${planId}')">▶️ Start Plan</button><button class="btn btn-secondary btn-sm" onclick="savePlanEdit('${planId}')">💾 Save</button>`}const c=$('plan-preview-content');c.innerHTML=`<div class="plan-preview-header"><h2>✏️ ${plan.planName}</h2><p>${plan.goal} • ${plan.duration} • ${plan.daysPerWeek} days/week</p><div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${pct}%"></div></div><p style="font-size:.7rem;color:var(--text-secondary);margin-top:4px">${done}/${total} days completed</p></div><div style="max-height:45vh;overflow-y:auto" id="plan-edit-weeks">${plan.weeks.map((w,wi)=>`<div class="plan-edit-week"><div style="margin:12px 0 8px"><strong>Week ${w.weekNumber}: ${w.focus||'Training'}</strong></div>${(w.days||[]).map((d,di)=>{const isDone=plan.done?.[`${w.weekNumber}-${d.dayNumber}`];return`<div class="plan-edit-day" style="${isDone?'border-color:var(--done-border);background:var(--done-bg)':''}"><div class="plan-edit-day-header"><input type="text" value="${d.name||'Workout'}" onchange="updateDayField('${planId}',${wi},${di},'name',this.value)"><span class="exercise-badge badge-${d.type||'strength'}">${d.type||'strength'}</span><button class="btn btn-xs btn-cyan" onclick="regenerateDay(${wi},${di})">🔄</button></div>${(d.exercises||[]).map((ex,ei)=>{const db=findExercise(ex.id);const en=db?db.n:ex.id;return`<div class="plan-edit-exercise"><input type="number" value="${ex.sets||3}" style="width:50px" onchange="updateExerciseField('${planId}',${wi},${di},${ei},'sets',this.value)"><input type="text" value="${ex.reps||'8-12'}" style="width:70px" onchange="updateExerciseField('${planId}',${wi},${di},${ei},'reps',this.value)"><div class="exercise-name" onclick="openExercisePicker('${planId}',${wi},${di},${ei})">${en}</div><button class="remove-btn" onclick="removeExerciseFromDay('${planId}',${wi},${di},${ei})">✕</button></div>`}).join('')}<div class="plan-edit-add-exercise"><button class="btn btn-xs btn-secondary" onclick="addExerciseToDay('${planId}',${wi},${di})">+ Add Exercise</button></div></div>`}).join('')}</div>`).join('')}</div><div class="plan-preview-actions">${actionBtns}<button class="btn btn-danger btn-sm" onclick="delPlan('${planId}');closePlanEdit()">🗑️ Delete</button></div>`}
+        function renderPlanEdit(planId){const plan=S.plans.find(p=>p.id===planId);if(!plan){toast('Plan not found');return}const total=plan.weeks.reduce((s,w)=>s+(w.days?.length||0),0);const done=Object.values(plan.done||{}).filter(v=>v).length;const pct=total>0?Math.round((done/total)*100):0;let actionBtns='';if(plan.started){actionBtns=`<button class="btn btn-danger btn-sm" onclick="stopPlan('${planId}');closePlanEdit()">⏹️ Stop Plan</button><button class="btn btn-primary btn-sm" onclick="savePlanEdit('${planId}')">💾 Save</button>`}else{actionBtns=`<button class="btn btn-primary btn-sm" onclick="startPlanFromEdit('${planId}')">▶️ Start Plan</button><button class="btn btn-secondary btn-sm" onclick="savePlanEdit('${planId}')">💾 Save</button>`}const c=$('plan-preview-content');c.innerHTML=`<div class="plan-preview-header"><h2>✏️ ${plan.planName}</h2><p>${plan.goal} • ${plan.duration} • ${plan.daysPerWeek} days/week</p><div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${pct}%"></div></div><p style="font-size:.7rem;color:var(--text-secondary);margin-top:4px">${done}/${total} days completed</p></div><div style="max-height:45vh;overflow-y:auto" id="plan-edit-weeks">${plan.weeks.map((w,wi)=>`<div class="plan-edit-week"><div style="margin:12px 0 8px"><strong>Week ${w.weekNumber}: ${w.focus||'Training'}</strong></div>${(w.days||[]).map((d,di)=>{const isDone=plan.done?.[`${w.weekNumber}-${d.dayNumber}`];return`<div class="plan-edit-day" style="${isDone?'border-color:var(--done-border);background:var(--done-bg)':''}"><div class="plan-edit-day-header"><input type="text" value="${d.name||'Workout'}" onchange="updateDayField('${planId}',${wi},${di},'name',this.value)"><span class="exercise-badge badge-${d.type||'strength'}">${d.type||'strength'}</span><button class="btn btn-xs btn-cyan" onclick="regenerateDay(event,${wi},${di})">🔄</button></div>${(d.exercises||[]).map((ex,ei)=>{const db=findExercise(ex.id);const en=db?db.n:ex.id;return`<div class="plan-edit-exercise"><input type="number" value="${ex.sets||3}" style="width:50px" onchange="updateExerciseField('${planId}',${wi},${di},${ei},'sets',this.value)"><input type="text" value="${ex.reps||'8-12'}" style="width:70px" onchange="updateExerciseField('${planId}',${wi},${di},${ei},'reps',this.value)"><div class="exercise-name" onclick="openExercisePicker('${planId}',${wi},${di},${ei})">${en}</div><button class="remove-btn" onclick="removeExerciseFromDay('${planId}',${wi},${di},${ei})">✕</button></div>`}).join('')}<div class="plan-edit-add-exercise"><button class="btn btn-xs btn-secondary" onclick="addExerciseToDay('${planId}',${wi},${di})">+ Add Exercise</button></div></div>`}).join('')}</div>`).join('')}</div><div class="plan-preview-actions">${actionBtns}<button class="btn btn-danger btn-sm" onclick="delPlan('${planId}');closePlanEdit()">🗑️ Delete</button></div>`}
         function startPlanFromEdit(planId){const p=S.plans.find(pl=>pl.id===planId);if(p){p.started=true;p.startedDate=new Date().toISOString();const dpw=p.daysPerWeek||4;p.streakFreezes=Math.max(0,7-dpw);p.streakFreezesUsed=0;save('fitlog_plans',S.plans);closePlanEdit();refreshPlans();refreshDash();checkActivePlanToday();toast('▶️ Plan started! '+p.streakFreezes+' streak freezes');scheduleDailyReminder()}}
         function updateDayField(planId,wIdx,dIdx,field,value){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]){p.weeks[wIdx].days[dIdx][field]=value}}
         function updateExerciseField(planId,wIdx,dIdx,exIdx,field,value){const p=S.plans.find(pl=>pl.id===planId);if(p&&p.weeks[wIdx]&&p.weeks[wIdx].days[dIdx]&&p.weeks[wIdx].days[dIdx].exercises[exIdx]){p.weeks[wIdx].days[dIdx].exercises[exIdx][field]=field==='sets'?parseInt(value)||3:value}}
@@ -610,7 +676,7 @@ FitLogAdaptive.refresh()
         function renderExercisePickerList(){const search=($('exercise-search')?.value||'').toLowerCase();const list=EX.filter(e=>e.n.toLowerCase().includes(search)).slice(0,30);$('exercise-picker-list').innerHTML=list.map(e=>`<div style="padding:10px;border-bottom:1px solid var(--border-color);cursor:pointer" onclick="selectExercise('${e.id}')"><strong>${e.n}</strong><br><span style="font-size:.75rem;color:var(--text-secondary)">${e.m} • ${e.e}</span></div>`).join('')||'<p style="padding:10px;color:var(--text-secondary)">No exercises found</p>'}
         function selectExercise(exId){const p=S.plans.find(pl=>pl.id===currentEditPlanId);if(p&&p.weeks[currentEditWeek]&&p.weeks[currentEditWeek].days[currentEditDay]&&p.weeks[currentEditWeek].days[currentEditDay].exercises[currentExPickerCallback]){p.weeks[currentEditWeek].days[currentEditDay].exercises[currentExPickerCallback].id=exId;save('fitlog_plans',S.plans);closeExercisePicker();renderPlanEdit(currentEditPlanId)}}
 
-        async function regenerateDay(wIdx,dIdx){const plan=S.plans.find(p=>p.id===currentEditPlanId);if(!plan)return;const day=plan.weeks[wIdx].days[dIdx];const eq=getSelectedValues('plan-equipment');if(!eq.length)eq.push('bodyweight');const avail=EX.filter(ex=>eq.some(e=>(ex.e||'').toLowerCase().includes(e.toLowerCase())||ex.e==='none')).slice(0,20);const btn=event.target;btn.disabled=true;btn.textContent='...';try{const r=await ai(`Generate exercises for ${day.name||'workout'} day. Goal: ${plan.goal}.`,"Create 4-6 exercises. Return JSON: {\"exercises\":[{\"id\":\"...\",\"sets\":3,\"reps\":\"8-12\"}]}. Use ONLY: "+JSON.stringify(avail.map(e=>({id:e.id,n:e.n}))));if(r?.exercises?.length){plan.weeks[wIdx].days[dIdx].exercises=r.exercises;save('fitlog_plans',S.plans);renderPlanEdit(currentEditPlanId);toast('🔄 Day regenerated!')}else{toast('⚠️ Could not regenerate')}}catch(e){toast('❌ '+e.message)}btn.disabled=false;btn.textContent='🔄'}
+        async function regenerateDay(ev,wIdx,dIdx){const plan=S.plans.find(p=>p.id===currentEditPlanId);if(!plan)return;const day=plan.weeks[wIdx].days[dIdx];const eq=getSelectedValues('plan-equipment');if(!eq.length)eq.push('bodyweight');const avail=EX.filter(ex=>eq.some(e=>(ex.e||'').toLowerCase().includes(e.toLowerCase())||ex.e==='none')).slice(0,20);const btn=ev.currentTarget;btn.disabled=true;btn.textContent='...';try{const r=await ai(`Generate exercises for ${day.name||'workout'} day. Goal: ${plan.goal}.`,"Create 4-6 exercises. Return JSON: {\"exercises\":[{\"id\":\"...\",\"sets\":3,\"reps\":\"8-12\"}]}. Use ONLY: "+JSON.stringify(avail.map(e=>({id:e.id,n:e.n}))));if(r?.exercises?.length){plan.weeks[wIdx].days[dIdx].exercises=r.exercises;save('fitlog_plans',S.plans);renderPlanEdit(currentEditPlanId);toast('🔄 Day regenerated!')}else{toast('⚠️ Could not regenerate')}}catch(e){toast('❌ '+e.message)}btn.disabled=false;btn.textContent='🔄'}
 
         // CONFIRM MODAL
         function showConfirm(title,msg,onOk){$('confirm-title').textContent=title;$('confirm-msg').textContent=msg;confirmCallback=onOk;const m=$('confirm-modal');m.style.zIndex='1500';m.style.display='flex'}
@@ -687,7 +753,7 @@ FitLogAdaptive.refresh()
             if (!cloudSyncCode) { toast('⚠️ Generate a sync code first'); return; }
             if (!isOnline()) { toast('📴 Offline — cannot backup'); return; }
             updateCloudStatus('syncing');
-            setCloudLog('Backing up...');
+            setCloudLog('Saving local backup...');
             try {
                 const payload = getAllDataPayload();
                 const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -696,8 +762,8 @@ FitLogAdaptive.refresh()
                 localStorage.setItem('fitlog_cloud_ts_' + cloudSyncCode, new Date().toISOString());
                 updateCloudStatus('synced');
                 const ts = new Date().toLocaleTimeString();
-                setCloudLog('✅ Backed up at ' + ts);
-                toast('☁️ Backup saved!');
+                setCloudLog('✅ Local backup saved at ' + ts + ' (same-device only)');
+                toast('💾 Local backup saved!');
                 updateCloudNavBtn(true);
             } catch(e) {
                 updateCloudStatus('error');
@@ -733,7 +799,7 @@ FitLogAdaptive.refresh()
                     localStorage.setItem(CLOUD_KEY_LS, code);
                     document.getElementById('sync-code-display').textContent = code;
                     updateCloudStatus('synced');
-                    setCloudLog('✅ Restored from backup');
+                    setCloudLog('✅ Restored from local backup');
                     refreshDash(); refreshNut(); refreshFavs(); refreshPlans();
                     updateHydr(); updateWeightUI(); updateStepsUI(); checkActivePlanToday();
                     toast('✅ Data restored!');
@@ -800,7 +866,7 @@ FitLogAdaptive.refresh()
         function haptic(pattern=[10]){if(navigator.vibrate)navigator.vibrate(pattern);}
 
         // ── CLEAR ALL DATA ───────────────────────────────────────────
-        function clearAllData(){showConfirm('Clear All Data?','This will permanently delete ALL your workouts, meals, plans, and settings. This cannot be undone.',()=>{['fitlog_meals','fitlog_wkts','fitlog_wlog','fitlog_goals','fitlog_favs','fitlog_hydr','fitlog_plans','fitlog_steps','fitlog_xp','fitlog_key','fitlog_theme','fitlog_last_congrats','fitlog_gifcache','fitlog_custom_foods','fitlog_fasting','fitlog_cloud_code','fitlog_onboarded','fitlog_perms_asked','fitlog_motion_perm'].forEach(k=>localStorage.removeItem(k));toast('🗑️ All data cleared. Reloading…');setTimeout(()=>location.reload(),1200);})}
+        function clearAllData(){showConfirm('Clear All Data?','This will permanently delete ALL your workouts, meals, plans, and settings. This cannot be undone.',()=>{['fitlog_meals','fitlog_wkts','fitlog_wlog','fitlog_goals','fitlog_favs','fitlog_hydr','fitlog_plans','fitlog_steps','fitlog_xp','fitlog_key','fitlog_rapidapi_key','fitlog_theme','fitlog_last_congrats','fitlog_gifcache','fitlog_custom_foods','fitlog_fasting','fitlog_cloud_code','fitlog_onboarded','fitlog_perms_asked','fitlog_motion_perm'].forEach(k=>localStorage.removeItem(k));toast('🗑️ All data cleared. Reloading…');setTimeout(()=>location.reload(),1200);})}
 
         // ── SHOWCONFETTI standalone ─────────────────────────────────
         function spawnConfetti(el){if(!el)return;const colors=['#00E5BB','#6C8CFF','#FFB84D','#FF5E7D','#B388FF'];for(let i=0;i<18;i++){const dot=document.createElement('div');dot.className='confetti-dot';dot.style.cssText=`background:${colors[i%colors.length]};left:${10+Math.random()*80}%;top:${20+Math.random()*40}%;animation-delay:${Math.random()*0.4}s;`;el.appendChild(dot);setTimeout(()=>dot.remove(),1600);}}
@@ -824,9 +890,8 @@ FitLogAdaptive.refresh()
             document.body.appendChild(orb);
             setTimeout(() => orb.remove(), 35000);
         }
-        // spawn orbs periodically
-        setInterval(spawnOrb, 3500);
-        spawnOrb(); spawnOrb();
+        // bg-orb spawning disabled — CSS blur on DOM nodes tanks mobile GPU.
+        // Static gradient on body::before handles ambience with zero JS cost.
 
         // ── STEP POP ANIMATION (added to original function) ─────────────────
 
@@ -915,14 +980,20 @@ FitLogAdaptive.refresh()
           ['Coffee (black)',2,0.3,0,0],['Green Tea',1,0,0,0],
         ];
 
+        // Food result registry — safe alternative to inline JSON in onclick attrs
+        // (names with apostrophes like "McDonald's" break onclick='...' attributes)
+        let _foodResultsRegistry=[];
+        function pickFoodFromRegistry(idx){const f=_foodResultsRegistry[idx];if(f)addFoodFromSearch(f.name,f.cal,f.prot,f.carb,f.fat);}
+
         // Render food results rows (shared by local + live)
         function renderFoodResults(items){
             // items: [{name,cal,prot,carb,fat,badge?}]
-            return items.map(f=>{
-                const nm=f.name.replace(/"/g,'&quot;');
+            _foodResultsRegistry=items.slice();
+            return items.map((f,idx)=>{
+                const nm=f.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
                 const short=nm.length>48?nm.slice(0,48)+'…':nm;
                 const badge=f.badge?`<span style="font-size:.6rem;background:rgba(108,140,255,.2);color:var(--accent-blue);border-radius:6px;padding:1px 5px;margin-left:4px">${f.badge}</span>`:'';
-                return`<div class="food-search-result" onclick='addFoodFromSearch(${JSON.stringify(f.name)},${f.cal},${f.prot},${f.carb},${f.fat})'>
+                return`<div class="food-search-result" onclick="pickFoodFromRegistry(${idx})">
                     <div><div class="food-sr-name">${short}${badge}</div><div class="food-sr-macros">P:${f.prot}g C:${f.carb}g F:${f.fat}g · per 100g</div></div>
                     <div class="food-sr-cal">${f.cal} kcal</div></div>`;
             }).join('');
@@ -947,41 +1018,69 @@ FitLogAdaptive.refresh()
                 el.innerHTML='<div style="text-align:center;padding:16px;color:var(--text-secondary);font-size:.82rem">🔍 Searching…</div>';
             }
 
-            // ── STEP 2: Live OpenFoodFacts search (async, ~1-2s) ──────────
+            // ── STEP 2: Live OpenFoodFacts v2 search ─────────────────────
+            // Capacitor native WebView has no CORS restriction — direct calls work.
+            // Web browser fallback uses the v2 API which has better CORS headers.
             try{
-                const PROXIES=[
-                    u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-                    u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,
-                ];
-                const offUrl=`https://world.openfoodfacts.org/cgi/search.pl?action=process&json=1&page_size=20&fields=product_name,nutriments,brands,lang&search_terms=${encodeURIComponent(q)}`;
+                // v2 search endpoint — better CORS + nutrition data
+                const offUrl=`https://world.openfoodfacts.org/api/v2/search?`+
+                    `search_terms=${encodeURIComponent(q)}`+
+                    `&fields=product_name,nutriments,brands,countries_tags`+
+                    `&page_size=24&json=1`;
 
                 async function tryFetch(url){
-                    // Direct first
-                    try{const r=await fetch(url,{mode:'cors',signal:AbortSignal.timeout(4000)});if(r.ok)return r.json()}catch(_){}
-                    // Proxies
-                    for(const mk of PROXIES){
-                        try{const r=await fetch(mk(url),{signal:AbortSignal.timeout(5000)});if(r.ok){const t=await r.text();return JSON.parse(t)}}catch(_){}
-                    }
+                    // Try direct fetch (works in Capacitor, works in modern browsers with OFF CORS)
+                    const ctrl=new AbortController();
+                    const tid=setTimeout(()=>ctrl.abort(),6000);
+                    try{
+                        const r=await fetch(url,{
+                            signal:ctrl.signal,
+                            headers:{'User-Agent':'FitLog/1.0 (fitness-tracker)'}
+                        });
+                        clearTimeout(tid);
+                        if(r.ok)return r.json();
+                    }catch(_){clearTimeout(tid);}
+                    // Fallback: v1 search (different endpoint, different CORS path)
+                    const v1=`https://world.openfoodfacts.org/cgi/search.pl?action=process&json=1`+
+                        `&page_size=20&fields=product_name,nutriments,brands`+
+                        `&search_terms=${encodeURIComponent(q)}`;
+                    const ctrl2=new AbortController();
+                    const tid2=setTimeout(()=>ctrl2.abort(),6000);
+                    try{
+                        const r2=await fetch(v1,{signal:ctrl2.signal,headers:{'User-Agent':'FitLog/1.0'}});
+                        clearTimeout(tid2);
+                        if(r2.ok)return r2.json();
+                    }catch(_){clearTimeout(tid2);}
                     throw new Error('fetch failed');
                 }
 
                 const data=await tryFetch(offUrl);
                 const qWords=ql.split(/\s+/).filter(Boolean);
                 const liveItems=(data.products||[])
-                    .filter(p=>p.product_name&&(p.nutriments?.['energy-kcal_100g']||p.nutriments?.energy_100g))
+                    .filter(p=>{
+                        if(!p.product_name)return false;
+                        const n=p.nutriments||{};
+                        return n['energy-kcal_100g']||n['energy-kcal']||n['energy_100g']||n['energy'];
+                    })
                     .map(p=>{
-                        const cal=Math.round(p.nutriments['energy-kcal_100g']||p.nutriments['energy_100g']/4.184||0);
-                        const prot=+(p.nutriments['proteins_100g']||0).toFixed(1);
-                        const carb=+(p.nutriments['carbohydrates_100g']||0).toFixed(1);
-                        const fat=+(p.nutriments['fat_100g']||0).toFixed(1);
+                        const n=p.nutriments||{};
+                        const cal=Math.round(
+                            n['energy-kcal_100g']||n['energy-kcal']||
+                            (n['energy_100g']||n['energy']||0)/4.184||0
+                        );
+                        const prot=+(n['proteins_100g']||n['proteins']||0).toFixed(1);
+                        const carb=+(n['carbohydrates_100g']||n['carbohydrates']||0).toFixed(1);
+                        const fat=+(n['fat_100g']||n['fat']||0).toFixed(1);
                         const brand=p.brands?` (${p.brands.split(',')[0].trim().slice(0,20)})`:'';
                         const name=p.product_name+brand;
                         let score=0;
                         const pn=p.product_name.toLowerCase();
                         for(const w of qWords)if(pn.includes(w))score+=10;
                         if(pn.startsWith(ql))score+=20;
-                        if(p.lang==='en')score+=5;
-                        if(cal<5||cal>900)score-=8;
+                        // prefer English/global products
+                        const ct=p.countries_tags||[];
+                        if(ct.some(c=>c.includes('united-states')||c.includes('en:')))score+=5;
+                        if(cal<5||cal>1200)score-=8;
                         return{name,cal,prot,carb,fat,score,badge:'live'};
                     })
                     .sort((a,b)=>b.score-a.score)
@@ -1037,9 +1136,11 @@ FitLogAdaptive.refresh()
             const qty=parseFloat($('food-qty-input')?.value)||100;
             const {name,cal:calPer100,prot:protPer100,carb:carbPer100,fat:fatPer100}=_pendingFood;
             const scale=qty/100;
+            const cal=Math.round(calPer100*scale),prot=+(protPer100*scale).toFixed(1),carb=+(carbPer100*scale).toFixed(1),fat2=+(fatPer100*scale).toFixed(1);
             const meal={id:Date.now(),date:gT(),time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
                 name:`${name} (${qty}g)`,
-                totals:{calories:Math.round(calPer100*scale),protein_g:+(protPer100*scale).toFixed(1),carbs_g:+(carbPer100*scale).toFixed(1),fat_g:+(fatPer100*scale).toFixed(1)}};
+                items:[{name,quantity:qty,unit:'g',calories:cal,protein_g:prot,carbs_g:carb,fat_g:fat2}],
+                totals:{calories:cal,protein_g:prot,carbs_g:carb,fat_g:fat2}};
             S.meals.push(meal);save('fitlog_meals',S.meals);
             _pendingFood=null;
             refreshNut();refreshDash();closeFoodSearch();
@@ -1084,6 +1185,7 @@ FitLogAdaptive.refresh()
             const f=S.customFoods[i];if(!f)return;
             const meal={id:Date.now(),date:gT(),time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
                 name:`${f.name} (${f.serving}g)`,
+                items:[{name:f.name,quantity:f.serving,unit:'g',calories:f.cal,protein_g:f.protein,carbs_g:f.carbs,fat_g:f.fat}],
                 totals:{calories:f.cal,protein_g:f.protein,carbs_g:f.carbs,fat_g:f.fat}};
             S.meals.push(meal);save('fitlog_meals',S.meals);
             refreshNut();refreshDash();closeFoodSearch();
@@ -1933,7 +2035,7 @@ FitLogAdaptive.refresh()
                             application:{name:'FitLog',version:'1.0',detailsUrl:GFIT_REDIRECT},
                         }),
                     });
-                    console.log('[GFit] Workout synced:',wkt.name);
+                    
                 }catch(e){console.warn('[GFit] writeWorkout silent fail:',e.message);}
             }
 
@@ -2302,7 +2404,7 @@ FitLogAdaptive.refresh()
             initFasting(); renderExHistoryPreview(); initOnboarding();
 
             GFit.init(); // ← Google Fit auto-sync
-            console.log('💪 FitLog — Glassmorphism Edition');
+            
 
             // ── Permissions: show for already-onboarded users who haven't been asked ──
             if(localStorage.getItem('fitlog_onboarded') && typeof FitLogPermissions !== 'undefined'){
