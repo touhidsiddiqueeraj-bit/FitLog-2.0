@@ -83,7 +83,19 @@
   --modal-overlay: rgba(50,60,120,0.35);
 }
 
-[data-theme="light"] body {
+[data-theme="light"] /* Static ambient background — zero JS, zero GPU rasterization cost */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(0,229,187,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 75%, rgba(108,140,255,0.06) 0%, transparent 70%);
+}
+
+body {
   background: var(--bg-base);
   background-image:
     radial-gradient(ellipse 80% 50% at 20% 10%, rgba(58,91,200,0.10) 0%, transparent 60%),
@@ -164,8 +176,8 @@ body {
 /* ---- GLASS MIXIN ---- */
 .glass {
   background: var(--glass-1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
 }
@@ -176,8 +188,8 @@ body {
 /* ---- TOP NAV ---- */
 #top-nav {
   background: rgba(6,8,18,0.75);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--glass-border);
   padding: 0 16px;
   display: flex;
@@ -261,8 +273,8 @@ body {
   left: 0;
   right: 0;
   background: rgba(4,6,16,0.92);
-  backdrop-filter: blur(40px) saturate(220%);
-  -webkit-backdrop-filter: blur(40px) saturate(220%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid rgba(255,255,255,0.08);
   z-index: 100;
   padding: 6px 0;
@@ -327,8 +339,8 @@ body {
 /* ---- GLASS CARDS ---- */
 .card {
   background: var(--glass-1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
   border: 1px solid var(--glass-border);
   border-radius: 22px;
   padding: 18px;
@@ -363,8 +375,8 @@ body {
 /* ---- STAT CARDS ---- */
 .stat-card {
   background: var(--glass-2);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--glass-border);
   border-radius: 18px;
   padding: 16px 10px;
@@ -622,8 +634,8 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 }
 .congrats-box {
   background: var(--glass-1);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border-strong);
   border-top-color: rgba(0,229,187,0.4);
   border-radius: 24px;
@@ -646,8 +658,8 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
   left: 20px;
   right: 20px;
   background: rgba(12,16,36,0.92);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.14);
   color: var(--text-primary);
   padding: 14px 20px;
@@ -678,8 +690,8 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 }
 .gif-modal {
   background: rgba(6,8,22,0.96);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 28px 28px 0 0;
   width: 100%;
@@ -716,8 +728,8 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
 }
 .modal {
   background: var(--glass-1);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border-strong);
   border-radius: 24px 24px 0 0;
   padding: 24px 20px;
@@ -858,8 +870,8 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
   width: 100%;
   max-width: 400px;
   background: rgba(6,8,18,0.90);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-left: 1px solid var(--glass-border);
   z-index: 150;
   transform: translateX(100%);
@@ -971,20 +983,9 @@ label { display:block; margin-bottom:4px; font-size:.78rem; color:var(--text-sec
    ============================================================ */
 
 /* Floating orb background decoration */
-.bg-orb {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  animation: orbFloat linear infinite;
-  opacity: 0;
-}
-@keyframes orbFloat {
-  0%   { transform: translateY(0) scale(1);   opacity: 0; }
-  15%  { opacity: 1; }
-  85%  { opacity: 0.6; }
-  100% { transform: translateY(-100vh) scale(0.7); opacity: 0; }
-}
+/* .bg-orb animation removed — CSS blur() on DOM nodes tanks mobile GPU.
+   Ambient background handled by body::before static gradient below. */
+.bg-orb { display: none; }
 
 /* Stat card number count-up effect */
 @keyframes countUp {
@@ -1481,13 +1482,13 @@ input, textarea, select {
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   background: var(--glass-1); border-top: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   display: flex; gap: 8px; z-index: 10;
 }
 /* Rest timer */
 .rest-timer-overlay {
   position: fixed; inset: 0; z-index: 950;
-  background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(14px);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .rest-timer-ring { position: relative; width: 180px; height: 180px; margin-bottom: 20px; }
@@ -1591,7 +1592,7 @@ input, textarea, select {
   border-radius:16px; padding:12px 16px;
   display:flex; align-items:center; gap:10px;
   z-index:500; animation:slideUp .4s ease;
-  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
 }
 #pwa-install-bar .pwa-text { flex:1; font-size:.78rem; font-weight:600; }
 #pwa-install-bar .pwa-text span { display:block; font-size:.68rem; color:var(--text-secondary); }
