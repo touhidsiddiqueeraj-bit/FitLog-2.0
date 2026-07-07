@@ -44,6 +44,15 @@
     <div id="api-key-status-display" style="margin-top:6px"></div>
   </div>
   <div style="margin-bottom:16px">
+    <label>🧠 AI Model</label>
+    <select id="settings-model" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:var(--bg-primary);color:var(--text-primary);font-size:.9rem;margin-top:4px">
+      <option value="gemini-3.1-flash-lite">🌤️ Gemini 3.1 Flash Lite (fast, default)</option>
+      <option value="gemini-3.5-flash">⚡ Gemini 3.5 Flash (best for coding)</option>
+      <option value="gemini-3-pro">🧠 Gemini 3 Pro (best quality)</option>
+      <option value="gemini-flash-latest">🔄 Flash Latest (auto-updates)</option>
+    </select>
+  </div>
+  <div style="margin-bottom:16px">
     <label>🎬 RapidAPI Key <span style="font-size:.75rem;color:var(--text-secondary);font-weight:400">(optional — better GIF coverage)</span></label>
     <p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:8px">Free key at <a href="https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb" target="_blank" style="color:var(--accent-blue);font-weight:600">RapidAPI ExerciseDB</a></p>
     <input type="password" id="settings-rapidapi-key" placeholder="Paste RapidAPI key... (optional)">
