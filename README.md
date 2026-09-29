@@ -35,9 +35,27 @@ Live at: https://touhidsiddiqueeraj-bit.github.io/FitLog-2.0/
   - Weight tracking over time
   - Weekly calorie intake vs burned
 
+## 📱 Screenshots
+
+| Dashboard | Nutrition | Train |
+|---|---|---|
+| ![Dashboard](screenshots/01-dashboard.png) | ![Nutrition](screenshots/02-nutrition.png) | ![Workout Studio](screenshots/03-train.png) |
+
+| Body | Stats |
+|---|---|
+| ![Body Metrics](screenshots/04-body.png) | ![Progress](screenshots/05-stats.png) |
+
+## 🎬 Trailer
+
+29 seconds, voiceover + 132 BPM workout beat, all five screens:
+
+[![FitLog trailer](videos/fitlog-trailer/renders/trailer-poster.jpg)](videos/fitlog-trailer/renders/fitlog-trailer-final.mp4)
+
+⬆️ Click the poster to play [`fitlog-trailer-final.mp4`](videos/fitlog-trailer/renders/fitlog-trailer-final.mp4)
+
 ## 🚀 Quick Start
 
-1. Open `fit.html` in any modern browser
+1. Open `index.html` in any modern browser
 2. Get a free API key from [Google AI Studio](https://aistudio.google.com/apikey)
 3. Click ⚙️ (Settings) and paste your API key
 4. Start tracking!

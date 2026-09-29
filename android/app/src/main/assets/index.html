@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>FitLog — AI Fitness Tracker</title>
+    <meta name="description" content="Your all-in-one AI-powered fitness tracker. Log workouts, nutrition, workout plans, and body stats.">
+    <meta name="application-name" content="FitLog">
+    <meta name="apple-mobile-web-app-title" content="FitLog">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23060812'/%3E%3Ctext x='32' y='46' font-size='36' text-anchor='middle'%3E%F0%9F%92%AA%3C/text%3E%3C/svg%3E">
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="webview-overrides.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00E5BB">
+</head>
+<body data-theme="dark">
+    <!-- Offline pill -->
+    <div id="network-pill">📴 You're offline</div>
+
+    <!-- Onboarding (shown on first launch) -->
+    <div id="onboarding-overlay" style="display:none">
+      <div class="onboarding-logo">💪</div>
+      <div class="onboarding-title">FitLog</div>
+      <div class="onboarding-sub">Your AI-powered fitness companion.<br>Track workouts, nutrition & progress.</div>
+      <div class="onboarding-features">
+        <div class="onboarding-feature"><div class="feat-icon">🤖</div><div class="feat-text"><strong>AI Meal Logging</strong><span>Describe any meal in natural language</span></div></div>
+        <div class="onboarding-feature"><div class="feat-icon">📅</div><div class="feat-text"><strong>Smart Workout Plans</strong><span>AI-generated multi-week training programs</span></div></div>
+        <div class="onboarding-feature"><div class="feat-icon">📈</div><div class="feat-text"><strong>Progress Tracking</strong><span>Streaks, XP levels & achievement badges</span></div></div>
+      </div>
+      <button class="btn btn-accent btn-block" onclick="dismissOnboarding()" style="max-width:320px;font-size:1rem;padding:16px">🚀 Let's Go!</button>
+      <p style="font-size:.72rem;color:var(--text-secondary);margin-top:12px">No account needed · All data stays on your device</p>
+    </div>
+
+    <div id="app">
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal-overlay" style="display:none"><div class="modal" style="max-width:440px"><button class="modal-close" onclick="closeSettings()">✕</button><h3 style="margin-bottom:16px">⚙️ Settings</h3>
+  <div style="margin-bottom:16px">
+    <label>🔑 Gemini API Key</label>
+    <p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:8px">Get your free key at <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--accent-blue);font-weight:600">Google AI Studio</a></p>
+    <input type="password" id="settings-api-key" placeholder="Paste API key...">
+    <div id="api-key-status-display" style="margin-top:6px"></div>
+  </div>
+  <div style="margin-bottom:16px">
+    <label>🧠 AI Model</label>
+    <select id="settings-model" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:var(--bg-primary);color:var(--text-primary);font-size:.9rem;margin-top:4px">
+      <option value="gemini-3.1-flash-lite">🌤️ Gemini 3.1 Flash Lite (fast, default)</option>
+      <option value="gemini-3.5-flash">⚡ Gemini 3.5 Flash (best for coding)</option>
+      <option value="gemini-3-pro">🧠 Gemini 3 Pro (best quality)</option>
+      <option value="gemini-flash-latest">🔄 Flash Latest (auto-updates)</option>
+    </select>
+  </div>
+  <div style="margin-bottom:16px">
+    <label>🎬 RapidAPI Key <span style="font-size:.75rem;color:var(--text-secondary);font-weight:400">(optional — better GIF coverage)</span></label>
+    <p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:8px">Free key at <a href="https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb" target="_blank" style="color:var(--accent-blue);font-weight:600">RapidAPI ExerciseDB</a></p>
+    <input type="password" id="settings-rapidapi-key" placeholder="Paste RapidAPI key... (optional)">
+  </div>
+  <button class="btn btn-primary btn-block" onclick="saveSettingsKey()">💾 Save Keys</button>
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label>🎨 Appearance</label>
+    <button class="btn btn-secondary btn-block" id="settings-theme-btn" onclick="toggleTheme();updateSettingsThemeBtn()" style="margin-top:6px">🌙 Switch to Light Mode</button>
+  </div>
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label>📷 Barcode Scanner</label>
+    <button class="btn btn-secondary btn-block" onclick="closeSettings();openScanner()" style="margin-top:6px">📷 Open Scanner</button>
+  </div>
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label>☁️ Cloud Sync</label>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;margin-bottom:8px">
+      <span class="cloud-status-dot" id="cloud-status-dot2"></span>
+      <span id="cloud-status-text2" style="font-size:.82rem;color:var(--text-secondary)">Not synced</span>
+    </div>
+    <button class="btn btn-secondary btn-block" onclick="closeSettings();openCloudModal()" id="cloud-nav-btn">💾 Open Local Backup</button>
+  </div>
+  <!-- ══ GOOGLE FIT SECTION ══ -->
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label>🏃 Google Fit</label>
+    <div style="display:flex;align-items:center;gap:8px;margin:8px 0 10px">
+      <div id="gfit-dot" style="width:8px;height:8px;border-radius:50%;background:var(--text-secondary);flex-shrink:0;transition:background .3s"></div>
+      <span id="gfit-status-text" style="font-size:.82rem;color:var(--text-secondary)">Not connected</span>
+    </div>
+    <!-- Sync summary row — hidden until connected -->
+    <div id="gfit-sync-summary" style="display:none;background:var(--glass-2);border:1px solid var(--glass-border);border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:.78rem;color:var(--text-secondary);line-height:1.8">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px" id="gfit-summary-grid"></div>
+    </div>
+    <button id="gfit-signin-btn" class="btn btn-block" onclick="GFit.connect()" style="background:#fff;color:#3c4043;border:1px solid rgba(0,0,0,.12);font-weight:600;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
+      <svg width="18" height="18" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M533.5 278.4c0-18.5-1.5-37.1-4.7-55.3H272.1v104.8h147c-6.1 33.8-25.7 63.7-54.4 82.7v68h87.7c51.5-47.4 81.1-117.4 81.1-200.2z" fill="#4285f4"/><path d="M272.1 544.3c73.4 0 135.3-24.1 180.4-65.7l-87.7-68c-24.4 16.6-55.9 26-92.6 26-71 0-131.2-47.9-152.8-112.3H28.9v70.1c46.2 91.9 140.3 149.9 243.2 149.9z" fill="#34a853"/><path d="M119.3 324.3c-11.4-33.8-11.4-70.4 0-104.2V150H28.9c-38.6 76.9-38.6 167.5 0 244.4l90.4-70.1z" fill="#fbbc04"/><path d="M272.1 107.7c38.8-.6 76.3 14 104.4 40.8l77.7-77.7C405 24.6 339.7-.8 272.1 0 169.2 0 75.1 58 28.9 150l90.4 70.1c21.5-64.5 81.8-112.4 152.8-112.4z" fill="#ea4335"/></svg>
+      Sign in with Google
+    </button>
+    <div id="gfit-connected-btns" style="display:none;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="GFit.syncNow()">🔄 Sync Now</button>
+      <button class="btn btn-secondary btn-sm" onclick="GFit.disconnect()">🔌 Disconnect</button>
+    </div>
+  </div>
+  <!-- ══ END GOOGLE FIT ══ -->
+
+  <!-- ══ MI BAND SECTION ══ -->
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label>⌚ Mi Band / BLE Fitness Band</label>
+    <div style="display:flex;align-items:center;gap:8px;margin:8px 0 10px">
+      <div id="miband-settings-dot" style="width:8px;height:8px;border-radius:50%;background:var(--text-secondary);flex-shrink:0;transition:background .3s"></div>
+      <span id="miband-settings-status" style="font-size:.82rem;color:var(--text-secondary)">Not connected</span>
+    </div>
+    <p style="font-size:.75rem;color:var(--text-secondary);margin-bottom:8px">Connects to Mi Band 2/3/4/5 or any BLE pedometer exposing the <strong>Step Counter</strong> characteristic (0x2A5B). Requires Chrome/Edge on Android or desktop.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="closeSettings();MiBandModule.toggle()">⌚ Connect Band</button>
+      <button class="btn btn-secondary btn-sm" onclick="MiBandModule.disconnect()">🔌 Disconnect</button>
+    </div>
+    <div id="miband-settings-last" style="font-size:.72rem;color:var(--text-secondary);margin-top:6px;text-align:center"></div>
+  </div>
+  <!-- ══ END MI BAND ══ -->
+
+
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label>📲 Install App</label>
+    <button class="btn btn-accent btn-block" id="pwa-install-btn-settings" onclick="triggerPWAInstall()" style="margin-top:6px;display:none">Add to Home Screen</button>
+    <p style="font-size:.75rem;color:var(--text-secondary);margin-top:6px" id="pwa-installed-note">Use your browser's "Add to Home Screen" option to install FitLog as an app.</p>
+  </div>
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label>🔐 App Permissions</label>
+    <p style="font-size:.75rem;color:var(--text-secondary);margin-top:4px;margin-bottom:8px">Manage camera, notifications &amp; motion access</p>
+    <button class="btn btn-secondary btn-block" onclick="FitLogPermissions.openSettings()" style="margin-top:2px">🔐 Manage Permissions</button>
+  </div>
+  <div style="border-top:1px solid var(--glass-border);margin-top:16px;padding-top:16px">
+    <label style="color:var(--accent-secondary)">⚠️ Danger Zone</label>
+    <button class="btn btn-danger btn-block" onclick="clearAllData()" style="margin-top:6px;opacity:.8">🗑️ Clear All Data</button>
+  </div>
+  <div class="settings-version">FitLog v1.0.0 · AI Fitness Tracker</div>
+</div></div>
+
+                <!-- Cloud Save Modal -->
+        <div id="cloud-modal" class="modal-overlay" style="display:none">
+          <div class="modal" style="max-width:420px">
+            <button class="modal-close" onclick="closeCloudModal()">✕</button>
+            <h3 style="margin-bottom:4px">💾 Local Backup</h3>
+            <p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:16px">Back up &amp; restore your data on <strong>this device</strong> using a sync code stored in browser storage.</p>
+
+            <div style="margin-bottom:16px">
+              <div style="display:flex;align-items:center;margin-bottom:10px">
+                <span class="cloud-status-dot" id="cloud-status-dot"></span>
+                <span id="cloud-status-text" style="font-size:.82rem;color:var(--text-secondary)">Not connected</span>
+              </div>
+              <label>Your Sync Code</label>
+              <div class="sync-code-display" id="sync-code-display">—</div>
+              <div style="display:flex;gap:6px;margin-top:6px">
+                <button class="btn btn-secondary btn-sm" style="flex:1" onclick="generateNewSyncCode()">🎲 New Code</button>
+                <button class="btn btn-cyan btn-sm" style="flex:1" onclick="copySyncCode()">📋 Copy</button>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid var(--glass-border);padding-top:14px;margin-bottom:14px">
+              <label>Restore from Code</label>
+              <div style="display:flex;gap:6px;margin-top:4px">
+                <input type="text" id="restore-code-input" placeholder="Enter sync code..." style="flex:1;letter-spacing:0.1em;text-transform:uppercase">
+                <button class="btn btn-primary btn-sm" onclick="restoreFromCode()">Restore</button>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-primary" style="flex:1" onclick="cloudBackup()">☁️ Backup Now</button>
+              <button class="btn btn-secondary" style="flex:1" onclick="exportLocalJSON()">💾 Export JSON</button>
+            </div>
+            <div id="cloud-log" style="margin-top:10px;font-size:.78rem;color:var(--text-secondary);min-height:20px;text-align:center"></div>
+          </div>
+        </div>
+
+<!-- GIF Demo Modal -->
+        <div id="gif-modal" class="gif-modal-overlay" style="display:none" onclick="closeGifModal(event)"><div class="gif-modal" onclick="event.stopPropagation()" id="gif-modal-sheet"><div class="gif-modal-handle"></div><div class="gif-modal-header"><h3 id="gif-modal-title">Demo</h3><button class="btn btn-secondary btn-sm" onclick="closeGifModal()">✕</button></div><div class="gif-modal-body" id="gif-modal-body"><div class="gif-loading">Loading...</div></div><div class="gif-modal-footer" id="gif-modal-footer"></div></div></div>
+
+        <!-- Scanner Modal -->
+        <div id="scanner-modal" class="modal-overlay" style="display:none"><div class="modal"><button class="modal-close" onclick="closeScanner()">✕</button><h3>📷 Scan Barcode</h3><p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:10px">Point camera at a food barcode</p><div id="scanner-container"></div><div id="scan-result"></div><button class="btn btn-secondary btn-block btn-sm" onclick="closeScanner()" style="margin-top:10px">Cancel</button></div></div>
+
+        <!-- Water / Weight Modals -->
+        <div id="water-modal" class="modal-overlay" style="display:none"><div class="modal"><button class="modal-close" onclick="closeWaterModal()">✕</button><h3>💧 Water</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="hydrate-btn" onclick="addWater(250);closeWaterModal()">250ml</button><button class="hydrate-btn" onclick="addWater(500);closeWaterModal()">500ml</button><button class="hydrate-btn" onclick="addWater(750);closeWaterModal()">750ml</button><button class="hydrate-btn" onclick="addWater(1000);closeWaterModal()">1000ml</button></div></div></div>
+        <div id="weight-modal" class="modal-overlay" style="display:none"><div class="modal"><button class="modal-close" onclick="closeWeightModal()">✕</button><h3>⚖️ Weight</h3><p>Today: <strong id="weight-modal-date"></strong></p><div style="display:flex;gap:8px;margin-bottom:10px"><button class="hydrate-btn" onclick="quickWeight(-0.5)">-0.5</button><button class="hydrate-btn" onclick="quickWeight(0)">Same</button><button class="hydrate-btn" onclick="quickWeight(0.5)">+0.5</button></div><div style="display:flex;gap:6px"><input type="number" id="custom-weight-input" placeholder="kg" step="0.1"><button class="btn btn-primary" onclick="logWeightFromModal();closeWeightModal()">💾</button></div></div></div>
+
+        <!-- Plan Preview Modal -->
+        <div id="plan-preview-modal" class="modal-overlay" style="display:none"><div class="modal" style="max-width:520px;max-height:85vh;overflow-y:auto"><button class="modal-close" onclick="closePlanPreview()">✕</button><div id="plan-preview-content"></div></div></div>
+
+        <!-- Confirm Modal -->
+        <div id="confirm-modal" class="modal-overlay" style="display:none"><div class="modal" style="max-width:360px;text-align:center"><h3 id="confirm-title">Confirm</h3><p id="confirm-msg" style="color:var(--text-secondary)"></p><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button><button class="btn btn-danger" id="confirm-ok" onclick="confirmOk()">Confirm</button></div></div></div>
+
+        <!-- Exercise Picker Modal -->
+        <div id="exercise-picker-modal" class="modal-overlay" style="display:none"><div class="modal" style="max-width:480px;max-height:80vh"><button class="modal-close" onclick="closeExercisePicker()">✕</button><h3>🏋️ Pick Exercise</h3><input type="text" id="exercise-search" placeholder="Search exercises..." style="margin:10px 0" onkeyup="renderExercisePickerList()"><div id="exercise-picker-list" style="max-height:400px;overflow-y:auto"></div></div></div>
+
+        <!-- Exercise History Modal -->
+        <div id="ex-history-modal" class="modal-overlay ex-history-modal" style="display:none"><div class="modal" style="max-width:520px;max-height:85vh;overflow-y:auto"><button class="modal-close" onclick="$('ex-history-modal').style.display='none'">✕</button><h3 id="ex-history-title">Exercise History</h3><div id="ex-history-body" style="margin-top:12px"></div></div></div>
+
+        <!-- Food Search Modal -->
+        <div id="food-search-modal" class="modal-overlay" style="display:none"><div class="modal" style="max-width:480px;max-height:85vh;overflow-y:auto"><button class="modal-close" onclick="closeFoodSearch()">✕</button><h3>🔍 Food Search</h3><div style="display:flex;gap:6px;margin:10px 0"><input type="text" id="food-search-input" placeholder="Search foods..." style="flex:1" onkeypress="if(event.key==='Enter')searchFoods()"><button class="btn btn-primary btn-sm" onclick="searchFoods()">Search</button></div><div id="food-search-results" style="max-height:300px;overflow-y:auto"></div><div style="border-top:1px solid var(--glass-border);margin-top:12px;padding-top:12px"><div class="card-header" style="font-size:.82rem;margin-bottom:8px">⭐ Custom Foods</div><div id="custom-foods-list"></div><button class="btn btn-secondary btn-sm btn-block" onclick="openAddCustomFood()">+ Add Custom Food</button></div></div></div>
+
+        <!-- Add Custom Food Modal -->
+        <div id="custom-food-modal" class="modal-overlay" style="display:none"><div class="modal" style="max-width:400px"><button class="modal-close" onclick="$('custom-food-modal').style.display='none'">✕</button><h3>🍽️ Custom Food</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><div style="grid-column:1/-1"><label>Name</label><input type="text" id="cf-name" placeholder="e.g. Mom's Rice Bowl"></div><div><label>Calories</label><input type="number" id="cf-cal" placeholder="kcal"></div><div><label>Serving (g)</label><input type="number" id="cf-serving" placeholder="100"></div><div><label>Protein (g)</label><input type="number" id="cf-protein" placeholder="0" step="0.1"></div><div><label>Carbs (g)</label><input type="number" id="cf-carbs" placeholder="0" step="0.1"></div><div><label>Fat (g)</label><input type="number" id="cf-fat" placeholder="0" step="0.1"></div></div><button class="btn btn-primary btn-block" onclick="saveCustomFood()" style="margin-top:12px">💾 Save Food</button></div></div>
+
+        <!-- Workout Active Mode -->
+        <div id="workout-active-modal" style="display:none">
+          <div class="wam-header">
+            <button class="btn btn-secondary btn-sm" onclick="wamConfirmEnd()" style="white-space:nowrap">🏁 End</button>
+            <div style="flex:1;padding:0 8px"><div style="font-size:.88rem;font-weight:700;font-family:'Sora',sans-serif" id="wam-name">Workout</div><div style="font-size:.72rem;color:var(--text-secondary)" id="wam-timer-display">0:00</div></div>
+            <div style="text-align:right"><div style="font-size:.72rem;color:var(--text-secondary)">Exercise</div><div style="font-size:.88rem;font-weight:700;color:var(--accent-primary)" id="wam-ex-progress">0/0</div></div>
+          </div>
+          <div class="wam-progress"><div class="wam-progress-fill" id="wam-progress-fill" style="width:0%"></div></div>
+          <div class="wam-body" id="wam-body">
+            <div class="wam-slides-track" id="wam-slides-track"></div>
+          </div>
+          <div class="wam-footer">
+            <button class="btn btn-secondary" style="flex:1" onclick="wamPrevEx()">← Prev</button>
+            <button class="btn btn-primary" style="flex:2" id="wam-done-btn" onclick="wamDoneExercise()">✅ Done</button>
+            <button class="btn btn-secondary" style="flex:1" onclick="wamNextEx()">Next →</button>
+          </div>
+        </div>
+
+        <!-- Rest Timer Overlay -->
+        <div id="rest-timer-overlay" class="rest-timer-overlay" style="display:none">
+          <div class="rest-timer-ring">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <circle class="ring-bg" cx="90" cy="90" r="80"/>
+              <circle class="ring-fill" id="rest-ring-fill" cx="90" cy="90" r="80" stroke-dasharray="502" stroke-dashoffset="0"/>
+            </svg>
+            <div class="rest-timer-count" id="rest-timer-count">60</div>
+          </div>
+          <div class="rest-timer-label">Rest Time</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" onclick="skipRest()">Skip</button>
+            <button class="btn btn-primary" onclick="addRestTime(15)">+15s</button>
+          </div>
+        </div>
+
+        <!-- Congratulations Overlay -->
+        <div id="congrats-overlay" class="congrats-overlay" style="display:none" onclick="closeCongrats()"><div class="congrats-box" onclick="event.stopPropagation()"><h2>🎉 Great Job!</h2><p id="congrats-msg">You crushed your workout today!</p><p style="font-size:2rem">💪🔥</p><button class="btn btn-primary" onclick="closeCongrats()">Continue</button></div></div>
+
+        <!-- Top Nav -->
+        <nav id="top-nav"><div class="nav-brand"><img src="icons/icon-192.png" alt="FitLog" style="width:32px;height:32px;border-radius:50%;object-fit:cover;margin-right:8px;vertical-align:middle;box-shadow:0 2px 10px rgba(0,0,0,0.3)"> FitLog</div><div class="nav-tabs-desktop" id="nav-tabs-desktop"><button class="tab active" data-view="dashboard">📊 Dashboard</button><button class="tab" data-view="nutrition">🍽️ Nutrition</button><button class="tab" data-view="workout">🏋️ Workout</button><button class="tab" data-view="body">📐 Body</button><button class="tab" data-view="progress">📈 Progress</button></div><div class="nav-actions"><span id="offline-indicator" style="display:none;color:#ff6b6b;font-size:.75rem;margin-right:2px" title="Offline">⚠️</span><button class="icon-btn coach" onclick="toggleCoach()" title="AI Coach">🤖</button><button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button></div></nav>
+
+        <!-- Main Content -->
+        <div class="view-container">
+            <!-- Dashboard -->
+<section id="view-dashboard" class="view active"><div class="section-title">📊 Today</div><div class="grid-4"><div class="stat-card" onclick="go('nutrition')"><div class="stat-value" id="stat-calories">0</div><div class="stat-label">Eaten</div></div><div class="stat-card"><div class="stat-value" id="stat-protein">0g</div><div class="stat-label">Protein</div></div><div class="stat-card" onclick="go('workout')"><div class="stat-value highlight" id="stat-workouts">0</div><div class="stat-label">Workouts</div></div><div class="stat-card"><div class="stat-value blue" id="stat-burned">0</div><div class="stat-label">Burned</div></div></div><div class="stat-card" id="net-cal-bar" style="margin-top:8px;display:none;align-items:center;justify-content:space-between;padding:12px 18px"><div style="font-size:.75rem;color:var(--text-secondary);font-weight:700;text-transform:uppercase;letter-spacing:.08em">⚡ Net Cal</div><div style="font-size:1.4rem;font-weight:700;font-family:'Sora',sans-serif" id="stat-net">—</div><div style="font-size:.7rem;color:var(--text-secondary)">eaten − (BMR + burned)</div></div>
+<!-- XP Bar -->
+<div class="xp-bar-wrap" style="margin-top:10px"><div class="xp-level-row"><span class="xp-level-badge" id="xp-level-badge">Level 1</span><span class="xp-label" id="xp-title-label">Rookie</span></div><div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div><div class="xp-numbers"><span id="xp-current">0</span> / <span id="xp-next">100</span> XP</div></div>
+<!-- Daily Quest -->
+<div id="daily-quest-card" class="quest-card"><div class="quest-header"><span class="quest-title">⚔️ Daily Quest</span><span class="quest-xp-badge" id="quest-xp-badge">+50 XP</span></div><div class="quest-desc" id="quest-desc">Loading...</div><div class="quest-progress-bar"><div class="quest-progress-fill" id="quest-progress-fill" style="width:0%"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="quest-status" id="quest-status">0 / 1 complete</span><button class="btn btn-xs btn-accent" onclick="logQuestProgress()" id="quest-btn">✔ Log Progress</button></div></div>
+<div class="card" style="margin-top:0"><div class="card-header">🔥 Streak <span class="streak-flame" id="streak-flame">🔥</span></div><div style="font-size:1.8rem;font-weight:700;text-align:center;color:var(--accent-secondary)" id="streak-count">0</div><div style="text-align:center;font-size:.8rem;color:var(--text-secondary)">consecutive days</div><div style="text-align:center;margin-top:6px;font-size:.85rem;color:var(--accent-blue)">❄️ <span id="streak-freezes">0</span> streak freezes</div></div><div class="card"><div class="card-header">👣 Steps</div><div class="step-display"><div class="step-number" id="step-count">0</div><div class="step-source-row"><span class="step-source-badge manual" id="step-source-badge">✋ Manual</span></div><div class="step-goal-bar-wrap"><div class="step-goal-bar"><div class="step-goal-fill" id="step-goal-fill" style="width:0%"></div></div><div class="step-goal-label"><span id="step-goal-pct">0</span>% of 10,000 goal</div></div></div><div style="text-align:center;font-size:.65rem;color:var(--text-secondary);margin-top:2px;font-family:monospace;min-height:14px" id="pedo-debug"></div><div class="step-live-row"><button class="pedometer-btn" id="pedometer-btn" onclick="PedometerModule.toggle()">📱 Start Pedometer</button><button class="miband-btn" id="miband-btn" onclick="MiBandModule.toggle()">⌚ Mi Band</button></div><div class="step-controls" style="margin-top:8px"><button class="hydrate-btn" onclick="addSteps(500)">+500</button><button class="hydrate-btn" onclick="addSteps(1000)">+1k</button><button class="hydrate-btn" onclick="addSteps(2000)">+2k</button><button class="hydrate-btn" onclick="addSteps(5000)">+5k</button></div></div>
+
+<!-- ══ GOOGLE FIT STATS CARD (hidden until connected) ══ -->
+<div id="gfit-dash-card" class="card" style="display:none;border-left:3px solid #4285f4">
+  <div class="card-header" style="justify-content:space-between">
+    <span>🏃 Google Fit</span>
+    <button class="btn btn-secondary btn-xs" onclick="GFit.syncNow()" id="gfit-sync-btn">🔄 Sync</button>
+  </div>
+  <div class="grid-4" style="margin-bottom:10px">
+    <div class="stat-card" style="cursor:default"><div class="stat-value blue" id="gfit-steps-val">—</div><div class="stat-label">Fit Steps</div></div>
+    <div class="stat-card" style="cursor:default"><div class="stat-value highlight" id="gfit-cal-val">—</div><div class="stat-label">Burned</div></div>
+    <div class="stat-card" style="cursor:default"><div class="stat-value" id="gfit-hr-val">—</div><div class="stat-label">Avg HR</div></div>
+    <div class="stat-card" style="cursor:default"><div class="stat-value" style="color:var(--accent-purple)" id="gfit-active-val">—</div><div class="stat-label">Active min</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.78rem">
+    <div style="background:var(--glass-2);border:1px solid var(--glass-border);border-radius:10px;padding:8px 12px">
+      <div style="color:var(--text-secondary);font-size:.68rem;text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:2px">Distance</div>
+      <div style="font-weight:700;color:var(--accent-cyan)" id="gfit-dist-val">—</div>
+    </div>
+    <div style="background:var(--glass-2);border:1px solid var(--glass-border);border-radius:10px;padding:8px 12px">
+      <div style="color:var(--text-secondary);font-size:.68rem;text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:2px">Sleep (last night)</div>
+      <div style="font-weight:700;color:var(--accent-blue)" id="gfit-sleep-val">—</div>
+    </div>
+    <div style="background:var(--glass-2);border:1px solid var(--glass-border);border-radius:10px;padding:8px 12px">
+      <div style="color:var(--text-secondary);font-size:.68rem;text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:2px">Weight (latest)</div>
+      <div style="font-weight:700;color:var(--accent-primary)" id="gfit-weight-val">—</div>
+    </div>
+    <div style="background:var(--glass-2);border:1px solid var(--glass-border);border-radius:10px;padding:8px 12px">
+      <div style="color:var(--text-secondary);font-size:.68rem;text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:2px">Body Fat</div>
+      <div style="font-weight:700;color:var(--accent-yellow)" id="gfit-bf-val">—</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;font-size:.7rem;color:var(--text-secondary);text-align:center" id="gfit-last-sync"></div>
+</div>
+<!-- ══ END GOOGLE FIT CARD ══ --><div class="card"><div class="card-header">💧 Hydration</div><div style="display:flex;justify-content:space-between;font-size:.9rem"><span><strong id="hydrate-current">0</strong> / <span id="hydrate-goal">2500</span> ml</span><span id="hydrate-pct">0%</span></div><div class="hydrate-bar"><div class="hydrate-fill" id="hydrate-fill" style="width:0%"></div></div><div style="display:flex;gap:6px"><button class="hydrate-btn" onclick="addWater(200)">+200</button><button class="hydrate-btn" onclick="addWater(400)">+400</button><button class="hydrate-btn" onclick="addWater(600)">+600</button><button class="hydrate-btn" onclick="openWaterModal()">+More</button></div></div><div class="card"><div class="card-header">⚖️ Weight</div><div style="display:flex;justify-content:space-between"><span style="font-size:1.3rem;font-weight:700" id="dashboard-weight">-- kg</span><span id="dashboard-weight-date"></span></div><button class="hydrate-btn" onclick="openWeightModal()" style="margin-top:6px">⚖️ Log</button></div>
+<!-- Achievements -->
+<div class="card"><div class="card-header" style="justify-content:space-between">🏆 Achievements <span id="achievement-progress" style="font-size:.72rem;font-weight:600;color:var(--accent-primary);background:rgba(0,229,187,0.12);border:1px solid rgba(0,229,187,0.25);padding:2px 9px;border-radius:20px;letter-spacing:.03em">0 / 13</span></div><div id="achievements-list"></div></div>
+<div class="card"><div class="card-header">📅 Plans</div><div id="active-plans-dashboard"><div class="empty-state-rich"><div class="es-icon">📋</div><div class="es-title">No active plans</div><div class="es-sub">Generate a plan in the Train tab</div></div></div></div><div class="card"><div class="card-header">⭐ Quick Log</div><div id="dashboard-favorites"><div class="empty-state-rich"><div class="es-icon">⭐</div><div class="es-title">No favorites yet</div><div class="es-sub">Save meals with ⭐ to log them fast</div></div></div></div>
+<div class="card"><div class="card-header" style="justify-content:space-between">🏋️ Recent Workouts <button class="btn btn-secondary btn-xs" onclick="go('workout')">View All</button></div><div id="dashboard-recent-workouts"><div class="empty-state-rich"><div class="es-icon">🏋️</div><div class="es-title">No workouts yet</div><div class="es-sub">Log your first workout in the Train tab</div></div></div></div></section>
+
+            <!-- Nutrition -->
+            <section id="view-nutrition" class="view"><div class="section-title">🍽️ Nutrition</div><div class="grid-2"><div><div class="card"><div class="card-header">💬 AI Meal Logger</div><div class="chat-container"><div class="chat-messages" id="nutrition-chat-messages"><div class="chat-message ai">👋 Describe your meal or scan a barcode with 📷</div></div><div class="chat-input-area"><input type="text" id="nutrition-chat-input" placeholder="Describe meal..." onkeypress="if(event.key==='Enter')sendMealMessage()"><button class="btn btn-primary btn-sm" onclick="sendMealMessage()">Send</button></div></div><button class="btn btn-secondary btn-sm btn-block" onclick="openFoodSearch()" style="margin-top:8px">🔍 Search Food Database</button></div><div class="card"><div class="card-header">📷 Photo & Scan</div><div style="display:flex;gap:8px;margin-bottom:10px"><div style="flex:1;padding:16px;text-align:center;cursor:pointer;border:2px dashed var(--border-color);border-radius:12px" onclick="openMealCamera()">📸 Camera</div><div style="flex:1;padding:16px;text-align:center;cursor:pointer;border:2px dashed var(--accent-cyan);border-radius:12px" onclick="openScanner()">📷 Scan Code</div></div><input type="file" id="meal-photo-input" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)"><img id="photo-preview" style="max-width:100%;max-height:200px;display:none;border-radius:8px;margin-top:8px"><button class="btn btn-primary btn-block btn-sm" id="analyze-photo-btn" onclick="analyzeMealPhoto()" disabled>🔍 Analyze Photo</button></div></div><div><div class="card"><div class="card-header">⭐ Favorites</div><div id="favorites-list"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">Save with ⭐</p></div></div></div><div class="card"><div class="card-header">📋 Today</div><div id="todays-food-log"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No food</p></div></div><div style="border-top:1px solid var(--border-color);margin-top:12px;padding-top:12px;display:none;flex-direction:column;gap:8px" id="nutrition-totals">
+  <div id="macro-rings-container" class="macro-rings-wrap"></div>
+  <div style="display:flex;gap:16px;font-size:.8rem;justify-content:center"><span><strong>Cal:</strong> <span id="nutrition-total-calories">0</span></span><span><strong>P:</strong> <span id="nutrition-total-protein">0</span>g</span><span><strong>C:</strong> <span id="nutrition-total-carbs">0</span>g</span><span><strong>F:</strong> <span id="nutrition-total-fat">0</span>g</span></div>
+</div></div><div class="card" style="margin-top:10px;border-left:3px solid var(--accent-blue)"><div class="card-header">⏱️ Intermittent Fasting</div><div style="display:flex;gap:6px;margin-bottom:12px"><button class="fast-window-btn" id="fw-16" onclick="setFastWindow(16)">16:8</button><button class="fast-window-btn" id="fw-18" onclick="setFastWindow(18)">18:6</button><button class="fast-window-btn" id="fw-20" onclick="setFastWindow(20)">20:4</button><button class="fast-window-btn" id="fw-24" onclick="setFastWindow(24)">24h</button></div><div class="fast-ring"><svg width="160" height="160" viewBox="0 0 160 160"><circle class="fr-bg" cx="80" cy="80" r="70"/><circle class="fr-fill" id="fast-ring-fill" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="440"/></svg><div class="fast-ring-center"><div class="fast-ring-time" id="fast-elapsed">00:00</div><div class="fast-ring-label" id="fast-label">Not fasting</div></div></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-primary" id="fast-toggle-btn" onclick="toggleFast()" style="flex:1">🟢 Start Fast</button></div><div id="fast-log-list" style="margin-top:10px"></div></div></div></div></section>
+
+            <!-- Workout -->
+            <section id="view-workout" class="view"><div class="section-title">🏋️ Workout Studio</div>
+                <div id="active-plan-today" style="display:none"><div class="card" style="border-left:4px solid var(--accent-blue)"><div class="card-header">📅 Today's Workout</div><div id="active-plan-workout"></div></div></div>
+                <div id="plan-generator-section"><div class="card" style="border-left:4px solid var(--accent-blue)"><div class="card-header">📅 Multi-Week Plan Generator</div><div class="grid-2"><div><label>Goal</label><select id="plan-goal"><option value="increase bench press">Bench Press</option><option value="increase squat">Squat</option><option value="build muscle mass">Build Muscle</option><option value="lose weight and tone">Lose Weight</option><option value="full body strength">Full Strength</option><option value="custom">Custom...</option></select></div><div id="custom-goal-container" style="display:none"><label>Custom</label><input type="text" id="custom-goal-input" placeholder="Goal"></div><div><label>Duration</label><select id="plan-duration"><option value="1 week">1 Week</option><option value="4 weeks" selected>4 Weeks</option><option value="8 weeks">8 Weeks</option></select></div><div><label>Days/Wk</label><select id="plan-days-per-week"><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></div><div><label>Session</label><select id="plan-session-duration"><option value="30">30 min</option><option value="45" selected>45 min</option><option value="60">60 min</option></select></div><div><label>Equipment</label><div class="tag-cloud" id="plan-equipment-cloud"></div><select id="plan-equipment" multiple style="display:none"><option value="dumbbells" selected>Dumbbells</option><option value="barbell" selected>Barbell</option><option value="bodyweight" selected>Bodyweight</option><option value="cables">Cables</option><option value="machines">Machines</option><option value="kettlebells">Kettlebells</option><option value="resistance bands">Resistance Bands</option></select></div></div><button class="btn btn-accent btn-block btn-sm" onclick="generateMultiWeekPlan()" style="margin-top:10px">✨ Generate Plan</button><div id="multi-week-plan-result" style="margin-top:12px"></div></div></div>
+                <div class="card" style="margin-top:10px"><div class="card-header">📋 Your Plans</div><div id="active-plans-list"><div class="empty-state" style="padding:12px"><p style="font-size:.8rem">No plans</p></div></div></div>
+                <div id="quick-generator-section"><div class="card" style="margin-top:10px;border-left:3px solid var(--accent-purple)"><div class="card-header">🤖 Quick Generator</div><div class="grid-2"><div><label>Type</label><select id="gen-workout-type"><option value="strength">Strength</option><option value="endurance">Endurance</option><option value="weightloss">Weight Loss</option><option value="power">Power</option></select></div><div><label>Duration</label><select id="gen-duration"><option value="30">30 min</option><option value="45" selected>45 min</option><option value="60">60 min</option></select></div><div><label>Split</label><select id="gen-split"><option value="full body">Full Body</option><option value="upper body">Upper</option><option value="lower body">Lower</option><option value="push">Push</option><option value="pull">Pull</option></select></div><div><label>Equipment</label><div class="tag-cloud" id="gen-equipment-cloud"></div><select id="gen-equipment" multiple style="display:none"><option value="dumbbells" selected>Dumbbells</option><option value="barbell" selected>Barbell</option><option value="bodyweight" selected>Bodyweight</option><option value="cables">Cables</option><option value="kettlebells">Kettlebells</option></select></div></div><button class="btn btn-accent btn-block btn-sm" onclick="generateWorkoutPlan()" style="margin-top:10px">✨ Generate</button><div id="generated-plan-container" style="margin-top:10px"></div></div></div>
+                <div class="card" style="margin-top:10px"><div class="card-header">➕ Log Workout</div><form id="workout-form" onsubmit="logWorkout(event)"><div><label>Name</label><input type="text" id="workout-name" required></div><div><label>Duration (min)</label><input type="number" id="workout-duration" value="45"></div><div><label>Calories</label><input type="number" id="workout-calories" value="300"></div><label>Exercises</label><div id="exercise-entries"><div class="workout-exercise"><div><input type="text" class="exercise-name-input" placeholder="Exercise" style="margin-bottom:4px" required><input type="text" class="exercise-details-input" placeholder="Sets × Reps × Weight"></div></div></div><button type="button" class="btn btn-secondary btn-xs" onclick="addExerciseEntry()">+ Add</button><div style="display:flex;gap:8px;margin-top:8px"><button type="submit" class="btn btn-primary" style="flex:1">💾 Log</button><button type="button" class="btn btn-accent" style="flex:1" onclick="startActiveWorkout()">▶ Start</button></div></form></div>
+                <div class="card" style="margin-top:10px"><div class="card-header" style="display:flex;justify-content:space-between;align-items:center">📊 Exercise History <button class="btn btn-secondary btn-xs" onclick="openExerciseHistory()">View All</button></div><div id="ex-history-preview" style="font-size:.8rem;color:var(--text-secondary);padding:6px 0">Log exercises to see history</div></div></section>
+
+            <!-- Body -->
+            <section id="view-body" class="view"><div class="section-title">📐 Body & Goals</div><div class="card"><div class="card-header">🧮 Body Fat (US Navy)</div><div class="grid-2"><div><label>Gender</label><select id="bf-gender" onchange="toggleHipField()"><option value="male">Male</option><option value="female">Female</option></select></div><div><label>Age</label><input type="number" id="bf-age" placeholder="25"></div><div><label>Height (cm)</label><input type="number" id="bf-height" placeholder="175" step="0.1"></div><div><label>Weight (kg)</label><input type="number" id="bf-weight" placeholder="70" step="0.1"></div><div><label>Neck (cm)</label><input type="number" id="bf-neck" placeholder="38" step="0.1"></div><div><label>Waist (cm)</label><input type="number" id="bf-waist" placeholder="80" step="0.1"></div><div id="hip-field" style="display:none"><label>Hip (cm)</label><input type="number" id="bf-hip" placeholder="95" step="0.1"></div></div><button class="btn btn-primary btn-block btn-sm" onclick="calculateBodyFat()">📐 Calculate</button><div id="bf-result-container" style="margin-top:10px"></div></div><div class="card"><div class="card-header">📸 AI Body Fat Estimate</div><p style="color:var(--text-secondary);font-size:.8rem;margin-bottom:10px">Upload a front-facing photo for an AI estimate</p><div class="body-photo-area" id="bf-photo-area" onclick="openBfCamera()"><span>📸 Tap to upload photo</span><img id="bf-photo-preview" alt="Preview"></div><input type="file" id="bf-photo-input" accept="image/*" style="display:none" onchange="handleBfPhotoSelect(event)"><button class="btn btn-primary btn-block btn-sm" id="analyze-bf-btn" onclick="estimateBodyFatFromPhoto()" disabled>🔍 Estimate Body Fat</button><div id="bf-photo-result" style="margin-top:10px"></div></div><div class="card"><div class="card-header">🎯 TDEE</div><div><label>Activity</label><select id="goal-activity"><option value="1.2">Sedentary</option><option value="1.375">Light</option><option value="1.55" selected>Moderate</option><option value="1.725">Active</option><option value="1.9">Athlete</option></select></div><div style="margin-top:8px"><label>Goal</label><select id="goal-type"><option value="lose">Lose</option><option value="maintain" selected>Maintain</option><option value="gain">Gain</option></select></div><button class="btn btn-primary btn-block btn-sm" onclick="calculateGoals()">🎯 Calculate</button><div id="goal-result-container" style="margin-top:10px"></div></div></section>
+
+            <!-- Progress -->
+            <section id="view-progress" class="view"><div class="section-title">📈 Progress</div><div class="card"><div class="card-header">⚖️ Weight</div><div id="weight-chart-container" class="chart-empty-state">Log weight</div></div><div class="card" style="margin-top:10px"><div class="card-header">🔥 Calories</div><div id="calorie-chart-container" class="chart-empty-state">Log meals</div></div></section>
+        </div>
+
+        <!-- AI Coach Panel -->
+        <div id="coach-panel" class="coach-panel"><div style="padding:16px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between"><h3>🤖 AI Coach</h3><button class="btn btn-secondary btn-sm" onclick="toggleCoach()">✕</button></div><div id="coach-messages" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px"><div class="chat-message ai">👋 I'm your AI fitness coach! Ask me about nutrition, workouts, or your progress.</div></div><div style="padding:12px;border-top:1px solid var(--border-color);display:flex;gap:8px"><input type="text" id="coach-input" placeholder="Ask your coach..." onkeypress="if(event.key==='Enter')sendCoachMsg()"><button class="btn btn-primary btn-sm" onclick="sendCoachMsg()">Send</button></div></div>
+
+        <!-- Bottom Nav -->
+        <nav id="bottom-nav"><button class="bottom-tab active" data-view="dashboard"><span class="bottom-tab-icon">🏠</span><span>Home</span></button><button class="bottom-tab" data-view="nutrition"><span class="bottom-tab-icon">🥗</span><span>Nutrition</span></button><button class="bottom-tab" data-view="workout"><span class="bottom-tab-icon">💪</span><span>Train</span></button><button class="bottom-tab" data-view="body"><span class="bottom-tab-icon">📐</span><span>Body</span></button><button class="bottom-tab" data-view="progress"><span class="bottom-tab-icon">📈</span><span>Stats</span></button></nav>
+    </div>
+
+    
+
+    <script src="permissions.js"></script>
+    <script src="app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('✅ SW registered:', reg.scope))
+            .catch(err => console.warn('SW registration failed:', err));
+        });
+      }
+    </script>
+
+    <!-- ── IN-APP CAMERA MODAL ───────────────────────────────────── -->
+    <div id="cam-capture-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:#000;flex-direction:column;align-items:center;justify-content:center">
+      <video id="cam-video" autoplay playsinline style="width:100%;max-height:75vh;object-fit:cover"></video>
+      <canvas id="cam-canvas" style="display:none"></canvas>
+      <div style="display:flex;gap:16px;padding:20px;width:100%;justify-content:center">
+        <button id="cam-cancel-btn" style="flex:1;max-width:140px;padding:14px;background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:12px;font-size:1rem;cursor:pointer">✕ Cancel</button>
+        <button id="cam-snap-btn" style="flex:1;max-width:140px;padding:14px;background:var(--accent-primary,#00E5BB);color:#000;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer">📸 Snap</button>
+      </div>
+    </div>
+</body>
+</html>

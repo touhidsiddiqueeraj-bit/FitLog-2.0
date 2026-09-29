@@ -1,0 +1,156 @@
+{
+  "tts_provider": "gemini",
+  "voice_id": "Fenrir",
+  "bgm": {
+    "path": "assets/bgm/track.wav",
+    "volume": 0.12,
+    "mode": "detached-seed-trim",
+    "duration_s": null
+  },
+  "bgm_pending": true,
+  "bgm_provider": "musicgen",
+  "bgm_pid": 122417,
+  "bgm_log": "/home/touhid/FitLog-2.0/videos/fitlog-trailer/assets/bgm/bgm-1790694525773.log",
+  "bgm_mode": "detached-seed-trim",
+  "bgm_target_duration_s": 9.24,
+  "bgm_seed_duration_s": 28,
+  "bgm_loop_count": 1,
+  "voices": [
+    {
+      "id": "b0",
+      "path": "assets/voice/b0-3.wav",
+      "duration_s": 4.56,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Stop",
+          "start": 0.23,
+          "end": 0.36
+        },
+        {
+          "id": "w1",
+          "text": "scrolling",
+          "start": 0.42,
+          "end": 1.24
+        },
+        {
+          "id": "w2",
+          "text": "start",
+          "start": 1.24,
+          "end": 1.72
+        },
+        {
+          "id": "w3",
+          "text": "training.",
+          "start": 1.72,
+          "end": 2.55
+        },
+        {
+          "id": "w4",
+          "text": "This",
+          "start": 2.82,
+          "end": 3.08
+        },
+        {
+          "id": "w5",
+          "text": "is",
+          "start": 3.08,
+          "end": 3.22
+        },
+        {
+          "id": "w6",
+          "text": "fit",
+          "start": 3.43,
+          "end": 3.61
+        },
+        {
+          "id": "w7",
+          "text": "lock",
+          "start": 3.76,
+          "end": 4.1
+        }
+      ]
+    },
+    {
+      "id": "b3",
+      "path": "assets/voice/b3-3.wav",
+      "duration_s": 4.68,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Get",
+          "start": 0.28,
+          "end": 0.34
+        },
+        {
+          "id": "w1",
+          "text": "a",
+          "start": 0.34,
+          "end": 0.37
+        },
+        {
+          "id": "w2",
+          "text": "brutal",
+          "start": 0.37,
+          "end": 0.92
+        },
+        {
+          "id": "w3",
+          "text": "plan",
+          "start": 0.92,
+          "end": 1.28
+        },
+        {
+          "id": "w4",
+          "text": "built",
+          "start": 1.34,
+          "end": 1.75
+        },
+        {
+          "id": "w5",
+          "text": "for",
+          "start": 1.75,
+          "end": 1.88
+        },
+        {
+          "id": "w6",
+          "text": "your",
+          "start": 2.03,
+          "end": 2.36
+        },
+        {
+          "id": "w7",
+          "text": "goal,",
+          "start": 2.43,
+          "end": 2.84
+        },
+        {
+          "id": "w8",
+          "text": "then",
+          "start": 3.1,
+          "end": 3.33
+        },
+        {
+          "id": "w9",
+          "text": "go",
+          "start": 3.33,
+          "end": 3.37
+        },
+        {
+          "id": "w10",
+          "text": "crush",
+          "start": 3.54,
+          "end": 4.05
+        },
+        {
+          "id": "w11",
+          "text": "it!",
+          "start": 4.07,
+          "end": 4.4
+        }
+      ]
+    }
+  ],
+  "sfx": [],
+  "total_duration_s": 9.24
+}

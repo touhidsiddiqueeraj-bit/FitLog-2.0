@@ -1,0 +1,20 @@
+{
+  "provider": "gemini",
+  "tts_model": "gemini-3.8-flash-tts",
+  "voice": "Fenrir",
+  "lang": "en",
+  "style": "High-energy fitness coach, punchy and motivational, fast driving pace, powerful emphasis on action words. No pauses between sentences except where marked.",
+  "lines": [
+    { "id": "b0", "text": "Stop scrolling. Start training. This is FitLog." },
+    { "id": "b1", "text": "Every calorie. Every rep. Every streak. Tracked in one glance." },
+    { "id": "b2", "text": "Just describe your meal. AI logs it in seconds." },
+    { "id": "b3", "text": "Get a brutal plan built for your goal. Then go crush it." },
+    { "id": "b4", "text": "Body fat. T D E E. Macros. Know exactly where you stand." },
+    { "id": "b5", "text": "Watch the charts climb. Level up. Stay unstoppable." },
+    { "id": "b6", "text": "FitLog. Free. No account. Your data stays yours. Start today!" }
+  ],
+  "bgm": {
+    "mode": "generate",
+    "prompt": "High-energy workout electronic, driving four-on-the-floor kick, aggressive distorted synth bassline, punchy snares, rising risers, 132 BPM, MAJOR scale, motivational and relentless, gym hype"
+  }
+}

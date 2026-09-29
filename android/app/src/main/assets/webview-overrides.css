@@ -1,0 +1,13 @@
+/* FitLog Android WebView performance overrides.
+   The desktop PWA keeps its glassmorphism; in the APK, backdrop-filter
+   blurs destroy frame rate on mobile GPUs, so they are stripped here and
+   key surfaces get solid backgrounds instead. Do NOT copy this file's
+   effects back into the root styles.css. */
+* {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#top-nav, #bottom-nav { background: #0b1116 !important; }
+.modal, .card, .stat-card, .quest-card,
+.chat-message, .sync-code-display,
+.gm-style-iw, .wam-header { background-color: #10171d !important; }

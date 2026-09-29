@@ -1,0 +1,17 @@
+# Android build outputs — rebuild with ./gradlew assembleDebug in android/
+android/build/
+android/.gradle/
+android/app/build/
+android/.idea/
+*.iml
+
+# Node / HyperFrames
+node_modules/
+videos/*/node_modules/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
